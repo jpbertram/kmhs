@@ -1,0 +1,14 @@
+const assert=require('node:assert/strict');
+const nav=require('./crew-navigation.js');
+const event=key=>({key,target:null}),state={mode:'crew',selectedId:20,crewPos:'tail'};
+assert.deepEqual(nav.action(event('ArrowRight'),state,['7','20','35']),{kind:'station',value:'pilot'});
+assert.deepEqual(nav.action(event('ArrowDown'),state,['7','20','35']),{kind:'ship',value:'35'});
+assert.deepEqual(nav.action(event('ArrowUp'),state,['7','20','35']),{kind:'ship',value:'7'});
+assert.deepEqual(nav.action(event('Escape'),state,[]),{kind:'view',value:'orbit'});
+for(const protectedKey of ['ArrowRight','ArrowDown','Escape'])assert.equal(nav.action({...event(protectedKey),target:{closest:()=>({})}},state,['1']),null);
+assert.equal(nav.action({...event('ArrowRight'),metaKey:true},state,['1']),null);
+assert.equal(nav.action(event('ArrowRight'),{...state,mode:'orbit'},['1']),null);
+assert.equal(nav.action(event('ArrowRight'),{...state,mode:'chase'},['1']),null);
+for(let i=0;i<nav.stations.length;i++)assert.equal(nav.next(nav.stations,nav.stations[i],1),nav.stations[(i+1)%nav.stations.length]);
+assert.equal(nav.next([],null,1),null);
+console.log('PASS: all 11 station views, stable aircraft IDs, wraparound, loss-accessible selection, Escape, and native-control key protection.');

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta charset="utf-8">
+<title>Kassel Mission Interactive — Build Spec</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; font-family: 'IBM Plex Sans', sans-serif; color: #1c1f23; }
+  a { color: #4a5d3a; } a:hover { color: #2f3d24; }
+  doc-page:not(:defined) { visibility: hidden; }
+  doc-page, doc-page * { font-family: 'IBM Plex Sans', sans-serif; }
+  doc-page pre, doc-page code, doc-page pre * { font-family: 'IBM Plex Mono', monospace; }
+  table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+  th { text-align: left; font-weight: 600; padding: 6px 10px; border-bottom: 2px solid #1c1f23; }
+  td { padding: 6px 10px; border-bottom: 1px solid #d8d5cd; vertical-align: top; }
+  tr { break-inside: avoid; }
+  code, pre { font-family: 'IBM Plex Mono', monospace; }
+  pre { background: #f3f1ea; padding: 12px 14px; font-size: 11.5px; line-height: 1.5; overflow-x: auto; break-inside: avoid; }
+  h2 { break-after: avoid; }
+</style>
+<script src="./doc-page.js"></script>
+</helmet>
+<doc-page margin="0.85in">
+  <div style="border-bottom: 3px solid #1c1f23; padding-bottom: 18px; margin-bottom: 6px;">
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.08em; color: #4a5d3a; font-weight: 600;">KMHS · KM3D-V2 SUCCESSOR PIECE · BUILD SPEC v1.0</div>
+    <h1 style="font-size: 30px; line-height: 1.15; margin: 10px 0 8px; font-weight: 700;">Kassel Mission Interactive — Full-Mission 3D Experience</h1>
+    <div style="font-size: 13px; color: #55595e;">Spec date 14 Aug 2026 · Status: <strong style="color: #8a3324;">awaiting "proceed"</strong> · No build work started. This document is the complete handoff — any competent implementer (or a future session) can build from it alone.</div>
+  </div>
+
+  <h2 style="font-size: 18px; margin: 26px 0 8px;">1 · Deliverable</h2>
+  <p style="font-size: 13.5px; line-height: 1.6; margin: 0 0 10px;">A standalone, public-facing, browser-based 3D piece (desktop + phone) that plays the 445th Bomb Group's Kassel Mission of 27 September 1944 as one scrubbable timeline — 0800 takeoff from Tibenham to the ~1230 return window — compressed to <strong>5 minutes</strong>, rendered in three.js with the real KMHS aircraft GLBs. The viewer can, at any time, pick any ship in the formation by crew name, then pick any of its 10 crew stations, and watch the mission first-person from that seat. Ships meet their documented fates; the battle over the Seulingswald plays automatically and historically from astern. Neutral documentary tone. Real names and serials.</p>
+  <p style="font-size: 13.5px; line-height: 1.6; margin: 0;">Delivery is sliced: <strong>Slice 1</strong> = battle sequence + crew/station system working end-to-end. <strong>Slice 2</strong> = full mission timeline, route-map inset, ground scenes, audio.</p>
+
+  <h2 style="font-size: 18px; margin: 26px 0 8px;">2 · Locked decisions (15 question rounds, consolidated)</h2>
+  <table>
+    <tr><th style="width: 32%;">Topic</th><th>Decision</th></tr>
+    <tr><td>Form</td><td>Live 3D demo using the real CDN GLBs; not a video, not a doc</td></tr>
+    <tr><td>Scope</td><td>Whole mission compressed: 0800 takeoff → IP turn error → ~1100 battle → 1230 return window; timeline scrubber spans it all</td></tr>
+    <tr><td>Runtime</td><td>5 minutes total, one-shot (no loop); scrubber for replay/seek</td></tr>
+    <tr><td>Ship selection</td><td>Jump between <em>all</em> ships: crew selector first, then station selector</td></tr>
+    <tr><td>Stations</td><td>All 10 (pilot, copilot, nav, bomb, ttop, ball, tail, waistL, waistR, radio), exact offset/look vectors supplied (§5)</td></tr>
+    <tr><td>Station camera</td><td>First-person from the seat, look vector as default gaze, gentle head-turn drag</td></tr>
+    <tr><td>Resting state</td><td>Exterior orbit of the formation; page opens in orbit with the crew/station list panel already open</td></tr>
+    <tr><td>Interior swap</td><td>At a station: show <code>interior</code> node, hide that ship's <code>km-b24-exterior</code>; exterior/interior toggle visible while seated</td></tr>
+    <tr><td>Picker UI</td><td>Side list panel (chosen over bottom dock and 3D hotspots)</td></tr>
+    <tr><td>Overlays</td><td>Station name + crew role caption; one-line (~15-word) Kassel-specific historical blurb per station (drafts in §8, flagged for review); mission clock + event captions; units in both ft/mph and m/km-h; sources credit line</td></tr>
+    <tr><td>Battle</td><td>Automatic, historically timed, from astern (line-abreast Sturmgruppe waves); visible losses — B-24s trail smoke/fire and fall away; parachutes shown; brief Fw&nbsp;190/Bf&nbsp;109 passes; P-51s arrive late (accurate); camera stays in current view during passes</td></tr>
+    <tr><td>Default ship's fate</td><td>Default-selected ship is shot down mid-battle; camera follows the stricken ship down to the cloud deck, then cuts to the survivors</td></tr>
+    <tr><td>Hit depiction</td><td>Visible hit + fire (user may be at a station when it happens)</td></tr>
+    <tr><td>Formation</td><td>Squadron box of 9–12 rendered B-24s (clones of km-b24-olive) around the detailed ship — representing the 35-ship group</td></tr>
+    <tr><td>Weather</td><td>Overcast (accurate): solid undercast, base ~3,000&nbsp;ft, tops 6–7,000&nbsp;ft; battle at 20–26,000&nbsp;ft</td></tr>
+    <tr><td>Ground phases</td><td>Model takeoff and landing at Tibenham (runway/airfield scenes); real map imagery for terrain</td></tr>
+    <tr><td>Route map</td><td>Live corner inset from real geography — Tibenham → IP → Göttingen → battle site → return — synced to the scrubber</td></tr>
+    <tr><td>IP error</td><td>Caption + visible formation turn (almost due E instead of ESE)</td></tr>
+    <tr><td>Clock</td><td>Real mission time readout (nonlinear compression between events), with event captions</td></tr>
+    <tr><td>Audio</td><td>Synthesized engine drone + battle audio; muted until tapped (autoplay policy)</td></tr>
+    <tr><td>Loading</td><td>Lazy: light exterior GLBs first; the 8&nbsp;MB interior b24j.glb fetched only when a station is first entered; loading state required (11.2&nbsp;s cold measured)</td></tr>
+    <tr><td>CORS fallback</td><td>If the Webflow CDN refuses cross-origin fetch from the preview: stop and ask the user to upload the GLBs (no stand-in geometry)</td></tr>
+    <tr><td>Look &amp; feel</td><td>Match the live staging viewer (kassel-mission-historical-society.webflow.io/mission/maps) — inspect it at build time; attached design-system project is empty</td></tr>
+    <tr><td>Identities</td><td>Real aircraft names/serials and crew (pilot) names from published Kassel Mission records</td></tr>
+    <tr><td>Tone</td><td>Neutral documentary; commemorative restraint in copy</td></tr>
+  </table>
+
+  <h2 style="font-size: 18px; margin: 26px 0 8px;">3 · Assets</h2>
+  <p style="font-size: 13px; margin: 0 0 8px;">All on <code>https://cdn.prod.website-files.com/642b4bd98014250aa392775f/</code> :</p>
+  <table>
+    <tr><th>File</th><th>Role</th><th>Notes</th></tr>
+    <tr><td><code>6a7e8c29feef923088dac6c8_b24j.glb</code></td><td>Detailed B-24J w/ interior</td><td>8,011,660 B, uncompressed; 174,185 tris (ext ~157k / int ~31k); 38 mats, 30 images; requires <code>EXT_texture_webp</code>; 0 animations; pre-fitted to len 33 (Box3 fit scale 0.998 — no retuning)</td></tr>
+    <tr><td><code>6a2ae0629d4e48a4e049a072_km-b24-olive.glb</code></td><td>Formation ships + pre-fetch placeholder</td><td>Config equiv: <code>len 33, rotY π/2, centerX −2.7, centerY 0.3</code> (no doubleSide)</td></tr>
+    <tr><td><code>6a2b19eff3a4c9950f5299e3_km-p51-v2.glb</code></td><td>Escort (arrives late)</td><td></td></tr>
+    <tr><td><code>6a2b19ef0caf522b3019d402_km-fw190.glb</code></td><td>Sturmgruppe attackers</td><td></td></tr>
+    <tr><td><code>6a2b19efe6e2804c3fd3146c_km-bf109-f2.glb</code></td><td>High cover / mixed passes</td><td></td></tr>
+  </table>
+  <p style="font-size: 13px; margin: 10px 0 4px;">b24j.glb node hierarchy — the interior/exterior swap keys off these names verbatim:</p>
+  <pre>B24J-with-interior
+├── km-b24-exterior   (20 children)
+└── interior          (100 children: frame-0..N, …)</pre>
+  <p style="font-size: 13px; margin: 8px 0 0;">Three.js r128 verified to accept the asset (registers <code>EXT_texture_webp</code>). A newer three release is fine for this standalone piece; nothing binds it to the km3d-v2 runtime. Load GLBs with a progress callback — the fetch is the loading state's data source.</p>
+
+  <h2 style="font-size: 18px; margin: 26px 0 8px;">4 · Historical basis</h2>
+  <p style="font-size: 13.5px; line-height: 1.6; margin: 0 0 10px;">39 B-24s of the 445th BG (squadrons 700/701/702/703) were scheduled from Tibenham, Norfolk; 4 aborted, 35 bombed. Lead ship: Capt. John Chilton (703rd crew flying with the 700th), Maj. Donald McCoy command pilot; deputy lead Capt. Web Uebelhoer with Capt. Jim Graham. Weather: solid undercast, base ~3,000&nbsp;ft, tops 6–7,000&nbsp;ft; PFF drop planned. At the IP the lead turned almost due east instead of ESE — a ~70&nbsp;mph tailwind put the group ~25&nbsp;mi NE of Kassel at bomb release. Bombs fell near Göttingen (village of Rosdorf/Grone area). Radio warnings from other navigators were answered only with "Keep it tight — keep it together." Now ~100&nbsp;mi behind the division and unescorted, the group turned west and, around 11:00, was hit over the Seulingswald (between Bad Hersfeld and Eisenach) by 100–150 fighters — Fw&nbsp;190 Sturmböcke in line-abreast waves from astern, with Bf&nbsp;109 cover — for roughly six minutes. 25 B-24s went down in or near the battle area; P-51s (incl. 361st FG; Lt. Leo Lamb was killed) arrived as the blow ended and chased the fighters off. Of ~10 aircraft still flying: French crash-landed at Metz-Frescaty (FR), Hunter east of Lille (FR), Heitz near Brussels (BE); Dewey and Mercer put down at Manston emergency strip; Krivik crash-landed at Old Buckenham; <strong>four landed back at Tibenham</strong>. Cost: 117 KIA (incl. 12 murdered on the ground), 121 POW. Luftwaffe: 29 fighters, 18 pilots lost. Chilton's lead ship was among the last lost; it crashed at Bad Hersfeld, where the 1990 memorial now stands.</p>
+  <table>
+    <tr><th style="width: 18%;">Mission time</th><th>Event</th><th style="width: 22%;">Confidence</th></tr>
+    <tr><td>0230</td><td>Crew wake-up, Tibenham (caption only)</td><td>Published account</td></tr>
+    <tr><td><strong>0800</strong></td><td>Takeoff ("zero hour")</td><td><strong>User-supplied</strong></td></tr>
+    <tr><td>~0930</td><td>Formation assembled, departs English coast</td><td>Approx — interpolated</td></tr>
+    <tr><td>~1030</td><td>IP; wrong turn almost due east</td><td>Approx — pending 445th mission report</td></tr>
+    <tr><td>~1045</td><td>Bombs away near Göttingen through 10/10 undercast</td><td>Approx — pending mission report</td></tr>
+    <tr><td><strong>~1100</strong></td><td>Turn west over the Seulingswald; attack begins</td><td><strong>User-supplied</strong> + published</td></tr>
+    <tr><td>~1106</td><td>Main blow over (≈6 min); P-51s arrive, fighters withdraw</td><td>Published ("six minutes")</td></tr>
+    <tr><td><strong>1230</strong></td><td>Scheduled return to base; survivors/stragglers land into the early afternoon</td><td><strong>User-supplied</strong></td></tr>
+  </table>
+  <p style="font-size: 12.5px; color: #55595e; margin: 8px 0 0;">Exact IP, bombs-away and landing times exist only in the 445th's mission report; if obtained later, update <code>TIMELINE</code> constants only — nothing else in the piece depends on the absolute values.</p>
+
+  <h2 style="font-size: 18px; margin: 26px 0 8px;">5 · Crew-station vectors (user-supplied, authoritative)</h2>
+  <pre>// [ox,oy,oz, lx,ly,lz] — offset from ship origin, default look direction
+KM._crewPositions = {
+  pilot:  [ 7.9, 2.3, -0.6,   1, -0.08,  0],
+  copilot:[ 7.9, 2.3,  0.6,   1, -0.08,  0],
+  nav:    [ 9.3, 0.2,  0.9,  0.55, -0.3, 0.85],
+  bomb:   [10.6, -1,   0,     1, -0.45,  0],
+  ttop:   [ 4.9, 3.3,  0,     1,  0.12,  0],
+  ball:   [ -2, -3.2,  0,    0.8, -0.55, 0],
+  tail:   [-17.6, 0.9, 0,    -1, -0.05,  0],
+  waistL: [ -6, 0.45, -2.62,  0, -0.15, -1],
+  waistR: [ -6, 0.45,  2.62,  0, -0.15,  1],
+  radio:  [ 2.2, 1.5,  0,    0.5, -0.25, -0.5]
+}</pre>
+  <p style="font-size: 13px; margin: 8px 0 0;">Vectors are in the ship's local frame at the viewer's len-33 scale, applied after the model's <code>rotY: π/2</code>. Head-turn drag: yaw ±120°, pitch ±60° from the look vector, eased return optional — no full free-look (stations have physical sightline limits).</p>
+
+  <h2 style="font-size: 18px; margin: 26px 0 8px;">6 · The 5-minute timeline</h2>
+  <p style="font-size: 13px; margin: 0 0 8px;">Nonlinear compression; the clock readout snaps through real mission time. Scrubber covers the full 0:00–5:00. One-shot playback; seeking anywhere is always allowed. All phases render regardless of selected ship/station — the camera is a lens, never a gate.</p>
+  <table>
+    <tr><th style="width: 14%;">Piece time</th><th style="width: 16%;">Mission clock</th><th>Phase</th><th style="width: 30%;">Caption (draft)</th></tr>
+    <tr><td>0:00–0:40</td><td>0800</td><td><strong>Takeoff.</strong> Tibenham runway on real map imagery; ships roll and climb in trail. (0230 wake-up as a pre-roll caption at 0:00.)</td><td>"0800 — 39 Liberators of the 445th Bomb Group lift off from Tibenham, Norfolk."</td></tr>
+    <tr><td>0:40–1:20</td><td>0800→0930</td><td><strong>Assembly &amp; crossing.</strong> Climb through/above overcast; formation forms the squadron box; coast out. 4 aborts noted by caption.</td><td>"Four ships abort. Thirty-five press on toward Kassel — target: the Henschel works."</td></tr>
+    <tr><td>1:20–2:00</td><td>0930→~1030</td><td><strong>Cruise to the IP</strong> at 20–26,000 ft over solid undercast. Map inset traces the route.</td><td>"Solid cloud below. The bomb run will be flown blind, on the lead ship's radar."</td></tr>
+    <tr><td>2:00–2:25</td><td>~1030</td><td><strong>The wrong turn.</strong> Formation visibly swings almost due E; intended ESE track ghosts on the map inset; escort diverges toward Kassel.</td><td>"At the Initial Point the lead turns east — not east-southeast. Radio calls go unanswered: 'Keep it tight — keep it together.'"</td></tr>
+    <tr><td>2:25–2:45</td><td>~1045</td><td><strong>Bombs away</strong> near Göttingen through the undercast; turn west begins.</td><td>"25 miles past Kassel, the bombs fall near Göttingen. The group turns for home — alone."</td></tr>
+    <tr><td>2:45–4:00</td><td>~1100–1106</td><td><strong>The battle</strong> (§9). Three astern waves; losses fall away with smoke/fire and parachutes; default ship hit ~3:20, followed down to the cloud deck; cut to survivors; P-51s sweep in at ~3:50.</td><td>"Over the Seulingswald, 100–150 fighters strike from astern. Six minutes. Twenty-five bombers fall."</td></tr>
+    <tr><td>4:00–4:30</td><td>1106→1230</td><td><strong>The long way home.</strong> Ragged survivors over the Channel; map inset flags the stragglers: Metz-Frescaty, Lille, Brussels, Manston ×2, Old Buckenham.</td><td>"Ten ships still fly. Three go down in France and Belgium; three more just reach England."</td></tr>
+    <tr><td>4:30–5:00</td><td>~1230+</td><td><strong>Return.</strong> Four B-24s land at Tibenham on real imagery; hold on the quiet airfield; epilogue card + credits.</td><td>"Four of thirty-five come home. 117 men killed, 121 captured — the heaviest one-day group loss in 8th Air Force history."</td></tr>
+  </table>
+
+  <h2 style="font-size: 18px; margin: 26px 0 8px;">7 · Crew &amp; ship selection</h2>
+  <p style="font-size: 13.5px; line-height: 1.6; margin: 0 0 8px;">Side panel, two levels: <strong>(1) Crew list</strong> — every rendered ship, listed as "Pilot surname · squadron · aircraft name/serial · fate"; <strong>(2) Station list</strong> for the selected ship — 10 stations with role captions. Breadcrumb back to crew list. Keyboard: ←/→ cycle stations, ↑/↓ cycle ships, Esc to orbit. Selecting a station triggers the lazy b24j.glb fetch (once, then cached template is cloned per ship).</p>
+  <p style="font-size: 13.5px; line-height: 1.6; margin: 0 0 8px;">The formation renders 9–12 ships; each maps to a documented aircraft. Roster (build task: finalize against kasselmission.org squadron pages / <em>Kassel Mission Reports</em>): Chilton/McCoy lead (703rd w/700th, PFF — shot down late, crashed Bad Hersfeld; <strong>default selected ship</strong>), Uebelhoer/Graham deputy lead (survivor — landed Tibenham), Schaen (702nd, high right — lost), Hautman "Mairzy Doats" (700th — lost), plus the documented straggler pilots as fates require: Dewey, Mercer (Manston), Krivik (Old Buckenham), French (Metz), Hunter (Lille), Heitz (Brussels), and 1–2 further documented losses to fill the box. Each roster entry: <code>{slug, pilot, squadron, acName, serial, fate, fateTime, formationSlot}</code> in a data JSON.</p>
+  <p style="font-size: 13.5px; line-height: 1.6; margin: 0;">When the selected ship is lost: hit + fire at its documented point in the wave sequence, camera (if aboard) shakes, then exterior follow-cam tracks the ship down to the cloud deck, holds a beat, cuts to the survivors' formation. Panel then shows the ship's fate line and offers the surviving ships. Seeking backward on the scrubber restores everything (all state derives from timeline position — pure function of t, no accumulated state).</p>
+
+  <h2 style="font-size: 18px; margin: 26px 0 8px;">8 · Station captions (drafts — for user review)</h2>
+  <table>
+    <tr><th style="width: 12%;">Slug</th><th style="width: 26%;">Name · role</th><th>One-line blurb</th></tr>
+    <tr><td>pilot</td><td>Pilot — left seat</td><td>"Formation discipline from this seat was the only defense the group had left."</td></tr>
+    <tr><td>copilot</td><td>Co-pilot — right seat</td><td>"Throttles and turbos for four Pratt &amp; Whitneys, three miles above the overcast."</td></tr>
+    <tr><td>nav</td><td>Navigator</td><td>"Navigators across the formation saw the wrong turn at once; their radio calls went unanswered."</td></tr>
+    <tr><td>bomb</td><td>Bombardier</td><td>"The drop was blind — through ten-tenths cloud, on the lead ship's radar."</td></tr>
+    <tr><td>ttop</td><td>Top turret — flight engineer</td><td>"First eyes on the fighters massing astern, out of the contrails."</td></tr>
+    <tr><td>ball</td><td>Ball turret</td><td>"Suspended beneath the ship, watching the undercast three miles below."</td></tr>
+    <tr><td>tail</td><td>Tail gunner</td><td>"The Sturmgruppe came line-abreast from dead astern — this seat saw them first."</td></tr>
+    <tr><td>waistL</td><td>Left waist gunner</td><td>"An open window at −40°, firing across the formation as the waves swept through."</td></tr>
+    <tr><td>waistR</td><td>Right waist gunner</td><td>"Twenty seconds a wave: 190s rolling through the box at closing speed."</td></tr>
+    <tr><td>radio</td><td>Radio operator</td><td>"The set carried one answer all morning: 'Keep it tight — keep it together.'"</td></tr>
+  </table>
+
+  <h2 style="font-size: 18px; margin: 26px 0 8px;">9 · Battle choreography (2:45–4:00)</h2>
+  <ul style="font-size: 13.5px; line-height: 1.7; margin: 0; padding-left: 20px;">
+    <li><strong>Geometry:</strong> three waves from astern, line-abreast Fw&nbsp;190s (6–9 rendered per wave, instanced), closing from ~1.5&nbsp;km behind/below-level, firing pass through the box, break high; Bf&nbsp;109s cross high cover. Camera never auto-cuts — passes are seen from wherever the viewer is.</li>
+    <li><strong>Losses:</strong> scripted per roster ship at fixed t; sequence = hit flash → engine fire + black smoke ribbon (particle/sprite trail) → peel out of formation → falling arc to the cloud deck → gone. 3–5 parachutes blossom behind each loss (small sprites). Losses among non-rendered ships are conveyed by the caption counter, not faked geometry.</li>
+    <li><strong>Own-ship hit</strong> (default ship ~3:20): cannon-strike flashes on the airframe, fire from #3, interior camera shake; controls stay live ~4&nbsp;s; then follow-cam sequence (§7).</li>
+    <li><strong>P-51 arrival ~3:50:</strong> 4–6 Mustangs dive through from high 6 o'clock, fighters withdraw east. Caption notes the escort's late arrival and Lt. Leo Lamb (361st FG), killed in the defense.</li>
+    <li><strong>Restraint:</strong> no gore, no audio screams, no slow-motion glamour shots. Fire/smoke are documentary, not spectacle.</li>
+  </ul>
+
+  <h2 style="font-size: 18px; margin: 26px 0 8px;">10 · Presentation layer</h2>
+  <ul style="font-size: 13.5px; line-height: 1.7; margin: 0; padding-left: 20px;">
+    <li><strong>Style source:</strong> inspect the live staging viewer at build time and match its sky/haze treatment, overlay typography, and control styling. The attached design-system project is empty — the staging page is the binding reference.</li>
+    <li><strong>Header:</strong> "The Kassel Mission — 27 September 1944" + subtitle "445th Bombardment Group · Mission 169". Sources/credit line in a footer (kasselmission.org, 445bg.org, <em>Kassel Mission Reports</em>).</li>
+    <li><strong>Clock/caption bar:</strong> mission time (24-h), phase caption, loss counter during battle. Units shown dual: "22,000 ft (6,700 m)".</li>
+    <li><strong>Scrubber:</strong> full-width bottom bar; phase tick marks + labels; play/pause; current mission time bubble. Position persisted to localStorage and restored on load.</li>
+    <li><strong>Map inset</strong> (corner, collapsible on phone): real-geography route Tibenham → coast → IP → Göttingen → Seulingswald → return legs incl. straggler endpoints; intended-vs-actual track shown from the IP; dot synced to t. Built from real geo data per the maps recipe.</li>
+    <li><strong>Overcast:</strong> volumetric-look cloud deck (layered noise sprites or shader plane) hiding the ground from altitude; terrain imagery visible only in ground phases (takeoff/landing) and below cloud breaks in the fall sequence.</li>
+    <li><strong>Audio:</strong> WebAudio-synthesized engine drone (layered detuned saws + LFO), distant gunfire/cannon thumps during battle; starts muted with a visible unmute control; volume ducks under captions. No recorded-audio assets.</li>
+  </ul>
+
+  <h2 style="font-size: 18px; margin: 26px 0 8px;">11 · Loading &amp; performance</h2>
+  <ul style="font-size: 13.5px; line-height: 1.7; margin: 0; padding-left: 20px;">
+    <li><strong>Startup:</strong> fetch km-b24-olive (+ fighters + p51 deferred until first needed) → orbit scene playable fast. b24j.glb (8&nbsp;MB) fetched only on first station entry, with an in-panel progress bar (measured 11.2&nbsp;s cold in the Webflow context); ship stays selectable meanwhile.</li>
+    <li><strong>Cloning:</strong> one loaded template per GLB, cloned per aircraft (mirrors the km3d-v2 <code>templates</code> pattern — the one injection point that worked, per D3).</li>
+    <li><strong>Budget:</strong> formation of 9–12 olive clones + fighters ≪ the viewer's 4.25&nbsp;M-tri baseline; detailed b24j swapped in only for the ship the camera occupies (one instance at a time — 174&nbsp;k tris).</li>
+    <li><strong>D4 lesson:</strong> single renderer for the page lifetime; dispose geometries/materials/textures and the context on teardown; cap pixel ratio at 2 (1.5 on phone); no re-init loops.</li>
+    <li><strong>Phone:</strong> reduced clone count (7), no shadows, panel collapses to a bottom sheet, hit targets ≥44&nbsp;px.</li>
+    <li><strong>CORS:</strong> if any CDN fetch fails cross-origin, halt with a visible notice and ask the user to upload the GLBs to the project. No placeholder geometry.</li>
+  </ul>
+
+  <h2 style="font-size: 18px; margin: 26px 0 8px;">12 · Build plan &amp; acceptance</h2>
+  <table>
+    <tr><th style="width: 12%;">Slice</th><th>Contents</th><th style="width: 38%;">Accepted when</th></tr>
+    <tr><td><strong>1</strong></td><td>Scene + formation, crew picker → station picker, first-person stations w/ head-turn, interior/exterior swap + toggle, battle sequence (waves, losses, own-ship shootdown, parachutes, P-51 arrival), scrubber over the battle span, clock + captions, keyboard nav</td><td>All 10 stations enterable on ≥3 ships; battle plays scripted and is seek-stable (scrub back/forward reproduces identical state); interior swap hides the correct ship's exterior only</td></tr>
+    <tr><td><strong>2</strong></td><td>Full 0:00–5:00 timeline (takeoff, cruise, IP turn, bombs, return, landing), Tibenham ground scenes on real imagery, route-map inset, straggler epilogue, audio, epilogue/credits, phone layout pass</td><td>Whole-piece scrub; map dot and clock always consistent with the 3D scene; audio unmutes on tap and survives seeking</td></tr>
+  </table>
+  <p style="font-size: 13px; margin: 8px 0 0;">Architecture note: everything is a pure function of timeline position <code>t</code> plus (ship, station, camera-drag) view state — no accumulated simulation. This is what makes the scrubber, seek-stability, and the localStorage restore trivial.</p>
+
+  <h2 style="font-size: 18px; margin: 26px 0 8px;">13 · Open items &amp; risks</h2>
+  <ul style="font-size: 13.5px; line-height: 1.7; margin: 0; padding-left: 20px;">
+    <li>Station blurbs (§8), timeline captions (§6), and the final ship roster (§7) are drafts — <strong>user review requested</strong> during Slice 1.</li>
+    <li>Exact IP / bombs-away / landing times need the 445th mission report; approximations are flagged and isolated in <code>TIMELINE</code>.</li>
+    <li>CDN CORS behavior unverified from this environment — first build step is a fetch probe; on failure, request uploads (locked fallback).</li>
+    <li>b24j interior detail level at nav/radio/ball stations unknown until loaded — some stations may need camera-offset nudges after first visual check.</li>
+    <li>This piece is standalone; it does not patch km3d-v2. The D1–D4 defects in the handoff brief remain open for the site's own refactor.</li>
+  </ul>
+
+  <div style="margin-top: 30px; padding-top: 14px; border-top: 2px solid #1c1f23; font-size: 12px; color: #55595e;">
+    <strong>Sources:</strong> kasselmission.org (mission overview, squadron pages); 445bg.org (Kassel narrative, aircraft records); <em>Kassel Mission Reports</em> (KMMA); Wikipedia "Kassel Mission"; Ratcliffe, <em>The Kassel Raid</em> (2021); user-supplied km3d-v2 handoff brief and crew-position vectors. Times marked "approx" are interpolations, not records.
+  </div>
+</doc-page>
+</x-dc>
+</body>
+</html>

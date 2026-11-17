@@ -1,0 +1,44 @@
+# Full mission checkpoint — M1 session
+- Migration checkpoint 2026-11-17: this is a COPIED cloud handoff. Originals untouched. See ../MIGRATION-VERIFICATION.md and ../CLOUD-SETUP.md. M1 remains incomplete.
+- Migration output: `PASS packaged M1 numeric suite: tests=8 failures=0; printed exclusions still apply; M1 remains incomplete`. Linux/cloud execution has not yet been verified.
+- M1 IN PROGRESS; M2–M6 NOT COMPLETE. No museum-grade or aerodynamic-validation claim.
+- Baseline actual runtime formation sampler: `aircraft: 35, backwardAircraft: 19` (exit 1).
+- Session scope: M1 only. Stop at its verified checkpoint; do not start M2.
+- Integrated metre-based sampler into full mission placement; per-aircraft tangent and bank replace leader-only heading. `index.html` defaults to full mission again.
+- Actual output: `PASS M1 formation-only: runs=20 aircraft=35 samples=1399300 backwards=0 headingJumps=0 minimumForwardDot=0.999848 minimumSeparationM=60.625; loss/departure gates NOT covered`
+- `verify-formation-history.js`: PASS; `verify-loss-trajectory.js`: PASS 24975 poses, but only synthetic geometry, NOT historical plausibility.
+- Route-centre diagnosis output: `behind: 13, total: 25, contradictions: []`; endpoint-fitting defect still unresolved, no historic validation claim.
+- Next: write full loss/departure continuity and turn-radius gates against actual runtime state (>=20 seeded timelines).
+- Next: remove backward endpoint attraction without changing documented coordinates or inventing events.
+- Next: verify fighter motion, landing/return seams, geometric/rendered separation, actual page integration and cache behavior.
+- Open: geometry oversized relative to corrected map spacing; formation-only tests do not establish rendered clearance. Return altitude/ground contact and endpoint handoffs need checks.
+- Sources/estimates for this patch: SOURCES.md. Default page does not imply M1 completion.
+- Item 1: actual init/placement harness added, 20 seeded sampling phases; terrain/effects excluded explicitly. Gates FAIL (baseline, not repair attempts).
+- Last output: `FAIL M1 actual placement transitions {"runs":20,"samples":487947,"backwards":2455,"poseJumps":8738,"radiusViolations":7848,"minimumRadiusM":0.7573780838727553,"minimumControlledRadiusM":1947.2358199228968,"worst":{"backward":"Fromm","radius":"Mowat","jump":"Krivik"}}; terrain/effects/browser excluded`
+- Bank limit 30 degrees and TAS 105 m/s are ESTIMATED operational assumptions, not validated airframe limits. Test does not apply controlled-flight radius to broken/spinning airframes.
+- Item 2 next: eliminate frame-order-dependent collision shoves and endpoint-fitting paths; preserve geographic evidence, label all inferred routing.
+- Item 2 repair: 2500 m forward circular/tangent approaches integrated for losses and departures; endpoints unchanged, entire connecting routes ESTIMATED. Frame-order-dependent shoves removed.
+- Last output: `FAIL M1 actual placement transitions {"runs":20,"samples":977278,"backwards":0,"poseJumps":3,"largePoseSteps":308,"radiusViolations":0,"minimumRadiusM":2499.999999168551,"minimumControlledRadiusM":1947.2358199228968,"worst":{"jump":{"id":"Isom","seconds":299.70523809525963,"angle":0.0035281988347902644,"distanceM":0.0004691439709566081}}}; terrain/effects/browser excluded`
+- Rapid continuous damaged-aircraft rolls counted separately, not mislabeled as mathematical discontinuities. Three small near-home roll discontinuities remain; testing numerical curvature conditioning (attempt 2).
+- Item 2 checkpoint (attempt 2): `PASS M1 actual placement transitions {"runs":20,"samples":977278,"backwards":0,"poseJumps":0,"largePoseSteps":300,"radiusViolations":0,"minimumRadiusM":2499.999999168551,"minimumControlledRadiusM":1947.2358199228968,"worst":{}}; terrain/effects/browser excluded`
+- Gates currently cover 205–300 playback seconds; exact event boundaries, endpoint completion and return ground contact still need separate item 4 gates. Item 2 is NOT complete on this partial check.
+- Next item 3: normalize rendered geometry against mapped metres and measure actual model bounds; do not equate centre clearance with mesh clearance.
+- Item 3 checkpoint: aircraft map fit uses measured mesh span and published 110 ft span; oriented native-mesh bounding volumes replace centre-only clearance.
+- Baseline: `FAIL M1 rendered bounds: runs=20 model=actual-procedural-B24 overlaps=327124 first={"seconds":205.0047619047619,"a":"Chilton","b":"Uebelhoer"}; imported models/fighters/terrain not covered`
+- Last output: `PASS M1 rendered bounds: runs=20 model=actual-procedural-B24 overlaps=0 first=null; imported models/fighters/terrain not covered`
+- Item 3 remains PARTIAL: CDN-imported mesh, fighter bounds and camera readability not verified; terrain/map vertical exaggeration remains. Do not claim full rendered clearance.
+- Item 4 next: exact event boundaries, completion clock, return ground-contact and actual fighter placement checks.
+- Item 4 boundary baseline: `FAIL M1 exact boundary gates: runs=20 checks=620 poseJumps=620 endpointsBeyondPlayback=240 endpointMisses=0`; fixed inherited launch pitch/bank and stopped-clock defect.
+- Last boundary output: `PASS M1 exact boundary gates: runs=20 checks=620 poseJumps=0 endpointsBeyondPlayback=0 endpointMisses=0 playbackEndSeconds=2886.479 failures=[]; animation scheduler/ground terrain not covered`
+- `PASS M1 actual animation scheduler: survives 300-second home boundary, parks route at 1, stops at remaining-trajectory end; no browser verification`
+- Ground baseline: `FAIL M1 return fallback-ground: runs=20 checks=80 hovering=80 landingJumps=80 maximumGroundErrorM=687.826; mesh support and DEM terrain not covered`
+- Last ground output: `PASS M1 return fallback-ground: runs=20 checks=80 hovering=0 landingJumps=0 maximumGroundErrorM=0.000; mesh support and DEM terrain not covered`
+- Fighter baseline: `FAIL M1 moving-anchor fighters: runs=20 samples=308981 backwards=0 visibleStops=31840 earlyEscorts=0`; uncapped fighter clock patched; rerun pending.
+- Open item 4: provisional remaining-path end is 2886.479 playback s (~48 min), unsuitable default pacing without further reconciliation; not historical timing. Browser controls/scheduler/terrain still need verification.
+- Final item 3 output: `PASS M1 rendered bounds: runs=20 timeline=0..300 model=actual-procedural-B24 overlaps=0 groundMisses=0 first=null; imported models/fighters/DEM not covered`
+- Final formation output: `PASS M1 formation-only: runs=20 aircraft=35 samples=1399300 backwards=0 headingJumps=0 minimumForwardDot=0.999848 minimumSeparationM=60.625; loss/departure gates NOT covered`
+- Final fighter output: `PASS M1 moving-anchor fighters: runs=20 samples=308981 backwards=0 visibleStops=0 earlyEscorts=0 failures=[]; bounds/forces not covered`
+- Last transition output after landing repairs: `PASS M1 actual placement transitions {"runs":20,"samples":977278,"backwards":0,"poseJumps":0,"largePoseSteps":312,"radiusViolations":0,"minimumRadiusM":2499.999999168551,"minimumControlledRadiusM":1947.2358199228968,"worst":{}}; terrain/effects/browser excluded`
+- Next three: reconcile the overly long loss clock without sacrificing entry continuity; verify imported/fighter bounds and full extended timeline; verify DEM-backed contact and browser controls/camera after physical scaling.
+- M1 NOT COMPLETE. Numerical passes are partial evidence, not full runtime/browser/terrain acceptance. M2 not started.
+- `PASS forward endpoint geometry: 359640 samples, 360 endpoint bearings, exact endpoints, forward launch and tangent-aligned motion; ESTIMATED routes, not aerodynamics`

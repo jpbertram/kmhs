@@ -1,0 +1,11 @@
+'use strict';
+const assert=require('node:assert/strict'),f=require('./flight-attitude');
+const a={lon:-.01,lat:0},b={lon:0,lat:0},c={lon:.01,lat:0};
+assert.equal(f.coordinatedBank(a,b,c,105),0);
+const r=7500,scale=111195,angle=.01;
+const points=[-angle,0,angle].map(t=>({lon:r*Math.sin(t)/scale,lat:r*(Math.cos(t)-1)/scale}));
+const bank=f.coordinatedBank(...points,105),expected=Math.atan(105**2/(r*9.80665));
+assert(Math.abs(bank-expected)<1e-8,'Circular track matches coordinated-turn relation');
+assert(Math.abs(f.coordinatedBank(...points.slice().reverse(),105)+bank)<1e-8);
+assert.equal(f.coordinatedBank(...points,0),0);
+console.log('PASS: straight/circular curvature, clockwise/counterclockwise sign and zero speed. Nominal renderer estimate, not full aerodynamic validation.');

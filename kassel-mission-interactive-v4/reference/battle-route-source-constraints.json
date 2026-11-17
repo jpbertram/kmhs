@@ -1,0 +1,54 @@
+{
+  "status": "Qualitative eyewitness constraints; no exact attack coordinates established",
+  "sources": [
+    {
+      "id": "whitefield-replot",
+      "archiveRelativePath": "Eighth Air Force/September 27 1944 Docs/Navigation/Don Whitefield, Dep Lead Nav, log and replot of Kassel Mission001.pdf",
+      "kind": "Deputy lead navigator retrospective log analysis; all 12 pages inspected",
+      "constraints": [
+        {"event": "bomb-run", "trueHeadingDegrees": 67, "estimatedTrueCourseDegrees": 77, "page": 7},
+        {"event": "post-release-rally", "trueHeadingDegrees": 35, "estimatedTrueCourseDegrees": 50, "sourceClockStart": "0941.5", "sourceClockEnd": "0945", "page": 7},
+        {"event": "attack-position", "rejectedEvidence": ["0957 radar fix", "1003 dead-reckoning position"], "page": 6},
+        {"event": "return-fix-line", "estimatedTrackDegrees": 245, "estimatedGroundspeedKnots": 145, "sourceClockStart": "1016", "sourceClockEnd": "1029.5", "page": 6}
+      ],
+      "limitations": "Retrospective estimates are not an exact measured track. The final DR interval is explicitly rejected. Do not equate heading with ground course or apply estimated return winds throughout the mission."
+    },
+    {
+      "id": "air-commanders-teletype",
+      "archiveRelativePath": "Eighth Air Force/September 27 1944 Docs/445th BG/mission report.pdf",
+      "kind": "Contemporary mission report, page 1 inspected",
+      "constraints": [
+        {"event": "bomb-release", "place": "western outskirts of Göttingen"},
+        {"event": "fighter-attack", "place": "south of Göttingen", "sourceClockStart": "1003", "sourceClockEnd": "1009"}
+      ],
+      "limitations": "No exact attack coordinates established. Source-clock offset to the simulation clock remains unresolved. Some right-edge text is clipped."
+    },
+    {
+      "id": "collar-overview",
+      "url": "https://www.kasselmission.org/mission/overview",
+      "author": "George Collar",
+      "kind": "Participant account published by the Historical Society",
+      "checked": "2026-10-01",
+      "constraints": [
+        {"event": "initial-point", "approach": "southeast", "intendedTurn": "east-southeast", "actualTurn": "approximately east"},
+        {"event": "bomb-release", "place": "Göttingen", "nextTurn": "south"},
+        {"event": "rally-turn", "place": "vicinity of Eisenach", "turn": "right", "exitDirection": "west"},
+        {"event": "attack-onset", "relativeTime": "as the rally turn was made", "attackDirection": "from astern", "waves": 3, "formation": "line abreast"}
+      ],
+      "limitations": "Retrospective account; no numerical fixes, precise loss-event ordering or aircraft-specific post-hit tracks supplied."
+    },
+    {
+      "id": "swofford-2004",
+      "url": "https://www.kasselmission.org/written/paul-swofford",
+      "author": "Paul Swofford",
+      "kind": "Participant account dated 2004, with bracketed Society corrections",
+      "checked": "2026-10-01",
+      "constraints": [
+        {"event": "attack-onset", "precedingEvents": ["bomb-release", "regroup", "set exit course"], "fighterCover": "absent"}
+      ],
+      "limitations": "No exact attack coordinates, post-bombing map trace or individual loss timestamps supplied."
+    }
+  ],
+  "notEstablished": ["actual coordinate fixes after Göttingen", "turn radius", "rally groundspeed", "individual aircraft loss coordinates and times", "individual post-hit headings"],
+  "implementationRule": "Never derive historical attack origins solely by fitting crash endpoints. Keep interpolation choices and uncertainty separate from source statements."
+}

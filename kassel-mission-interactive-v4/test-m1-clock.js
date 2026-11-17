@@ -1,0 +1,11 @@
+'use strict';
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync(__dirname+'/km3d-v3.js','utf8');
+const start=src.indexOf('      if(KM._playing){',src.indexOf('var now=performance.now();'));
+const end=src.indexOf('      updateAnchor(',start),code=src.slice(start,end);
+assert(start>0&&end>start,'Actual animation scheduler block required');
+const ctx={KM:{_playing:true,_playbackSeconds:299.99,_playbackEndSeconds:350,_missionT:.99999,_speed:1},dt:.05,RETURN_START:.92,KMMissionTimeline:require('./mission-timeline')};vm.createContext(ctx);
+vm.runInContext(code,ctx);assert(ctx.KM._playing&&ctx.KM._playbackSeconds>300,'Remaining loss paths continue after survivors land');
+for(let i=0;i<1200;i++)vm.runInContext(code,ctx);
+assert(!ctx.KM._playing);assert.equal(ctx.KM._playbackSeconds,350);assert.equal(ctx.KM._missionT,1);
+console.log('PASS M1 actual animation scheduler: survives 300-second home boundary, parks route at 1, stops at remaining-trajectory end; no browser verification');

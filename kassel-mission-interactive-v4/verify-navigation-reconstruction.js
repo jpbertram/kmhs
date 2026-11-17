@@ -1,0 +1,14 @@
+'use strict';
+const assert=require('node:assert/strict');
+const {destination,reverseProject}=require('./reconstruct-navigation');
+const p=destination(0,0,90,Math.PI*6371008.8/2);
+assert(Math.abs(p.lon-90)<1e-10&&Math.abs(p.lat)<1e-10);
+assert.deepEqual(reverseProject({lon:8,lat:50},245,0,13),{lon:8,lat:50});
+assert.throws(()=>reverseProject({lon:8,lat:50},245,-1,13));
+const a=reverseProject({lon:9+17/60,lat:50+46/60},245,145,13);
+const rad=Math.PI/180,lat0=(50+46/60)*rad;
+const h=Math.sin((a.lat*rad-lat0)/2)**2+Math.cos(lat0)*Math.cos(a.lat*rad)*Math.sin((a.lon-(9+17/60))*rad/2)**2;
+const distance=2*6371008.8*Math.atan2(Math.sqrt(h),Math.sqrt(1-h));
+assert(Math.abs(distance-145*1852*13/60)<1e-6,'Independent inverse distance matches speed × elapsed time');
+assert(a.lon>9+17/60&&a.lat>50+46/60,'Reverse of southwest track runs northeast');
+console.log('PASS: direct-geodesic cardinal reference, zero distance, input validation and research projection arithmetic. This does not validate source fixes or an actual flight path.');

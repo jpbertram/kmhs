@@ -1,0 +1,22 @@
+{
+  "runs": 20,
+  "aircraft": 35,
+  "positiveWrapRuns": 6,
+  "negativeWrapRuns": 4,
+  "checks": {
+    "forward": true,
+    "heading": true,
+    "separation": true,
+    "slots": true,
+    "labels": true,
+    "velocityConsistency": true,
+    "bodyFrame": true
+  },
+  "minimumForward": 80.53466137704372,
+  "minimumSpeed": 80.53466137704375,
+  "maximumSpeed": 100.43862667523348,
+  "minimumSeparation": 65.74921903779553,
+  "maxHeadingRate": 0.013308896347364318,
+  "maxBank": 0.1273308290224342,
+  "maxError": 6.944067667844825e-12
+}

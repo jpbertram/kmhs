@@ -1,0 +1,16 @@
+{
+  "source": "Local OneDrive archive, Navigation/Don Whitefield, Dep Lead Nav, log and replot of Kassel Mission001.pdf",
+  "sourcePage": 7,
+  "headingConvention": "T.C. is true course; T.H. is true heading. Values must not be interchanged.",
+  "unitStatus": "Preserve source K and speed labels pending verification against flight-log unit selection. No automatic SI conversion yet.",
+  "clockStatus": "Source-clock readings; conversion to displayed local time not established",
+  "method": "Author's retrospective dead reckoning, not observed coordinate fixes",
+  "segments": [
+    {"from": "09:17", "to": "09:22", "trueCourseDeg": 150, "trueHeadingDeg": 162, "altitudeFt": 23000, "temperatureRaw": -29, "IASRaw": 140, "TASRaw": 202, "groundspeedRaw": 245, "durationMinutes": 5, "distanceRawK": 21},
+    {"from": "09:22", "to": "09:29", "trueCourseDeg": 168, "trueHeadingDeg": 185, "altitudeFt": 23000, "temperatureRaw": -29, "IASRaw": 140, "TASRaw": 202, "groundspeedRaw": 225, "durationMinutes": 7, "distanceRawK": 26},
+    {"from": "09:29", "to": "09:41:30", "trueCourseDeg": 77, "trueHeadingDeg": 67, "altitudeFt": 23000, "temperatureRaw": -29, "IASRaw": 144, "TASRaw": 209, "groundspeedRaw": 263, "durationMinutes": 12.5, "distanceRawK": 55},
+    {"from": "09:41:30", "to": "09:45", "trueCourseDeg": 50, "trueHeadingDeg": 35, "altitudeFt": 23000, "temperatureRaw": -29, "IASRaw": 144, "TASRaw": 209, "groundspeedRaw": 235, "durationMinutes": 3.5, "distanceRawK": 14},
+    {"from": "09:45", "to": "10:03", "trueCourseDeg": 190, "trueHeadingDeg": 210, "altitudeFt": 22500, "temperatureRaw": -29, "IASRaw": 144, "TASRaw": 204, "groundspeedRaw": 200, "durationMinutes": 18, "distanceRawK": 60, "warning": "Page 6 rejects the resulting 1003 DR position and discusses an unlogged turn. Not a verified actual path."}
+  ],
+  "implementationStatus": "Evidence transcription only; not wired into mission route or aerodynamic validation"
+}

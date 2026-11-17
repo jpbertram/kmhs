@@ -1,0 +1,9 @@
+# SI aerodynamic-load layer
+
+`aerodynamic-loads.js` provides dynamic pressure, lift/drag/side-force resolution and body-axis moments. Reference-point forces contribute their cross-product moment about the centre of gravity. Its callback subtracts world-space wind from aircraft velocity and rotates air-relative velocity into the body frame before evaluating coefficients. Environment, complete coefficient function, geometry and propulsion/other loads are explicit caller inputs; no B-24 coefficients or atmosphere are fabricated.
+
+General equations follow NASA Glenn's lift-equation description (https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/lift-equation/). Frame separation is consistent with the distinction documented in JSBSim's official forces/moments and reference-frame documentation (https://jsbsim-team.github.io/jsbsim-reference-manual/user/concepts/forces-and-moments/). This implementation uses its own explicitly documented +X forward, +Y up, +Z right convention, NOT JSBSim's conventional body-axis coefficient signs. Pitch is about +Z; yaw is about +Y. Tables require explicit sign/axis conversion before use.
+
+Tests cover analytical forces, drag-work sign under 1,000 airflow orientations, force-reference moment transfer, wind subtraction, yawed-frame rotation and integration with the existing rigid-body solver. All coefficients in these tests are synthetic fixtures. No actual aircraft has passed an empirical validation comparison.
+
+This module is not connected to the mission renderer. Required next inputs remain matched B-24 variant/load/configuration coefficient tables and domains, stall/post-stall behaviour, control/stability derivatives, complete mass/inertia, engine/propeller loads and a defensible atmosphere/wind model. The existence of correct general force equations does not prove B-24 performance or documented damage outcomes.

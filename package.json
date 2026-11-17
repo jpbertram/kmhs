@@ -1,0 +1,17 @@
+{
+  "name": "kassel-mission-cloud-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Private development handoff; M1 remains incomplete",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "node serve.cjs",
+    "test": "node run-m1.cjs",
+    "test:m1": "node run-m1.cjs",
+    "test:demo:browser": "node kassel-mission-interactive-v4/test-turn-browser.js",
+    "browser:install": "playwright install --with-deps chromium",
+    "check:package": "node check-package.cjs",
+    "manifest": "node check-package.cjs --write"
+  },
+  "devDependencies": { "playwright": "1.62.1" }
+}

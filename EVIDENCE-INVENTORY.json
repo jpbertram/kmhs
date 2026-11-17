@@ -1,0 +1,56 @@
+[
+  {
+    "relative": "Maps/Germany/Crash Sites/Possible crash site order001.pdf",
+    "bytes": 1609796,
+    "sha256": "d3836ed4d46517addc616084d4dbc5015339c82da77eee869c1851cb9d9d2fe2",
+    "status": "COPIED"
+  },
+  {
+    "relative": "Maps/Germany/Crash Sites/Germans list of crash locations by plane001.pdf",
+    "bytes": 356116,
+    "sha256": "a79d1e28c57ce1882788f14eec4a23aa5a10a09393034eec2881129064125377",
+    "status": "COPIED"
+  },
+  {
+    "relative": "Eighth Air Force/September 27 1944 Docs/445th BG/Formations025.pdf",
+    "bytes": 628246,
+    "sha256": "29dc39b8ea6f115e97df5ab21a5b32d80645e7c07c002374bd25709c59e61f2c",
+    "status": "COPIED"
+  },
+  {
+    "relative": "Eighth Air Force/September 27 1944 Docs/445th BG/mission report.pdf",
+    "bytes": 7145350,
+    "sha256": "31fe661b35592e05dd48b38c962be4f7dc1ae430f5850ce9ebce4b86d6dcf748",
+    "status": "COPIED"
+  },
+  {
+    "relative": "Eighth Air Force/September 27 1944 Docs/Navigation/Lead Navigator's Report001.pdf",
+    "bytes": 1499578,
+    "sha256": "4c244b04febf57942f840bdbb16e56e5f4a0f93c5e0b985bc708fe5608e27f98",
+    "status": "COPIED"
+  },
+  {
+    "relative": "Eighth Air Force/September 27 1944 Docs/Navigation/KM Flight Log001.pdf",
+    "bytes": 661098,
+    "sha256": "ae013e224425b29eda346504bb89d51b625a8007d8a05edcd2c18e69f97e8c84",
+    "status": "COPIED"
+  },
+  {
+    "relative": "Eighth Air Force/September 27 1944 Docs/Navigation/Don Whitefield, Dep Lead Nav, log and replot of Kassel Mission001.pdf",
+    "bytes": 1071555,
+    "sha256": "090f8b77f446f629eed57dafc0da12639769f68998239cf41ab0588549761c3d",
+    "status": "COPIED"
+  },
+  {
+    "relative": "Eighth Air Force/September 27 1944 Docs/Navigation/Don Whitefield's Re-logging of the Kassel Mission.doc",
+    "bytes": 173568,
+    "sha256": "238dc372385db453fafc6843f9d41d24214ec0446d613fdc2d9a6f83bdc63de2",
+    "status": "COPIED"
+  },
+  {
+    "relative": "Eighth Air Force/Bomb Groups/445th BG/Crews by Squadron/702nd Squadron/Miner/Accounts/Interviews/Reg Miner Interview with Aaron Elson.doc",
+    "bytes": 243712,
+    "sha256": "f9464c565a72fa2e150abbc390f06b2689f0549d4a382891933f171951cd0157",
+    "status": "COPIED"
+  }
+]

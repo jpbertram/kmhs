@@ -1,0 +1,41 @@
+{
+  "aircraft": 35,
+  "drawCalls": 28,
+  "triangles": 29276,
+  "views": [
+    "box",
+    "chase",
+    "cockpit"
+  ],
+  "windowFps": [
+    60.957329866186996,
+    60,
+    60.00393468424157,
+    60,
+    60.00983767830792,
+    60,
+    60,
+    60.00393468424157,
+    59.998032851381986,
+    60.00983767830792,
+    60,
+    59.99999999999989,
+    60.00393468424168,
+    60.00393468424168,
+    60,
+    60,
+    60.00393468424146,
+    60.00393468424168,
+    60.00393468424146
+  ],
+  "minimumWindowFps": 59.998032851381986,
+  "maximumFrameMs": 16.80000000000291,
+  "viewport": "1280x720",
+  "durationSeconds": 20,
+  "warmupFrames": 120,
+  "renderer": "Chrome headless WebGL; local host",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+  "errors": [],
+  "minimumInstantaneousFps": 59.523809523799216,
+  "pass": true
+}

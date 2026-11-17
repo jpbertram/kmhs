@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Supplied B-24 interior — geometry inspection</title>
+<style>body{margin:0;background:#152027;color:#e8e9df;font:14px system-ui}header{position:absolute;left:18px;top:18px;z-index:2;width:min(390px,calc(100vw - 72px));background:#111a20ed;border:1px solid #626c70;padding:18px}h1{font-size:20px;margin:0 0 10px}p{font-size:12px;line-height:1.5}select,button{min-height:44px;background:#283840;color:#ffe6a0;border:1px solid #718083;padding:8px;margin:4px 6px 4px 0}canvas{display:block;outline-offset:-3px}output{display:block;font-size:12px;line-height:1.6;color:#c3d2d4}#failure{color:#ffa391}</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="vendor/GLTFLoader-r128.js"></script></head><body>
+<header><h1>Supplied interior: inspect, don’t assume</h1>
+<select id="station" aria-label="Source station"><option value="pilot">Pilot</option><option value="copilot">Copilot</option><option value="nav">Navigator</option><option value="bomb">Bombardier</option><option value="nose">Nose gunner</option><option value="radio">Radio operator</option><option value="ttop">Top turret — source location unverified</option><option value="ball">Ball turret</option><option value="waistL">Left waist</option><option value="waistR">Right waist</option><option value="tail">Tail gunner</option></select>
+<button id="crew">Estimated eyeline</button><button id="orbit">Inspect geometry</button>
+<p>Original named interior meshes and gauge-face textures only. No photograph walls, added people, replacement equipment or aircraft skin. Source positions are not certified factory dimensions; the camera eyes are estimates above the modeled seats.</p>
+<p>Drag to inspect; scroll to change distance. This view renders only when changed, to avoid continuous background graphics load.</p><output id="status">Loading the supplied local model…</output><output id="failure" role="alert"></output></header>
+<script src="supplied-interior-review.js"></script></body></html>

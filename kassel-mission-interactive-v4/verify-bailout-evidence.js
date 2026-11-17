@@ -1,0 +1,12 @@
+'use strict';
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync(__dirname+'/km3d-v3.js','utf8'),context={V2:{}};
+const start=src.indexOf('V2.BAILOUT_EVIDENCE='),end=src.indexOf('V2.bailoutCrewFor=',start);
+vm.runInNewContext(src.slice(start,end),context);
+const evidence=context.V2.bailoutEvidenceFor;
+assert(evidence('Miner',{s:'gilfoil'}).includes('assisted out over the battle area'));
+assert(evidence('Miner',{s:'gilfoil'}).includes('cause of death are unconfirmed'));
+assert(evidence('Miner',{s:'miner'}).includes('nose-wheel opening'));
+assert.equal(evidence('Miner',{s:'other'}),'');assert.equal(evidence('Other',{s:'miner'}),'');
+assert.equal(evidence('Miner',null),'');
+console.log('PASS: participant-specific bailout evidence and explicit uncertainty; unknown crew/airmen receive no invented circumstances. Display-content check, not historical-source authentication.');

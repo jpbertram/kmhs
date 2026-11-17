@@ -1,0 +1,55 @@
+{
+  "status": "Measured source benchmarks only; not fitted coefficients or B-24J validation",
+  "source": {
+    "url": "https://www.wwiiaircraftperformance.com/org/B-24/b-24_files/B-24G_42-78095_Eng-47-1736-A.pdf",
+    "localFile": "original-manuals/B24G-1944-Flight-Test.pdf",
+    "report": "Engineering 47-1736-A",
+    "coverDate": "1944-04-20",
+    "aircraft": "North American B-24G, AAF 42-78095",
+    "transcription": "Read from rendered original scan; recheck before calibration"
+  },
+  "configuration": {
+    "gear": "up",
+    "flaps": "neutral",
+    "intercoolers": "wide open",
+    "cowlsLevelFlight": "closed",
+    "ballTurret": "retracted",
+    "waistGuns": "stowed",
+    "externalGuns": "minimum drag",
+    "warning": "Not automatically the mission aircraft's drag/load configuration"
+  },
+  "printedPage5LevelFlight": {
+    "columns": ["altitudeFt", "rpm", "manifoldInHg", "brakeHorsepowerPerEngine", "trueAirspeedMph", "grossWeightLb"],
+    "rows": [
+      [10000,2700,49,1245,253.5,61890],
+      [10000,2550,46,1160,246,60400],
+      [10000,2400,39.5,958,228,59540],
+      [10000,2300,31.7,832,215,59280],
+      [10000,2200,31.7,746,204,59050],
+      [10000,2050,30.8,660,189,58820],
+      [10000,1900,30.8,606,173.5,58580],
+      [10000,1800,30.8,574,160,58420],
+      [23000,2700,49,1255,294,59570],
+      [23000,2550,46,1170,285,58940],
+      [23000,2400,39.9,995,266,58170]
+    ]
+  },
+  "maximumSpeedSummary": {
+    "trueAirspeedMph": 291,
+    "altitudeFt": 23000,
+    "rpm": 2700,
+    "manifoldInHg": 49,
+    "brakeHorsepowerPerEngine": 1255,
+    "summaryGrossWeightLb": 59100,
+    "detailedSectionGrossWeightLb": 59350,
+    "takeoffWeightLb": 62000,
+    "warning": "Preserve weight discrepancy; do not conflate with the separate 294 mph table point"
+  },
+  "handlingObservations": [
+    "Heavy controls and slow roll; restricted acrobatics and steep dives",
+    "Longitudinal and directional stability; laterally neutral",
+    "Straight-ahead stalls showed no tendency to drop a wing",
+    "Intentional spins prohibited; tested abrupt low-speed/steep-turn maneuvers showed no spin tendency",
+    "Intact-aircraft observations do not validate severely damaged crash behavior"
+  ]
+}

@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),{select}=require('./fighter-targeting.js');
+const at={x:0,y:0,z:0},nose={x:1,y:0,z:0};
+const target=(x,y,z)=>({position:{x,y,z},visible:true,userData:{alive:true}});
+const front=target(50,0,0),behind=target(-50,0,0),side=target(0,0,50),offAxis=target(50,0,30),near=target(2,0,0);
+assert.equal(select(at,nose,[behind,side,offAxis,near],12,90,Math.PI/12),null);
+assert.equal(select(at,nose,[behind,front,side],12,90,Math.PI/12),front);
+assert.equal(select(at,{x:0,y:0,z:1},[front,side],12,90,Math.PI/12),side);
+front.visible=false;assert.equal(select(at,nose,[front],12,90,Math.PI/12),null);
+front.visible=true;front.userData.alive=false;assert.equal(select(at,nose,[front],12,90,Math.PI/12),null);
+assert.equal(select(at,{x:0,y:0,z:0},[side],12,90,Math.PI/12),null);
+console.log('PASS: forward-axis firing cone, rear/side/range exclusion, actual heading and hidden/lost target exclusion. Rendering guard, not gun ballistics or historical firing validation.');

@@ -1,0 +1,35 @@
+const assert = require('node:assert/strict');
+const physics = require('./flight-dynamics-core.js');
+const body = {massKg:2,inertiaKgM2:[[2,0,0],[0,3,0],[0,0,4]]};
+const initial = {positionM:[0,500,0],velocityMS:[10,0,0],orientationXYZW:[0,0,0,1],angularVelocityRadS:[0,0,0]};
+const zero = () => ({forceBodyN:[0,0,0],momentBodyNm:[0,0,0]});
+const near=(a,b,t=1e-8)=>assert.ok(Math.abs(a-b)<t,`${a} differs from ${b}`);
+let s=physics.integrate(initial,10,body,zero,{gravityMS2:[0,0,0]});
+near(s.positionM[0],100);near(s.positionM[1],500);
+s=physics.integrate(initial,10,body,zero);
+near(s.positionM[1],500-.5*9.80665*100);near(s.velocityMS[1],-98.0665);
+s=physics.integrate(initial,10,body,()=>({forceBodyN:[4,0,0],momentBodyNm:[0,0,0]}),{gravityMS2:[0,0,0]});
+near(s.positionM[0],200);near(s.velocityMS[0],30);
+const rotating={...initial,velocityMS:[0,0,0],angularVelocityRadS:[0,0,1]};
+s=physics.integrate(rotating,10,body,zero,{gravityMS2:[0,0,0]});
+near(s.orientationXYZW[2],Math.sin(5));near(s.orientationXYZW[3],Math.cos(5));
+near(Math.hypot(...s.orientationXYZW),1);
+const tumbling={...initial,velocityMS:[0,0,0],angularVelocityRadS:[.4,.3,.2]};
+const energy=physics.kineticEnergy(tumbling,body);
+s=physics.integrate(tumbling,5,body,zero,{gravityMS2:[0,0,0]});
+near(physics.kineticEnergy(s,body),energy);
+const angularMomentum=physics.rotate(s.orientationXYZW,s.angularVelocityRadS.map((w,i)=>w*body.inertiaKgM2[i][i]));
+angularMomentum.forEach((v,i)=>near(v,tumbling.angularVelocityRadS[i]*body.inertiaKgM2[i][i]));
+assert.throws(()=>physics.step(initial,0,.01,body,null),/force model required/);
+assert.throws(()=>physics.validateBody({...body,inertiaKgM2:[[0,0,0],[0,3,0],[0,0,4]]}),/positive definite/);
+assert.throws(()=>physics.validateBody({...body,inertiaKgM2:[[100,0,0],[0,1,0],[0,0,1]]}),/physical mass distribution/);
+// Rotation of the impossible tensor defeats checks of diagonal entries
+// alone; the second-moment matrix's principal minors must also be checked.
+assert.throws(()=>physics.validateBody({...body,inertiaKgM2:[[50.5,49.5,0],[49.5,50.5,0],[0,0,1]]}),/physical mass distribution/);
+const coupled={massKg:2,inertiaKgM2:[[3,-1,0],[-1,3,0],[0,0,4]]};
+const multiply=(I,w)=>I.map(r=>r.reduce((sum,v,i)=>sum+v*w[i],0));
+const initialMomentum=physics.rotate(tumbling.orientationXYZW,multiply(coupled.inertiaKgM2,tumbling.angularVelocityRadS));
+const coupledState=physics.integrate(tumbling,5,coupled,zero,{gravityMS2:[0,0,0]});
+near(physics.kineticEnergy(coupledState,coupled),physics.kineticEnergy(tumbling,coupled));
+physics.rotate(coupledState.orientationXYZW,multiply(coupled.inertiaKgM2,coupledState.angularVelocityRadS)).forEach((v,i)=>near(v,initialMomentum[i]));
+console.log('PASS: translation, gravity, constant force, rotation, energy, angular momentum, and input gates. This is numerical verification, NOT aircraft aerodynamic validation.');

@@ -1,0 +1,1011 @@
+{
+  "retrievedAt": "2026-10-01",
+  "source": "Webflow CMS Crews collection 642c7b9fa30f880692d37146",
+  "warning": "Staged CMS records include unpublished drafts. Narrative claims require corroboration against cited original accounts; not a certified historical dataset.",
+  "pagination": {
+    "total": 35
+  },
+  "items": [
+    {
+      "id": "64548b4b922c9e6247f7f2dc",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:30:54.483Z",
+      "fieldData": {
+        "participants": [
+          "658d1356cbeb870d2370287c",
+          "658d135797589af28fc190bc",
+          "658d135870bb753783b01bcb",
+          "658d1359a7939e4251028265",
+          "658d1360fad6a31f9d1638b5",
+          "658d136277440f8e943d5010",
+          "658d13647a397cda825cd70c",
+          "658d1365221bbf9e5f481cb9",
+          "658d136999e5cbfecc4d600e"
+        ],
+        "squadron": "642c97418758627ed624e3d9",
+        "about": "<h3>The Seeds Crew &mdash; Lost With All Hands</h3><p>On the morning of Wednesday, 27 September 1944, nine young men climbed into a B-24J Liberator, serial 42-110073, and lifted off from Tibenham with the 703rd Squadron, bound for the Henschel works at Kassel. None of them would come home. Their pilot was 2nd Lt. Andrew G. Seeds of Trenton, New Jersey; beside him sat co-pilot 2nd Lt. Michael J. Luongo of Brooklyn. Behind them were navigator 2nd Lt. Thomas C. Bibb of Beckley, West Virginia, bombardier 2nd Lt. Joseph F. Sirl, and the enlisted men &mdash; James M. Douglas, John E. Buch Jr., Sigmund Mischel, James J. Crowley, and Clare L. Wheeler.</p><p>The crew had trained together at Tonopah, Nevada, where a photograph of the original ten was taken on 5 July 1944. By the day of the mission the formation had been thrown into disaster: a navigational error sent the 445th some fifty miles off course, straight into the guns of waiting fighters. In roughly three minutes, twenty-five Liberators plunged to a fiery end. The German crash record fixes the end of 42-110073 at about 11:03&ndash;11:09, brought down &ldquo;<em>durch J&auml;ger beim R&uuml;ckflug</em>&rdquo; &mdash; by fighters during the return flight. Both wings caught fire and tore away, and the aircraft fell some 1.8 km southwest of Lauchr&ouml;den, near the Werra. As the Beckley <em>Register-Herald</em> later recorded, the bomber &ldquo;was a twisted, burning mass of men and machine &hellip; All nine men aboard died.&rdquo;</p><p>The aftermath is preserved in the words of George Collar, who parachuted down nearby and was forced by the Germans to spend the day gathering the dead. &ldquo;We came across the burning fuselage of a B-24,&rdquo; he wrote. &ldquo;There were bodies inside, but we could not approach the wreckage because of the intense heat. I believe this was the wreckage of Lt. Seeds&rsquo; plane.&rdquo; The men were first buried in the civilian cemetery at Lauchr&ouml;den and later reinterred in the Ardennes American Cemetery in Belgium.</p><p>The crew might have remained only a list of names but for two threads that reached across half a century. The first was a silver identification bracelet. In 1948, eighteen-year-old Ursula Holtkamp turned it up in a tractor rut in a field at Lauchr&ouml;den, a few yards from where the Liberator fell. One face was stamped <em>Thomas C. Bibb</em>; the other engraved, in flowing script, with a single name: <em>Muriel</em> &mdash; Muriel Wooddell, whom Bibb had dated before the war. German historian Walter Hassenpflug recovered it and, with the Kassel Mission Memorial Association, traced it to Beckley, returning it to Bibb&rsquo;s family in 1996. &ldquo;It just made chills run over me,&rdquo; his sister said. The second thread bound the crew to a later September morning: James Luongo, a New York police inspector and cousin of co-pilot Michael Luongo, stood in the ruins of the World Trade Center on 11 September 2001 and took comfort in a fighter overhead. &ldquo;The only smile I had on my face that day was when I saw that fighter pilot protecting us from above,&rdquo; he wrote &mdash; thinking of his cousin Mike and the bombers&rsquo; &ldquo;Little Friends.&rdquo;</p><p><em>Sources: German crash-data sheet and Missing Air Crew Report 9400; George M. Collar correspondence (1993&ndash;1996); William Crowley letters (2009); Walter Hassenpflug and Edgar E. Bibb III correspondence (1995&ndash;1996); Mannix Porterfield, &ldquo;Bracelet holds sentimental link to WWII,&rdquo; Register-Herald (1996); James Luongo, &ldquo;My Own &lsquo;Little Friends&rsquo;&rdquo; (2002). KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">LOW LEFT ELEMENT</p>",
+        "outcome-details": "<p>Crashed 1.8 Km Southwest of Lauchroden, Germany - MACR 9400</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24J",
+        "serial-number": "42-110073",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Seeds Crew",
+        "slug": "seeds"
+      }
+    },
+    {
+      "id": "64548b4a04e699568e277402",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:30:54.481Z",
+      "fieldData": {
+        "participants": [
+          "658d135ca45b4262198d12be",
+          "658d135f1d83ae2ab0f60683",
+          "658d1362ecbc3a7acda2f916",
+          "658d13620fe960c2d857bf09",
+          "658d1362a45b4262198d1533",
+          "658d1363ebf151b529215218",
+          "658d13665294877bbdc85a12",
+          "658d13667b58e8edf274a6e0",
+          "658d1369cd9d5a68c7c5baa1"
+        ],
+        "squadron": "642c97418758627ed624e3d9",
+        "about": "<h3>&ldquo;Hot Rock&rdquo; and the Mowat Crew</h3><p>On the morning of 27 September 1944, 1st Lt. William J. Mowat lifted the B-24J Liberator <em>Hot Rock</em> (42-51532) off the runway at Tibenham, bound for the railyards at Kassel, flying with the 703rd Squadron in the low-left squadron of a formation that would within hours be all but annihilated. Of the ten men aboard, only two would survive, and the plane would fall in flames roughly 1.5 km north of H&ouml;nebach, in the Wildecker Forest.</p><p>When the off-course 445th was caught alone by more than 100 German fighters, tail gunner S/Sgt. Frank Plesa saw the first sign from below: bursts of orange and grey smoke &ldquo;like flak all around us for at least thirty seconds before I saw fighters firing at us from the rear,&rdquo; then the call from top-turret engineer T/Sgt. Theodore Myers: &ldquo;Fighters, six o&rsquo;clock!&rdquo;</p><p>Myers fired until his guns jammed from the heat; a shell burst near his turret and knocked out the interphone. Climbing to the flight deck, he saw &ldquo;several large streams of gasoline shooting down against the bomb bay doors.&rdquo; Knowing one shell could detonate the fuel, he climbed down into the bomb bay to reach the holed tanks. &ldquo;During this time, I got soaked from head to foot with gas,&rdquo; he wrote. As he turned to warn the pilot, 20 mm shells exploded beneath his feet: &ldquo;I saw a blinding flash and I was on fire from head to foot &hellip; I felt my face burning, and that was all I remembered as I thought I was dying.&rdquo; He came to in his parachute, the slipstream having blown out the flames.</p><p>In the tail, Plesa fired at an FW-190 before two shells struck his turret, &ldquo;bending the left gun up and blew out the top front bullet proof windows and me, all going out at the same time. I felt as if a horse had kicked me in the chest.&rdquo; Wounded in the foot, forearm, and chest, he saw left waist gunner Everette Williams, on his final mission, badly wounded but &ldquo;still firing down with his right hand,&rdquo; his left arm hanging limp. Then fire burst through the door &ldquo;like a blowtorch.&rdquo; Plesa covered his face, &ldquo;screaming in my mask,&rdquo; before the ship exploded and blew him clear; he pulled his ripcord at about 800 feet.</p><p>The two survivors found each other hours later in a German hospital, then again as prisoners at Stalag Luft IV. Plesa endured skin grafts, a forced march, and liberation by the British Second Army on 2 May 1945: &ldquo;I was a very fortunate and lucky nineteen year old airman, and will never forget the crew.&rdquo; The other seven &mdash; Mowat, copilot Smets, navigator Spingler, nose gunner Lello, radio operator Groves, and waist gunners Neher and Williams &mdash; all died. Waist gunner John Neher&rsquo;s body did not return to his Missouri family until 1949, with Plesa and Myers as pallbearers; at the 1990 memorial dedication, Neher&rsquo;s sister met the German fliers who had downed her brother &mdash; a reconciliation she called &ldquo;very, very touching.&rdquo;</p><p><em>Sources: German crash-data sheet, MACR 9572; T/Sgt. Theodore Myers letter (8 Aug 1945); Frank Plesa letter (1986) and &ldquo;A Tail Gunner&rsquo;s Account&rdquo; (1994); Tri-City Herald (1990). KMHS archive.</em></p>",
+        "formation-details": "<p>SLOT ELEMENT</p>",
+        "outcome-details": "<p>Crashed 1.5 Km North of Honebach, Germany - MACR 9572</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24J",
+        "serial-number": "42-51532",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Mowat Crew",
+        "slug": "mowat"
+      }
+    },
+    {
+      "id": "64548b4a6b2083b4c4dd1994",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:37:06.282Z",
+      "fieldData": {
+        "participants": [
+          "658d13569113ee53db0dab8b",
+          "658d135a0f2f680e3e09caf6",
+          "658d135ce6c4f8153cf50438",
+          "658d135f7b58e8edf274a36a",
+          "658d13609113ee53db0dae6f",
+          "658d13610fe960c2d857be9e",
+          "658d136261cdc3543475104c",
+          "658d1363157481a906b5fbb8",
+          "658d136562cc519051173f52",
+          "658d1369157481a906b5fead"
+        ],
+        "squadron": "642c97418758627ed624e3d9",
+        "about": "<h3>The Mercer Crew &mdash; &ldquo;G for George&rdquo;</h3><p>At 10:16 on the morning of 27 September 1944, 1st Lt. Jackson C. Mercer banked B-24J #42-51549 &mdash; &ldquo;G for George&rdquo; &mdash; away from the target and into history. &ldquo;And there we were &mdash; 26,000 feet, 10:16AM, September 27, 1944, somewhere south of Kassel, Germany flying above a 9/10 overcast &mdash; and then &lsquo;BOOM!&rsquo;&rdquo; he wrote. His 703rd Squadron ship, flying the left-wing slot on the wing of squadron leader Cecil Isom, had just survived the bomb run when an &ldquo;unbelievable catastrophe&rdquo; opened in the sky to its right.</p><p>A navigation error had carried the 445th alone over Germany, stripped of escort, and 150 or more fighters fell on the group. Tail gunner Harry Lied broke in: &ldquo;Bandits at six o&rsquo;clock level, ten or twelve across&hellip; They&rsquo;re firing &mdash; looks like their wings are on fire, they&rsquo;re closing fast&mdash;&rdquo; and the intercom went dead. Co-pilot Leo Pouliot remembered it plainly: &ldquo;Looking to the right, I saw just plain hell. Planes were going down &mdash; some in flames, others just exploding. The air was full of 20mm shells.&rdquo; Within minutes only Isom&rsquo;s and Mercer&rsquo;s ships of the 703rd remained.</p><p>The crew fought back ferociously. When a fighter hung firing on Isom&rsquo;s ship, nose gunner Ted Hoiten &ldquo;was upon him with his guns blazing &hellip; The fighter caught on fire, fell over on its back, and went down.&rdquo; Engineer Kenneth Kribs swung the top turret around &ldquo;in a violent maneuver,&rdquo; held a long burst, &ldquo;and then suddenly the fighter just disappeared in a cloud of debris.&rdquo; In the right waist, bombardier George Noorigian downed a Focke-Wulf 190 of G&ouml;ring&rsquo;s &ldquo;Yellow-Nose Squadron.&rdquo; All told the crew was credited with five fighters destroyed and two probables.</p><p>The cost was staggering. A burst of four 20mm shells walked across the ship: one blew apart the twin tail; one detonated in the chaff box Noorigian sat on &mdash; &ldquo;it&rsquo;s a lucky thing I&rsquo;m still here.&rdquo; Shells ruptured oxygen bottles, severed control cables, shot away the rudder, and holed a wing tank that streamed fuel through the bomb bay. With no rudder, no radio, no hydraulics, Mercer engaged the autopilot and nursed the wreck toward the RAF emergency field at Manston, flying the ailerons while Pouliot worked the autopilot for the rudders. As they touched down, a small New Testament radio operator Robert Bennett kept in the equipment fell on him &mdash; &ldquo;We felt even more assured when a small Bible fell on Bob Bennett when we touched down.&rdquo;</p><p>The Manston depot logged more than 300 items of battle damage across six pages &mdash; over 250 shrapnel holes and, in the No.&nbsp;2 gas tank, an unexploded 20mm shell. &ldquo;If it hadn&rsquo;t been a dud,&rdquo; Pouliot wrote, &ldquo;we&rsquo;d never have come back.&rdquo; Noorigian put it more simply, scrambling out: &ldquo;It&rsquo;s the first time I ever kissed the ground.&rdquo;</p><p><em>Sources: Jackson Mercer, &ldquo;Next To Last and then &mdash; Home&rdquo; (KM Reports Addendum, 1994); Leo Pouliot, &ldquo;Fire Fight&rdquo; (8th AF News, 1989); George Noorigian interview with Aaron Elson (1999); Mercer crew sheet. KMHS archive.</em></p>",
+        "formation-details": "<p>LEAD ELEMENT</p>",
+        "outcome-details": "<p>Force-landed at Manston Emergency Field, Kent, England</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24J",
+        "serial-number": "42-51549",
+        "outcome": "675c31c81d3b3090bad7db9a27189710",
+        "name": "Mercer Crew",
+        "slug": "mercer"
+      }
+    },
+    {
+      "id": "64548b493aea4475208bbb68",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:37:06.280Z",
+      "fieldData": {
+        "participants": [
+          "658d135470bb753783b01a7e",
+          "658d1355bc9f8a76fe443b70",
+          "658d135aa7939e42510282bf",
+          "658d1359c7d6a88a82aff62f",
+          "658d135a7b58e8edf274a29a",
+          "658d135d2f16f6d662e9a291",
+          "658d135eebf151b529214fc5",
+          "658d135e91a9e3f9f0162dd3",
+          "658d13644f9335e0ffb1a5bf",
+          "658d1365fad6a31f9d163bf8"
+        ],
+        "squadron": "642c97418758627ed624e3d9",
+        "about": "<h3>1st Lt. Joseph E. Johnson&rsquo;s Crew &mdash; B-24J &ldquo;Fridget Bridget,&rdquo; 703rd Squadron</h3><p>On the morning of 27 September 1944, the crew of 1st Lt. Joseph E. Johnson flew as deputy lead of the 445th in B-24J 42-51342, a Liberator the men called &ldquo;Fridget Bridget.&rdquo; Their bombardier, 1st Lt. James E. Dowling, spent the rest of his life insisting on one point: the popular account that the 445th simply got &ldquo;lost&rdquo; was wrong. &ldquo;The conception that we were lost is not true,&rdquo; he wrote. &ldquo;We made the I.P. and turned toward the target Kassel.&rdquo; From over the bombsight he had the tank factory in his sights when the lead crew radioed they were diverting because of cloud. &ldquo;Johnson tried to tell the lead crew that we had the target. However, this information was ignored.&rdquo;</p><p>After bombs-away the group lost its escort and, some thirty miles on, was struck by a wall of FW-190s. Dowling never forgot the strangeness of it: &ldquo;It seemed that the cannon fire was frozen in time as the sky lit up with thousands of tiny flashes.&rdquo; He watched Capt. Chilton&rsquo;s lead ship begin to maneuver, then &ldquo;Chilton&rsquo;s plane blew up as well as one to our right.&rdquo; Calling a target to his nose-turret gunner, he saw the result: &ldquo;I called to William Flickner, who was in the nose turret, that a FW 190 was directly below us. He pointed his 50 caliber guns down, and I could see stitches all over the wings and it spun in.&rdquo;</p><p>On the second pass the No. 3 engine was shot out and 20mm fire cut down navigator 2nd Lt. Herbert Bateman, seated directly behind Dowling. In his account &ldquo;Too Busy,&rdquo; Dowling recalled warning Bateman to put on his chute: &ldquo;He acknowledged and stated he was too busy at the time.&rdquo; When the nose doors gave way and Bateman fell, Dowling tried to save him:</p><blockquote>&ldquo;I spun around and grabbed him by the legs but due to the lack of oxygen and the tremendous tug of the slipstream, I was unable to pull him back into the ship. He fell out without his chute. As far as I can determine, he was already dead from wounds caused by the 20mm.&rdquo; &mdash; 1st Lt. James Dowling</blockquote><p>Hit in the back, Dowling clipped on his chest chute and rolled out the nose-wheel opening, coming down near Bad Hersfeld &mdash; among the first of the group&rsquo;s men captured. The Liberator went in at Breitau, about a kilometre north of the Erbberg. Only Bateman was killed in the air; Johnson, Dowling and the others became prisoners. But nose-turret gunner 2nd Lt. William Flickner, who survived the bail-out and evaded for ten days, was captured near Nenterode and shot by a country constable &ldquo;while attempting to escape&rdquo; on 7 October &mdash; one of several Kassel airmen murdered after capture.</p><p>James Dowling carried Kassel home to Smithtown, New York, where he became Highway Superintendent. In 1987 he returned to Germany and met historian Walter Hassenpflug; it was then the airmen learned their missing comrade&rsquo;s fate. &ldquo;It took 43 years,&rdquo; Dowling told the local paper, &ldquo;but now we know what happened.&rdquo; A decade later he and his wife Dorothy were guests of honor at Tom Brokaw&rsquo;s <em>Greatest Generation</em> book party &mdash; a 445th bombardier standing for a whole generation.</p><p><em>Sources: German crash-data sheet, MACR 9392; James Dowling letter to Walter Hassenpflug (1987) and &ldquo;Too Busy&rdquo; (8th AF News); Dowling casualty questionnaire; The Smithtown News (1987); 2nd ADA Journal (1998&ndash;99). KMHS archive.</em></p>",
+        "formation-details": "<p>LEAD ELEMENT</p>",
+        "outcome-details": "<p>Crashed 1 Km North of Breitan, Germany - MACR 9392</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24J",
+        "serial-number": "42-51342",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Johnson Crew",
+        "slug": "johnson"
+      }
+    },
+    {
+      "id": "64548b496663c5420eaa404b",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:30:54.479Z",
+      "fieldData": {
+        "participants": [
+          "658d1355a1cce10059f4036d",
+          "658d135586303d8f3a39b0bc",
+          "658d1359304ca15240ac4781",
+          "658d135c221bbf9e5f4816b2",
+          "658d135d822af522de30f9cb",
+          "658d135e4b73d75dd3fe7e13",
+          "658d13634b73d75dd3fe7fa8",
+          "658d13644205f28754f8d20b",
+          "658d136552d5ee59e33ab2e4",
+          "6454920d123c055bd1ea6ebf",
+          "658d1368383d9bd0af5dc1ea"
+        ],
+        "squadron": "642c97418758627ed624e3d9",
+        "about": "<h3>1st Lt. Cecil J. Isom and the Crew of &ldquo;Patty Girl&rdquo;</h3><p>On the morning of 27 September 1944 &mdash; Yom Kippur &mdash; 1st Lt. Cecil J. Isom of Ennis, Texas, lifted the B-24J Liberator &ldquo;Patty Girl&rdquo; (42-50811) off the runway at Tibenham and took the lead of the 703rd Squadron, flying the low-left position in the 445th&rsquo;s formation bound for Kassel. The men had been served real eggs that morning instead of powdered; the briefing left them thinking this &ldquo;might be a milk run.&rdquo;</p><p>It was anything but. After the group turned for home, navigator Art Shay had already warned Isom that the formation had drifted off course. Then tail gunner Raymond Phillips called &ldquo;fighters at six o&rsquo;clock high,&rdquo; and, in left waist gunner Paul Dickerson&rsquo;s words, &ldquo;ALL HELL BROKE LOOSE.&rdquo; Roughly 150 Me-109s and FW-190s slammed into the 445th in waves abreast. Shay, riding the nose turret that day, described a sky of &ldquo;hundreds of white and orange explosions&rdquo; from cannon fire: &ldquo;On every side ships from our group were burning and exploding, and men were bailing out.&rdquo;</p><p>Isom flew his ship through it. In his own words, recorded that day: &ldquo;Those Germans had plenty of nerve. I could have hit the big black crosses with my .22-caliber pistol, they came so close. Twenty-millimeter shells were exploding so thick it looked like white flak. We have flown 29 missions before today without tangling with the Luftwaffe, but they tried to make up for it today.&rdquo;</p><p>The crew fought back fiercely. Shay raked an FW-190 at fifty yards &mdash; bombardier Wayne Sprague yelling, &ldquo;You got him, Shay! You got him!&rdquo; as the German bailed out. Top-turret gunner Kyle Bailey knocked down two at close range; right waist gunner William Wagner claimed another; and Dickerson downed an Me-109 that came up so close &ldquo;it was as if he was just sitting there at our waist.&rdquo; Then the Germans were gone, and the men counted ten Liberators where thirty-five had flown.</p><p>The moment that defined the day came over the radio as &ldquo;Patty Girl&rdquo; reached Tibenham. When the tower asked where the rest of the group was, Isom answered: &ldquo;We are the group!&rdquo; The ship that had set out leading the low-left squadron now led a remnant of three. &ldquo;A small group of about eighteen walked into the chow hall, where food had been prepared for two hundred,&rdquo; Dickerson wrote. Col. Jimmy Stewart, commander of the 703rd, came down to run the debriefing. Art Shay went on to a celebrated career as a Life photographer; decades later he reflected, &ldquo;These meetings and memorials reduce us to our real selves &mdash; humans caught up in a war we didn&rsquo;t want.&rdquo;</p><p><em>Sources: Art Shay, &ldquo;Description of Combat with German Fighters on Sept. 27th&rdquo; and &ldquo;A Change of Heart&rdquo; (KM Chronicles, 2010); Paul Dickerson, &ldquo;Kassel Mission&rdquo; account; Aaron Elson interview with Art Shay (2009). KMHS archive.</em></p>",
+        "formation-details": "<p>LED 703RD IN LEAD ELEMENT</p>",
+        "outcome-details": "<p>Returned to Tibenham</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24J",
+        "serial-number": "42-50811",
+        "outcome": "ca2e997b6d5ece53237dfaf9dd4977f3",
+        "name": "Isom Crew",
+        "slug": "isom"
+      }
+    },
+    {
+      "id": "64548b48c57dc58b73a2bc7e",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T05:52:01.772Z",
+      "fieldData": {
+        "participants": [
+          "645491e857eb6985f8b62eaf",
+          "645491e97564d4b0a3a560e2",
+          "645491ea750412d239c0cfb0",
+          "645491eaa3b4eaf6246c11a9",
+          "645491ebe3c85a1bb07aebef",
+          "645491eb61bbe54a7483e766",
+          "645491ec123c0522c0ea47e7",
+          "645491ec1151a516225dab62",
+          "645491ed29c83141a0052c26",
+          "645491ee9330fec5203a1fcd"
+        ],
+        "squadron": "642c97418758627ed624e3d9",
+        "about": "<h3>1st Lt. Edward F. Hautman&rsquo;s Crew &mdash; B-24J &ldquo;Mairzy Doats&rdquo;</h3><p>Six days before the Kassel Mission, 1st Lt. Edward F. Hautman wrote home with quiet pride in his men: the crew had turned down a lead-crew slot, and &ldquo;regardless of this we do have the best crew in the group &hellip; we are more cautious than cocky &mdash; each does his job well, so the odds are on our side. With the help of your prayers etc. we&rsquo;ll all be back home soon.&rdquo;</p><p>On 27 September the crew flew with the 700th Squadron in the B-24J &ldquo;Mairzy Doats&rdquo; (42-109789). After the navigation error carried the group off course and away from its escort, an estimated 150 fighters fell on the formation. Co-pilot 2nd Lt. Carrol Snidow remembered the moment the milk run ended: &ldquo;Then, all of a sudden, all Hell broke loose &hellip; FIGHTERS!!! I don&rsquo;t know how many there were, but it was &lsquo;beaucoup&rsquo;.&rdquo;</p><p>The first pass knocked out the tail turret, wounding tail gunner S/Sgt. Gordon Waldron; top-turret gunner T/Sgt. Thomas Land shot an FW-190 out of the sky. Then the No.&nbsp;4 engine was hit and its runaway propeller tore loose. &ldquo;The whole prop and engine was coming out of the wing,&rdquo; Snidow wrote. &ldquo;The propeller, whirling in its full velocity, made a 90&deg; turn and came toward me &hellip; The prop came over into the number three prop and engine and knocked it out of the wing.&rdquo; Radio operator T/Sgt. Harold Giesler confirmed it: &ldquo;the prop came off &amp; hit the prop on inboard motor &hellip; so we were flying with two motors on left side which isn&rsquo;t good.&rdquo;</p><p>Crippled, the ship fell out of formation and was escorted southwest by P-51s and then P-38s for some forty minutes, bleeding altitude, the crew throwing out guns and equipment. Near Koblenz, down to about 1,200 feet, it ran into light railway flak. &ldquo;We were so low and going so slow that we were a perfect target &hellip; there wasn&rsquo;t anything to do but leave the ship,&rdquo; Snidow wrote. On Hautman&rsquo;s order the men bailed out &mdash; Land, Giesler, Jones, Snidow, and finally Hautman. &ldquo;The pilot (Hautman) was still at controls,&rdquo; Giesler recalled. At 11:55 a.m. the abandoned bomber banked steeply and fell near Bassenheim, about seven miles west of Koblenz, with waist gunner S/Sgt. John Tarbert still aboard.</p><p>Three men died: pilot Hautman (who jumped last but was never seen alive again), Tarbert, and tail gunner Gordon Waldron, who had bled from his wounds. Snidow, Jones, Land, Giesler, Maupin and Howe survived as prisoners; Giesler and Land endured the long forced march of early 1945. Years later Giesler wrote to German historian Walter Hassenpflug: &ldquo;wars don&rsquo;t make much sense. Every one is a loser.&rdquo;</p><p><em>Sources: Ed Hautman letter home (21 Sept 1944); Carrol Snidow, &ldquo;A Day to Remember&rdquo; (1944); Harold Giesler letters to Walter Hassenpflug (1988); Maynard Jones account (1979); German crash-data form, MACR 9398. KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">SLOT ELEMENT</p>",
+        "outcome-details": "<p>Crashed in Germany &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; MACR 9398</p>",
+        "additional-details": "<p><em>Flying with the 700th Squadron on the Kassel Mission</em></p>",
+        "aircraft-type": "B-24J",
+        "serial-number": "42-109789",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Hautman Crew",
+        "slug": "hautman"
+      }
+    },
+    {
+      "id": "64548b48415b857d215410a8",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:30:54.484Z",
+      "fieldData": {
+        "participants": [
+          "658d135523ee3a3981d804c2",
+          "658d1357ebf151b529214c8f",
+          "658d135799e5cbfecc4d4bac",
+          "658d135bbf5859f359232359",
+          "658d135b0fe960c2d857bcec",
+          "658d1360cbeb870d23702d61",
+          "658d13604b73d75dd3fe7ed9",
+          "658d136377440f8e943d50ad",
+          "658d136962cc519051174185"
+        ],
+        "squadron": "642c97418758627ed624e3d9",
+        "about": "<h3>1st Lt. Richard A. Fromm &mdash; B-24H #42-51080, 703rd Squadron</h3><p>At roughly 7:15 on the morning of 27 September 1944, 1st Lt. Richard A. Fromm lifted B-24H Liberator #42-51080 off the runway at Tibenham, bound for the railyards of Kassel. He was twenty-one, a former University of Tennessee basketball standout who had turned down professional offers to enlist &mdash; close to six-foot-three, tall enough that German witnesses would later remember the &ldquo;noticeably taller&rdquo; airman among the fugitives in their woods. Among his nine crewmen was a gunner who may have been the youngest man on the entire mission: nose-turret gunner S/Sgt. Raymond Bence Jr., who had turned nineteen exactly one month before.</p><p>Over the target the 445th&rsquo;s aircraft, drifted off course, were ambushed and shredded. The German crash record (MACR 9762) lists the cause bluntly: <em>durch J&auml;ger beim R&uuml;ckflug</em> &mdash; brought down by fighters on the return flight. Heavily damaged, Fromm&rsquo;s ship drifted northwest. He gave his men what every bomber pilot prayed he could give: time. He held the dying aircraft steady and sounded the alarm early, so the crew could bail in order rather than in panic.</p><p>They went out in sequence. Radio operator Joseph Rackis and copilot Edward Globis dropped through the bomb bay one behind the other; the researcher Walter Hassenpflug recorded that &ldquo;Globis had patted the man in front of him on the shoulder reassuringly &hellip; meant as an encouraging gesture.&rdquo; In the waist, gunner Joseph Williams had been badly wounded and could no longer move; William Brower and tail gunner Lee Coffin &ldquo;ran back, pulled him out, hooked him to the clip and pushed him out, hoping he could pull the cord.&rdquo; The empty Liberator flew on another seventeen kilometres and exploded at low altitude about 400 metres south of Reichenbach (today part of Hessisch Lichtenau).</p><p>Of the ten men, all bailed out alive but one. Globis&rsquo;s parachute failed to open; he was found dead in the farmland near Ulfen and buried in the village cemetery &mdash; the crew&rsquo;s only fatality. The survivors were hunted down over days and weeks. Fromm&rsquo;s war was only beginning: he and 2nd Lt. William Flickner of the Johnson crew fled together through the forest toward the American lines; captured once, Fromm escaped and was recaptured, while Flickner later broke away and was murdered by a rural policeman. Fromm pressed on alone, finally arrested on 21 October near Leimbach &mdash; some fifty kilometres covered over twenty-four days of evasion, spotted by a boy on his way to the train station.</p><p>As a prisoner at Stalag Luft III, Fromm spent his captivity, his daughter wrote, &ldquo;digging tunnels underneath the POW camp.&rdquo; After the war he stayed in uniform, flying B-29s and B-52s in Korea and Vietnam and retiring a lieutenant colonel in 1975; he died of leukemia in 1978 and was buried at Andersonville National Cemetery. His son Martin remembered the crew with a plain awe: &ldquo;I say men and I mean men &mdash; but really, they were so young.&rdquo;</p><p><em>Sources: German crash-data sheet, MACR 9762; Walter Hassenpflug, &ldquo;Failed Escape Attempts (Flickner&ndash;Fromm)&rdquo;; Raymond Bence Jr. letters (1991) and 2nd ADA Journal (1992); Joseph Rackis letter; Brower and Coffin family accounts; Carol and Martin Fromm emails (2005, 2011). KMHS archive.</em></p>",
+        "formation-details": "<p>SLOT ELEMENT</p>",
+        "outcome-details": "<p>Crashed 400 meters South of Hessisch Lichtenau-Reichenbach, Germany - MACR 9762</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24H",
+        "serial-number": "42-51080",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Fromm Crew",
+        "slug": "fromm"
+      }
+    },
+    {
+      "id": "64548b479076bdcef946a419",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:37:06.284Z",
+      "fieldData": {
+        "participants": [
+          "658d1358ca1479f5b8a169e5",
+          "658d13590f2f680e3e09ca27",
+          "658d1359ef485db1d647a03c",
+          "658d135a1815cdd2c22b2cdf",
+          "658d135aecbc3a7acda2f5d7",
+          "658d13620f2f680e3e09cd25",
+          "658d1368789f6c8f4eb4b535",
+          "658d136986303d8f3a39b941"
+        ],
+        "squadron": "642c97418758627ed624e3d9",
+        "about": "<h3>The Elder Crew &mdash; B-24H &ldquo;Clay Pigeon&rdquo;</h3><p>The crew of 1st Lt. Oliver B. Elder flew B-24H Liberator #41-29579, the ship the men called <em>Clay Pigeon</em>, with the 703rd Squadron. On 27 September 1944 they led the low-left element of the formation bound for Kassel &mdash; on what would become the costliest single-battle loss any American bomber group ever suffered. Waist gunner S/Sgt. John L. Durr, twenty, of Cincinnati, had shipped over aboard the <em>Queen Elizabeth</em>, arriving at Glasgow on D-Day; his hope that &ldquo;our crew wouldn&rsquo;t fly any missions because the war would be over &hellip; vanished very quickly.&rdquo; By late September he was on his 23rd mission, having &ldquo;never seen a German fighter plane on any of my first twenty two.&rdquo;</p><p>Kassel changed that in an instant. After the off-course group bombed near G&ouml;ttingen and turned back without escort, it was set upon near Eisenach. &ldquo;A short time later, Stanley Morse, the tail gunner, shouted &lsquo;fighters&rsquo; on the intercom,&rdquo; Durr recalled. &ldquo;He fired several volleys and then opened the hatch and bailed out.&rdquo; Durr never forgot his crewmate&rsquo;s fate: &ldquo;I will always wonder what happened to Stanley, since he was listed as KIA.&rdquo;</p><p>Then the fire reached Durr. &ldquo;A hole more than large enough to fall through was blown in the floor about three feet from me and a bullet hit my lower left leg, shattering the bones,&rdquo; he wrote. &ldquo;I was also hit in my right eye by a cannon shell fragment which later resulted in a false eye.&rdquo; Wounded, he bailed out and watched three Me-109s circle him as he came down &mdash; not to fire, he realized, but &ldquo;to alert people on the ground.&rdquo; He landed in a meadow, was taken prisoner, and survived captivity at Stalag IXC until an American spearhead freed him on 2 April 1945.</p><p>Of the men aboard <em>Clay Pigeon</em>, pilot Elder, tail gunner Morse, and radio operator T/Sgt. John J. Donahue were killed; Ellender, Whidden, DeVries, Deckert and Durr became prisoners. Donahue&rsquo;s death was not, strictly, a battle death. As Michael Buettner reported in the Petersburg <em>Progress-Index</em>, the twenty-year-old radio operator was among a group of downed airmen murdered by a Gestapo-led mob at Nentershausen that afternoon. &ldquo;Brief as it is,&rdquo; Buettner wrote of the &ldquo;Killed in Action&rdquo; on Donahue&rsquo;s gravestone, &ldquo;the inscription is unintentionally misleading. John Donahue was not, strictly speaking, killed in action. He was murdered.&rdquo; Several of the perpetrators were later tried and hanged. Donahue had been awarded the Distinguished Flying Cross only months before; his mother, a relative recalled, &ldquo;grieved for him for the rest of her life.&rdquo;</p><p>Durr, who lived to retire from Wright-Patterson Air Force Base in 1976, closed his memoir with the survivor&rsquo;s burden: &ldquo;I feel very fortunate to have survived this experience while four of our crew and so many of the 445th lost their lives.&rdquo;</p><p><em>Sources: John L. Durr, &ldquo;My Kassel Mission Story&rdquo;; KMHS crew photograph with annotated caption; Michael Buettner, &ldquo;The Fallen and Forgotten&rdquo; / &ldquo;Murder in Midst of War,&rdquo; Petersburg Progress-Index (May 2009). KMHS archive. (Crash site ~1 km SW of Lindenau; the ground murders occurred at Nentershausen.)</em></p>",
+        "formation-details": "<p>LOW LEFT ELEMENT</p>",
+        "outcome-details": "<p>Crashed 1 Km Southwest of Lindenau, Germany - MACR 9387</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24H",
+        "serial-number": "41-29579",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Elder Crew",
+        "slug": "elder"
+      }
+    },
+    {
+      "id": "64548b476fbb786c64bc0602",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T05:52:01.770Z",
+      "fieldData": {
+        "participants": [
+          "658d1356ef485db1d6479d8d",
+          "658d13570f2f680e3e09c956",
+          "658d135d6f7007cb928111a8",
+          "645491d47881e85a66262946",
+          "658d135eb356090779353d20",
+          "658d13616b166e0e0a314f14",
+          "658d13612f16f6d662e9a428",
+          "658d1361157481a906b5fac5",
+          "658d1365b700e73390ce4e65",
+          "658d1365c7d6a88a82aff9d2",
+          "658d1367ecbc3a7acda2fb70"
+        ],
+        "squadron": "642c97418758627ed624e3d9",
+        "about": "<h3>The Lead Ship: Capt. John H. Chilton&rsquo;s Crew</h3><p>On 27 September 1944 the 445th Bomb Group flew at the head of the 2nd Combat Wing, and at the very front of the 445th flew Capt. John H. Chilton and his crew in B-24J Liberator 42-51541 of the 703rd Squadron. Theirs was the lead ship &mdash; the aircraft every other Liberator in the formation would follow to Kassel. Aboard rode the air commander, Maj. Donald W. McCoy, C.O. of the 700th Bomb Squadron, flying as command pilot. As Group Communications Officer Maj. Howard L. Davis recalled, the 445th was leading the wing with &ldquo;Major McCoy the command pilot in our lead ship (Chilton crew).&rdquo;</p><p>This was a battle-tested team &mdash; the Kassel Mission was their 28th. Because they led, the ship had been converted to a Pathfinder (PFF) radar plane: the belly ball turret was removed and replaced with an H2X radar dome, and extra navigators rode aboard. KMHS records note an unusually large complement: &ldquo;Fourteen people were aboard that plane, an unusual number, even for a lead plane.&rdquo;</p><p>The PFF role proved fatal. Clouds hid the target, bombing went by radar, and the lead navigation faltered. &ldquo;All went well until the target area was reached,&rdquo; Davis wrote. &ldquo;The 389th and 453rd Groups following us saw that we were going past the target due to some navigational failure &hellip; The 445th drove some miles beyond the briefed course alone: no bombers for company and no friendly fighters for support.&rdquo; The removed ball turret left the formation&rsquo;s underside undefended &mdash; a gap the Luftwaffe exploited.</p><p>Pilotage navigator Carlton Hudson described the killing blow from below: &ldquo;A number of F.W.190&rsquo;s came up on our bottom side which was out of range of all eight of our guns. They filled our bomb-bay with 20 &amp; 30 mm cannons &hellip; the craft was doomed to explode in midair.&rdquo; Gunner Glen McCormick was in the rear: &ldquo;Our plane was one of the later ones hit &hellip; The crew members on the flight deck were in the airplane when it exploded.&rdquo;</p><p>The ship went down about 1.8 km east of Friedlos. Capt. Chilton, Maj. McCoy, co-pilot 2nd Lt. Harold Sutherland, navigator 1st Lt. Raymond Ische, radio operator T/Sgt. William Sloane, and gunners S/Sgt. Robert Shay and S/Sgt. Donald Mills were killed. A handful lived: Carlton Hudson bailed out wounded; radar navigator 2nd Lt. Cloys Johnson came to in mid-air after the explosion, kicked free of hydraulic lines wrapped round his legs, and pulled his ripcord despite severe burns; gunners McCormick and Merle Briggs and engineer Howard Sturdy evaded for weeks before capture. Hudson long believed only he and Johnson had survived &mdash; until, after the war, a postcard arrived from bombardier Parker Trefethen. Maj. McCoy left behind a wife and a daughter, Sheila, whom he had never seen.</p><p><em>Sources: Howard L. Davis, &ldquo;Proud 445th BG Complacent Before the Kassel Mission&rdquo; (KM Chronicles, 1999); Carlton Hudson letters to Duane Giesler; Glen McCormick, &ldquo;My Stay in the Military&rdquo;; Howard Sturdy diary; German crash-data form, MACR 9394. KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">LEAD POSITION IN THE LEAD SQUADRON</p>",
+        "outcome-details": "<p id=\"\">Crashed 1.8Km East of Freidlos, Germany - MACR9394</p>",
+        "additional-details": "<p><em>Flying with the 700th Squadron on the Kassel Mission</em></p>",
+        "aircraft-type": "B-24J",
+        "serial-number": "42-51541",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Chilton Crew",
+        "slug": "chilton"
+      }
+    },
+    {
+      "id": "64548b466b208325badd196d",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T05:52:01.765Z",
+      "fieldData": {
+        "participants": [
+          "645491bd270fb069387386b9",
+          "658d135470bb753783b01a06",
+          "658d135591a9e3f9f0162b18",
+          "658d13546f7007cb92810d13",
+          "658d1356b700e73390ce4642",
+          "658d135bb9114f8fc4f976a6",
+          "658d136297589af28fc19586",
+          "658d136477440f8e943d50ff",
+          "658d13685294877bbdc85b6c"
+        ],
+        "squadron": "642c97418758627ed624e3d9",
+        "about": "<h3>The Bolin Crew on the Kassel Mission</h3><p>The 703rd Squadron ship B-24J 42-51355 was captained by 2nd Lt. Roy E. Bolin &mdash; a former University of Illinois engineering student who, as his niece Janet Bolin Heise recalled, &ldquo;wanted to be in the Air Force and fly a plane.&rdquo; It was only about his fourth combat mission, and nine men were aboard.</p><p>The crew flew that day already short one of their own. Their regular waist gunner, Lauri Niemela, had been grounded by injuries from a mission six days earlier: on 21 September, over Koblenz, the ship took a savage flak hit and Bolin wrestled it to a forced landing at Cambrai, France. Niemela&rsquo;s grounding spared him; it left his seat to Sgt. Tage Frederiksen.</p><p>After the group bombed near G&ouml;ttingen and turned away some 35 miles off course, it was overwhelmed by as many as 150 fighters attacking from below and behind. As KMHS researcher Duane Giesler reconstructed it, Bolin&rsquo;s position &ldquo;made him extremely vulnerable &hellip; It is almost a certainty that his ship would have been a casualty of the first wave of fighters, and quite possibly the first to crash.&rdquo; The Liberator broke into three pieces and came down at Krauthausen, near Eisenach; the German report (MACR 9393) records the cause flatly &mdash; shot down &ldquo;by fighters on the way home.&rdquo;</p><p>Eight of the nine aboard were killed. Only the tail gunner lived &mdash; Sgt. Orland J. (&ldquo;Jack&rdquo;) Schooley, 24. &ldquo;The plane blew up,&rdquo; he remembered decades later. &ldquo;Blew the tail off, and I was in the tail &hellip; I was 20,000 feet high, and I just pushed a button and the parachute opened up.&rdquo; He drifted down with shrapnel in his ankle, bleeding badly; German soldiers captured him and stopped the bleeding. &ldquo;They saved my life,&rdquo; Schooley said. He endured six months as a POW and a forced march: &ldquo;I lost 82 pounds and weighed 82 pounds.&rdquo;</p><p>For Bolin&rsquo;s family the tail gunner became a figure of hope. &ldquo;They would say, &lsquo;Uncle Roy was shot down and killed over Germany,&rsquo;&rdquo; Heise wrote, &ldquo;but all changed when they said the second sentence &hellip; &lsquo;But, the tail gunner got out.&rsquo;&rdquo; For 66 years his name and fate were unknown to them. In 2009&ndash;2010 the Kassel Mission Historical Society pieced it together and discovered the unthinkable: Schooley and Heise had both lived in the Fort Myers, Florida area for about fifteen years. In May 2010, a county veterans officer knocked on Schooley&rsquo;s door and read him Heise&rsquo;s letter. The lone survivor, then 89, was finally found.</p><blockquote>&ldquo;Bolin and his crew &mdash; Ajello, Armstrong, Barben, Oleson, Weatherly and Aaron &mdash; are today in a mass grave &hellip; in Jefferson Barracks National Cemetery, St. Louis, Missouri.&rdquo; &mdash; Eberhard H&auml;lbig, who lives near the crash site, to KMHS, 22 February 2009</blockquote><p>Roy Bolin rests there among his men.</p><p><em>Sources: Duane Giesler narrative; Eberhard H&auml;lbig correspondence (2009); Jay Niemela letters; Janet Bolin Heise family notes; Fort Myers News-Press (2010); German crash-data form, MACR 9393. KMHS archive.</em></p>",
+        "formation-details": "<p>HIGH RIGHT ELEMENT</p>",
+        "outcome-details": "<p>Crashed 6 Km Northwest of Eisenach, Germany - MACR 9393</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24J",
+        "serial-number": "42-51355",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Bolin Crew",
+        "slug": "bolin"
+      }
+    },
+    {
+      "id": "64548b462411ad6af02dd12e",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T05:52:01.768Z",
+      "fieldData": {
+        "participants": [
+          "64549237123c05a87bea8fac",
+          "64549237f01ddacd9dd65286",
+          "6454923738243d77f51c82b6",
+          "645492367f8503485f0cd1ac",
+          "645492366fbb7801e0c43d58",
+          "645492353aea443945905710",
+          "645492357f8503109b0cd19e",
+          "6454923529c8314947052ccc",
+          "64549234320f4e64ddbba4f8"
+        ],
+        "squadron": "642c9705bc923d1ab10e8638",
+        "about": "<h3>The Warman Crew &mdash; B-24J &ldquo;Our Gal&rdquo;</h3><p>On 27 September 1944, 2nd Lt. Leslie E. Warman and his nine-man crew lifted off from Tibenham aboard the olive-drab B-24J <em>Our Gal</em> (42-100308), bound for Kassel. It was the crew&rsquo;s ninth mission. When the lead navigation took the group off course and onto the wrong target, the Liberators turned for home alone &mdash; nearly twenty miles from the bomber stream and its P-51 escort. Tail gunner S/Sgt. Raymond W. Ray had not realized anything was wrong: &ldquo;I was not aware on the Kassel Raid that we were off course and that our escort had gone with the main bomber group stream.&rdquo;</p><p>The Luftwaffe struck without warning. &ldquo;The attack came from the rear at 6 O&rsquo;clock low,&rdquo; Ray remembered. &ldquo;They came up through the clouds within range with guns blazing. I knew there was no way we could survive the attack. Their force was overwhelming.&rdquo; Machine-gun fire hammered his turret glass; a 20mm shell shattered it and disabled his guns; a second blew him clean out of the tail.</p><blockquote>&ldquo;The next 20mm shell blew me out of the turret. I did a backward somersault and landed 15 feet into the aircraft between the waist gunners. They were lying on the floor. I assumed they were dead and opened the escape hatch and rolled out. The tail was on fire and the Bombay was an inferno.&rdquo; &mdash; S/Sgt. Raymond W. Ray</blockquote><p>Ray fell free through the clouds before pulling his ripcord &mdash; the opening tore off his boots &mdash; and an FW-190 flashed past, climbing back into the fight. Then came an eerie stillness three miles up. &ldquo;There was total silence,&rdquo; he said. &ldquo;The first sound I heard was a dog barking.&rdquo; He landed barefoot, his left arm hit three times and his shoulder shattered. An old man beat him until two young women ran up and pushed the crowd back, bandaging his wounds from his own first-aid kit and laying him on straw in a small house. They guarded him eleven hours until Luftwaffe soldiers carried him to a hospital at Eisenach.</p><p>Six of the crew were killed &mdash; pilot Warman, copilot Robert Johnston, navigator Francis Costley, radio operator Douglas Smith, and waist gunners Charles Pakestein and Carl Forster. <em>Our Gal</em> went down in the Gerstunger Forst. Only Ray, top-turret gunner T/Sgt. Wilbur Brown (badly burned), and nose gunner S/Sgt. Francis Barnish survived as prisoners &mdash; Ray recognizing Brown days later only by a ring on his finger. Waist gunner Carl Forster, a high-school valedictorian, had once told his classmates they could &ldquo;go forth well-fitted for the struggle that is looming ahead.&rdquo;</p><p><em>Sources: Raymond W. Ray interview and &ldquo;Closure&rdquo;; Walter Hassenpflug Gerstungen-cross research (1998); Carl Forster valedictory address; German crash-data form, MACR 9763. KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">SLOT ELEMENT</p>",
+        "outcome-details": "<p>Crashed 5 Km Northwest of Gerstungen, Germany - MACR 9763</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24J",
+        "serial-number": "42-100308",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Warman Crew",
+        "slug": "warman"
+      }
+    },
+    {
+      "id": "64548b456fbb78157fbc03d1",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:07:42.116Z",
+      "fieldData": {
+        "participants": [
+          "64549218e3c85a2cab7aec74",
+          "64549218f01dda2a25d651ff",
+          "6454921761bbe5108283e837",
+          "64549217a646415ceb3445ef",
+          "64549216f01ddaa982d651f8",
+          "645492166bc44858dddfce18",
+          "64549216e3c85aa0f87aec63",
+          "6454921561bbe5ebd483e828",
+          "6454921530fb4195828e1e79",
+          "645492146c4f31ea119625ff"
+        ],
+        "squadron": "642c9705bc923d1ab10e8638",
+        "about": "<h3>The Sollien Crew &mdash; B-24H &ldquo;Fort Worth Maid&rdquo;</h3><p>On the morning of 27 September 1944, 1st Lt. Carl J. Sollien lifted B-24H &ldquo;Fort Worth Maid&rdquo; (42-50321) off the runway at Tibenham with the 702nd Squadron. Sollien was a man apart &mdash; a professional photographer from Hamilton, New York, and a pianist and composer whose playing at the Officer&rsquo;s Club was so admired that the group&rsquo;s former squadron commander, the actor James Stewart, &ldquo;enjoyed Carl Sollien&rsquo;s piano playing&rdquo; whenever he returned to the 445th. Lead bombardier Lt. Malcolm MacGregor, who flew in Sollien&rsquo;s nose that day, called them &ldquo;a really sharp crew.&rdquo;</p><p>The mission began as a milk run. Then the lead navigator drifted miles off course, the group bombed an open field instead of the target, and &mdash; just as the P-51 escort peeled away &mdash; a German storm group of some 150 fighters fell on the strung-out formation. Number 4 engine caught fire. Radio operator T/Sgt. Charles Graham saw the moment control was lost: &ldquo;I saw Carl Sollien pull the control back and it all came right back in his lap. So he had no control over the ailerons or rudders.&rdquo; The ball turret had been stripped out weeks earlier to save weight, leaving the belly blind; the fighters came up from below, and, MacGregor said, their first object was &ldquo;to kill the gunners in the back of the plane &mdash; and that&rsquo;s what happened in our plane; they were all killed.&rdquo;</p><p>Co-pilot Lt. William Koenig bailed out, but his back-pack chute never opened; he was found dead near the wreck with a single mark on his chin. Pilotage navigator Lt. John Dent &mdash; flying that day only to gain experience &mdash; never got out of the nose. The ship came down about a mile and a half west of Herleshausen, near the Werra; a surviving photograph shows a German soldier and a small child picking through the scattered aluminum.</p><blockquote>&ldquo;Smoking oil so thick you couldn&rsquo;t breathe&hellip; Sir, you&rsquo;re under arrest.&rdquo; &mdash; navigator Lt. Wesley Hudelson, recalling his escape from the spiralling fuselage and his capture in a tree</blockquote><p>MacGregor, riddled with thirteen pieces of shrapnel and a wrecked ankle, drifted into a plowed field amid &ldquo;extreme loneliness.&rdquo; On the ground, civilians were as great a danger as the battle: the survivors were marched in lines, spat on, stoned and struck &mdash; &ldquo;the civilians would have killed us all if it hadn&rsquo;t been for the German soldiers protecting us,&rdquo; Hudelson remembered. Five of the day&rsquo;s downed 445th men were murdered by civilians. Sollien, drafted into a German burial detail, wore the overseas cap of a dead waist gunner to silently signal Graham which of the crew had been lost. Five of the ten aboard were killed; five became prisoners.</p><p>Carl Sollien stayed in uniform, retiring a lieutenant colonel with Strategic Air Command. Thirty-five years on, the anger had not cooled:</p><blockquote>&ldquo;It is especially galling to me that my last combat mission was, in my mind, an incredible, useless, devastating fiasco&hellip; Only us, who survived the awful shellacking, can feel anything.&rdquo; &mdash; Lt. Col. Carl J. Sollien, 1979</blockquote><p><em>Sources: Carl Sollien letter (1979); Malcolm MacGregor oral history (Univ. of Utah, 2002) and Aaron Elson interview; Charles Graham interview (Aaron Elson, 1999); Wesley Hudelson recollections (2011). KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">LEAD ELEMENT</p>",
+        "outcome-details": "<p>Crashed 1.5 Km West of Herleshausen, Germany - MACR 9911</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24H",
+        "serial-number": "42-50321",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Sollien Crew",
+        "slug": "sollien"
+      }
+    },
+    {
+      "id": "64548b45415b852278540888",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T05:52:01.767Z",
+      "fieldData": {
+        "participants": [
+          "64549210a3b4ea2a7e6c1244",
+          "64549210270fb08b267396bc",
+          "6454920fa397bb4b20d2f48e",
+          "6454920ff01dda2ee5d651c2",
+          "6454920e270fb01d747396b5",
+          "6454920e338d6c19dd67c87b",
+          "6454920ef01dda35ebd651ab",
+          "6454920da6464115b73445b6",
+          "6454920da397bb1921d2f47a",
+          "6454920d123c055bd1ea6ebf"
+        ],
+        "squadron": "642c9705bc923d1ab10e8638",
+        "about": "<h3>The Schaen Crew on the Kassel Mission</h3><p>1st Lt. James W. Schaen was a Des Moines native who became, as his wife Sarah put it, &ldquo;a Mississippian by choice and marriage,&rdquo; marrying a college student in Columbus, Mississippi on Christmas Day 1943. His navigator, 2nd Lt. Corman Bean, remembered him as &ldquo;a damn good pilot&rdquo; who once dead-sticked them onto a muddy strip in a Wyoming snowstorm.</p><p>On 27 September 1944 the crew&rsquo;s regular bombardier failed to return from a London pass, and 2nd Lt. George M. Collar of Jackson, Michigan flew in his place &mdash; a veteran filling in on what should have been a milk run. When the 445th turned too early in cloud and bombed G&ouml;ttingen, drifting far behind the bomber stream, Bean called over the intercom: &ldquo;That Mickey man in the lead ship has screwed up, we shouldn&rsquo;t have turned yet.&rdquo; Then more than a hundred FW-190s struck from the high clouds behind. &ldquo;They hit us so fast,&rdquo; Collar recalled, &ldquo;that our tail gunner never got to call them.&rdquo;</p><p>Collar was jammed in the nose turret when a 20mm shell blew out its controls; the Consolidated turret was notorious for trapping its gunner. His life was saved by his navigator:</p><blockquote>&ldquo;I distinctly remember opening those doors to the turret and grabbing Collar by the neck and pulling him ass over teakettle backwards into the little navigation quarter, and then we got our parachutes hooked on, and I went out first and he followed me.&rdquo; &mdash; 2nd Lt. Corman Bean (interview with Aaron Elson, 1999)</blockquote><p>On the flight deck the end was crueler. Top-turret gunner T/Sgt. George Eppley dropped into the bomb bay to find the doors shut &mdash; the pilots and radioman were climbing forward, believing them jammed. Eppley yanked the handle, the doors fell open, and he bailed an instant before the ship exploded. &ldquo;The pilot, Jim Schaen, I don&rsquo;t think ever got out of the plane,&rdquo; Collar said. &ldquo;His body was found right near the wreck.&rdquo; The Liberator came down about a kilometer north of Gerstungen, near a spring called the Kohlbach Quelle.</p><p>Captured near Lauschroeden, Collar was beaten by a mob, then forced to spend the day gathering the broken bodies of fallen airmen onto hay wagons. The four Schaen dead &mdash; Schaen, Parsons, Johnson and Hurt &mdash; were buried by the people of Gerstungen beneath a hand-stencilled wooden cross; Schaen was re-interred at Arlington in 1951. His daughter, Jima, was born a month after his death was confirmed &mdash; and decades later met the son of a German fighter pilot killed in the same battle, a friendship across the old enemy lines. George Collar survived Stalag Luft I to become one of the Kassel Mission&rsquo;s foremost chroniclers.</p><p><em>Sources: George Collar, &ldquo;Recollections of a Bombardier&rdquo; and Aaron Elson interview; Corman Bean interview (Aaron Elson, 1999); Sarah Schaen Naugher memoir; Walter Hassenpflug correspondence; German crash-data form, MACR 9385. KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">LOW LEFT ELEMENT</p>",
+        "outcome-details": "<p>Crashed 3.5 Km Northwest of Gerstungen, Germany - MACR 9385</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24J",
+        "serial-number": "44-10511",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Schaen Crew",
+        "slug": "schaen"
+      }
+    },
+    {
+      "id": "64548b446b2083585add195a",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:37:06.287Z",
+      "fieldData": {
+        "participants": [
+          "6454920913dde16215d9ae04",
+          "6454920861bbe50b5a83e806",
+          "645492087f8503a91b0cd09a",
+          "64549208e3c85ab4b37aec5c",
+          "645492077504120cc1c0d00f",
+          "645492076bc4486853dfce0b",
+          "64549207270fb0856f739685",
+          "645492068db9a6d811d62aea",
+          "6454920628518b63c7c070df"
+        ],
+        "squadron": "642c9705bc923d1ab10e8638",
+        "about": "<h3>The Potts Crew &mdash; B-24H #42-50340, 702nd Squadron</h3><p>On the morning of Wednesday, 27 September 1944, the crew of 2nd Lt. Herbert Potts lifted B-24H Liberator 42-50340 off the runway at Tibenham with the 702nd Squadron, bound for the rail yards at Kassel &mdash; one of nine ships the 702nd would lose that day. The co-pilot, 2nd Lt. Gerald J. Kathol of Hartington, Nebraska, was on only his second combat mission.</p><p>The 445th drifted off course after the bomb run and, separated from the bomber stream, was set upon by an overwhelming force of fighters on the return flight; the German crash record (MACR 9389) lists the cause flatly: &ldquo;durch J&auml;ger beim R&uuml;ckflug.&rdquo; Potts&rsquo;s Liberator was raked nose to tail. &ldquo;We were hit by many cannon and heavy machine gun bullets,&rdquo; Kathol wrote, &ldquo;with tracers going thru the cockpit.&rdquo;</p><p>With the bomb bay aflame and its doors jammed, the only way out was up through the top hatch. &ldquo;I was pushed up, to try to get through the hatch by Sgt. Scott, our engineering waist gunner,&rdquo; Kathol recalled. &ldquo;I was to pull him up when on the top.&rdquo; In that instant the aircraft was torn apart: &ldquo;At that moment the fuel tanks exploded in the Davis wing of the B-24, resulting in the 4 engines and wings blown off. I was on the nose section of the plane. Scott must have been killed by the explosion.&rdquo; The blast threw Kathol onto the rotating nose and pitched him into open air: &ldquo;I kicked off and opened my chute too early (only one strap buckled), perhaps reason for hip seperation.&rdquo;</p><p>Their hut-mate George Collar recorded a parallel version: with the doors jammed, &ldquo;Gerry and the engineer, Sgt. Roger Scott, went back on the flight deck to try and exit from the top hatch. Scott was boosting Gerry up when the wing tanks exploded and the ship disintegrated.&rdquo; Pilot Herbert Potts did not survive; the Liberator went down about a kilometre northeast of Archfeld, on the Hachenberg. Kathol came down in a field where young women were stacking hay; unable to walk for his dislocated hip, he gave his parachute to one of them. An old man arrived with &ldquo;a relic of a hand gun&rdquo; and the words &ldquo;Ich schiess dich&rdquo; &mdash; I&rsquo;ll shoot you &mdash; until his companion told him to put it away.</p><p>That evening it was Collar &mdash; captured and pressed into a detail collecting the dead &mdash; who found his friend: &ldquo;We found Gerry Kathol lying near the tailgate in considerable pain.&rdquo; Kathol began a seven-month odyssey through German hospitals and prison camps before liberation by Patton&rsquo;s 14th Armored Division on 29 April 1945. &ldquo;Flag went up at 12:38 PM,&rdquo; he noted. &ldquo;A MOST HAPPY DAY!!&rdquo;</p><p><em>Sources: German crash-data sheet, MACR 9389; Gerald Kathol letter to Walter Hassenpflug (1988) and POW chronology; George Collar, &ldquo;Remembering an Old Friend&rdquo; (2nd ADA Journal, 1997). KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">LOW LEFT ELEMENT</p>",
+        "outcome-details": "<p>Crashed 1 Km Northeast of Archfeld, Germany - MACR 9389</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24H",
+        "serial-number": "42-50340",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Potts Crew",
+        "slug": "potts"
+      }
+    },
+    {
+      "id": "64548b44415b855aeb54073a",
+      "isDraft": false,
+      "lastUpdated": "2026-06-30T20:02:40.302Z",
+      "fieldData": {
+        "participants": [
+          "6454920138243d80e51c4634",
+          "64549201338d6ca49d67c84b",
+          "6454920161bbe5a15b83e7d7",
+          "645492006c4f3147a5961448",
+          "64549200a397bbaac6d2f442",
+          "645491ff6bc44855ccdfcdef",
+          "645491ff38243d15021c43b0",
+          "645491ffa397bb5ce8d2f43b",
+          "645491fe30fb4177f48df8ec",
+          "645491fe38243d5ee01c418b",
+          "645491fda3b4eaaacc6c11f9",
+          "645491fda397bb6fd6d2f434"
+        ],
+        "squadron": "642c9705bc923d1ab10e8638",
+        "about": "<h3>The Miner Crew on the Kassel Mission</h3><p>On 27 September 1944, 1st Lt. Reginald R. &ldquo;Reg&rdquo; Miner flew a mission he was never meant to fly. His crew had led the 702nd Squadron to Hamm the day before, but when the ship of the pilot scheduled to lead to Kassel malfunctioned, Miner was directed to lead again. Flying as his dead-reckoning lead navigator was 1st Lt. Frank J. Bertram, who would spend the rest of his life documenting what went wrong.</p><blockquote>&ldquo;All was essentially uneventful until a short time after we made our turn at the IP. All of my 3 navigators called to tell me we were not on course for the target in Kassel. I called the group lead with that information.&rdquo; &mdash; Reg Miner</blockquote><p>The reply was, in effect, to follow the lead. The group swept past the primary target and bombed near G&ouml;ttingen &mdash; later judged the worst single-group navigational error in 8th Air Force history. The blow came moments after the turn for home. &ldquo;Suddenly I saw some fairly small white puffs ahead,&rdquo; Miner wrote, &ldquo;immediately looked down at the lead squadron &hellip; and saw them under attack by a flight of FW190&rsquo;s line abreast.&rdquo; From the nose, Bertram saw the same instant: &ldquo;Those P-47&rsquo;s I had imagined turned into FW190&rsquo;s.&rdquo;</p><p>The first pass crippled Miner&rsquo;s Liberator: engines 1 and 3 out and windmilling, a fire on each wing, the intercom dead, and top-turret gunner Mac Thornton blown from his shattered turret, covered in blood. With the bail-out bell rung and his copilot gone, Miner deliberately held the dying bomber on a westward heading &mdash; &ldquo;to give anyone that hadn&rsquo;t gotten out more time, and to get as far west as possible.&rdquo; Only near 10,000 feet did he leave his seat; the bomb-bay doors jammed, so he pulled himself out the nose-wheel opening as the plane fell into a spin, landing in a meadow less than a hundred feet from his burning ship, just outside Grebenau.</p><blockquote>&ldquo;My closest view of an FW190 was one that came over my left wing, upside down, close enough for me to clearly see the pilot &hellip; &lsquo;It&rsquo;s crazy, here we are trying to kill one another while under different circumstances we&rsquo;d probably be friends.&rsquo;&rdquo; &mdash; Reg Miner</blockquote><p>Not all came through. Radioman Joe Gilfoil, behind the bomb bay, had a leg nearly severed by a 20mm shell; with no time to do more, his crewmates fastened a chute to him, lowered him out by rope and pulled the ripcord for him &mdash; but former crewman George Collar later found him dead on the ground. Copilot Virgil Chima came down in dense forest and was not found for about six weeks. For decades Bertram and Miner pressed the unanswered question of the error; in 1987 the two returned to Grebenau together with former FW-190 pilot Ernst Schr&ouml;der, through the work of German researcher Walter Hassenpflug &mdash; once enemies, now friends.</p><p><em>Sources: Reg Miner&rsquo;s handwritten account (1989) and 1994 letter on the &ldquo;Kassel Mission mystery&rdquo;; Frank Bertram, &ldquo;The 445th&rsquo;s Mission to Kassel&rdquo;; Larry Bowers interview (Aaron Elson, 1999); German crash-data form, MACR 9571. KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">Lead Element</p>",
+        "outcome-details": "<p>Crashed at Grebenau, Germany - MACR 9571</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24J",
+        "serial-number": "42-50961",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Miner Crew",
+        "slug": "miner"
+      }
+    },
+    {
+      "id": "64548b4304e69920ee2773bf",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:20:56.409Z",
+      "fieldData": {
+        "participants": [
+          "645491fde3c85a323c7aec33",
+          "645491fc61bbe5467483e7c8",
+          "645491fc30fb418ea18df70d",
+          "645491fce3c85aa97c7aec2c",
+          "645491fba397bb8c2dd2f427",
+          "645491fb61bbe5e91f83e7bf",
+          "645491fa38243d73971c3b0b",
+          "645491faa397bb324ad2f420",
+          "645491f9a3b4ead9fa6c11e6"
+        ],
+        "squadron": "642c9705bc923d1ab10e8638",
+        "about": "<h3>Percy: The Ship That Came Home</h3><p>On 27 September 1944, eighteen missions into his tour, 1st Lt. Stanley E. Krivik lifted the war-weary B-24J Liberator &ldquo;Percy&rdquo; (42-100331) off the field at Tibenham with the 702nd Squadron. The run to Kassel began quietly &mdash; waist gunner James R. &ldquo;Bob&rdquo; Paul called it &ldquo;a relatively easy one up to the point where we were attacked after leaving the target.&rdquo; Then, in a few savage minutes, more than two dozen Liberators of the 445th fell from the sky. Of the 702nd Squadron, &ldquo;Percy&rdquo; alone would survive the battle and turn for England.</p><p>The first warning came not from the gunners&rsquo; eyes but from the bullets. &ldquo;You could feel the bullets whizzing through the fuselage,&rdquo; radio operator John Cadden remembered. The Focke-Wulf 190s came from below; tail gunner Harry Puto was &ldquo;blown completely out of the turret&rdquo; on the first pass, and waist gunner Bill Rand was struck in the face. Paul, himself hit in the leg and heel, pressed a compress to Rand&rsquo;s wound; in the freezing air, &ldquo;the blood froze and the bleeding stopped.&rdquo; An FW-190 shot the propeller off the right inboard engine. Rand and Paul kept firing &mdash; between them downing three fighters &mdash; until P-38s and P-51s drove the Germans off and kept &ldquo;Percy&rdquo; from being the last ship to go down.</p><p>Krivik nursed the crippled bomber home across the North Sea on failing engines and with no hydraulics. Reaching Tibenham, the crew found the runway blocked by lorries and wreckers. Rather than kill the men working there, Krivik overshot &mdash; &ldquo;he couldn&rsquo;t get back up and go around &hellip; he overshot the runway and crashed&rdquo; in a farm field near Diss. The Liberator broke in half and caught fire.</p><blockquote>&ldquo;The plane broke in half and was burning pretty badly, but with the heroism of Stan Krivik and Bill Rand, they pulled everyone out except Dan Dale our Navigator who was killed in the crash.&rdquo; &mdash; James R. Paul to George Collar, 10 July 1990</blockquote><p>Thrown clear and knocked unconscious, Krivik revived and went back into the burning wreck. He pulled out co-pilot Leonard Trotta &ldquo;seat and all,&rdquo; dragged Cadden free as .50-caliber rounds cooked off in the flames, then returned a third time for engineer Donald Bugalecki. &ldquo;Krivik was probably the strongest person I ever saw,&rdquo; Cadden said. &ldquo;He was a bull &hellip; I was very happy I was flying with Krivik that day.&rdquo; Navigator F/O Daniel J. Dale, who had braced on the floor of the fuselage, was thrown into the bomb bay and killed &mdash; the crew&rsquo;s only fatality. Tellingly, Krivik&rsquo;s own report covered only the flight up to the crash; it fell to his radio operator and engineer to tell of the rescues. For their heroism, Stanley Krivik and Bill Rand each received the Soldier&rsquo;s Medal.</p><p><em>Sources: Krivik crew summary and crew sheet (George Collar); James R. Paul letters to George Collar (1990); John Cadden interview with Aaron Elson (1999); Stanley Krivik biography and Notre Dame tribute. KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">SLOT ELEMENT</p>",
+        "outcome-details": "<p>Crash-landed at Old Buckenham near Tibenham</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24J",
+        "serial-number": "42-100331",
+        "outcome": "675c31c81d3b3090bad7db9a27189710",
+        "name": "Krivik Crew",
+        "slug": "krivik"
+      }
+    },
+    {
+      "id": "64548b43c57dc554efa2b730",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:37:06.285Z",
+      "fieldData": {
+        "participants": [
+          "645491f93aea44a929905646",
+          "645491f88db9a6b453d61b8a",
+          "645491f84d7dcd1c7618d336",
+          "645491f8270fb09469739603",
+          "645491f78db9a62924d61ada",
+          "645491f76bc448c33bdfcdda",
+          "645491f67564d4a63da56f48",
+          "645491f67f850390200cd078",
+          "645491f661bbe5842a83e79c",
+          "645491f561bbe5d7d383e795"
+        ],
+        "squadron": "642c9705bc923d1ab10e8638",
+        "about": "<h3>The Jones Crew &mdash; B-24H #41-29542, 702nd Squadron</h3><p>On the morning of 27 September 1944, 2nd Lt. Howard A. Jones lifted his B-24H Liberator off the runway at Tibenham with the 702nd Squadron, bound for the Henschel works at Kassel. The ten men aboard tail number 41-29542 would not return as a crew: by day&rsquo;s end four were dead, five were prisoners, and one would die of his wounds in a German hospital. (Waist gunner S/Sgt. Willis Meier later clarified a long-standing puzzle over the ship&rsquo;s name &mdash; the crew&rsquo;s first bomber, <em>The Green Hornet</em>, &ldquo;lasted for two missions &hellip; so shot up it was scrapped. Then we got another one, Roughhouse Kate.&rdquo;)</p><p>Lagging the division without escort, the 445th was set upon east of Eschwege. Meier, in the waist, watched it begin: &ldquo;They got up to the plane next to me and it lit up like a Christmas tree with the 20-millimeters going off all over the place &hellip; Then that&rsquo;s when we got hit.&rdquo; A 20mm round tore through his thigh and &ldquo;blew out three inches of my hipbone.&rdquo; The aircraft was burning, and his account of the tail gunner&rsquo;s death is among the most harrowing in the archive: &ldquo;My tail gunner came out of the tail gunner position back there. He was full of hydraulic fluid and he went up like a torch when the flames hit him. I tried to do something for him.&rdquo;</p><p>Meier bailed from the waist window and fell from roughly 28,000 feet. &ldquo;I passed out &hellip; I rolled over and pulled my chute, and my shoes shot off.&rdquo; The cold proved a grim mercy: with an artery severed in his calf, &ldquo;it&rsquo;s sixty-five below zero centigrade up there &hellip; it froze &hellip; so I didn&rsquo;t bleed to death.&rdquo; On the ground an old man came at him with a knife until a wounded Luftwaffe soldier intervened. The pilotless Liberator flew on; researcher Walter Hassenpflug surmised that Jones &ldquo;turned on the auto-pilot before bailing out and that the pilotless B-24 drifted onto an opposite course&rdquo; before crashing about a kilometre east of D&ouml;ringsdorf.</p><p>Tail gunner Raymond Paulus and engineer Andrew Fratta were killed in the aircraft; co-pilot Harold Allen died that day at the Eschwege hospital. Pilot Jones survived as a prisoner and went on to a career in the Air Force. Meier endured surgery and an amputated finger without anesthesia and dropped from 200 to 118 pounds at Stalag Luft I before liberation by the Russians. &ldquo;I served with some wonderful people,&rdquo; he reflected. &ldquo;They gave their lives freely. Never a complaint &hellip; They were here yesterday; they&rsquo;re gone tomorrow.&rdquo;</p><p><em>Sources: oral-history interview of Willis Meier (State Historical Society of Missouri, 2002); MACR 9570 crew list and German crash-data sheet (courtesy Walter Hassenpflug); Stremme family recollections. KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">LEAD ELEMENT</p>",
+        "outcome-details": "<p>Crashed 1 Km East of Doringsdorf, Germany - MACR 9570</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24H",
+        "serial-number": "41-29542",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Jones Crew",
+        "slug": "jones"
+      }
+    },
+    {
+      "id": "64548b42fe43043d7c225638",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:20:56.399Z",
+      "fieldData": {
+        "participants": [
+          "645491dca397bbf051d2e495",
+          "645491db13dde11647d9adc8",
+          "645491db61bbe52a4183e72a",
+          "645491db7f850381a50cd03d",
+          "645491da123c058805ea3587",
+          "645491da61bbe51c7783e719",
+          "645491da29c831b642052263",
+          "645491d9e3c85af0117aebc8",
+          "645491d9a3b4ead0856c0ca8"
+        ],
+        "squadron": "642c9705bc923d1ab10e8638",
+        "about": "<h3>The Donald Crew &mdash; B-24H #42-51287, 702nd Squadron</h3><p>On the morning of 27 September 1944, 1st Lt. Myron H. Donald lifted his B-24 Liberator (42-51287) off the runway at Tibenham as part of the 445th&rsquo;s strike on Kassel. The crew that day was an assembled one. Their bombardier, 1st Lt. Ira P. Weinstein, had not been scheduled to fly &mdash; it was Yom Kippur, and he had a three-day pass in his pocket. He volunteered anyway, hoping to finish his tour and be home for his wife&rsquo;s December birthday. &ldquo;I never knew or had met anyone on that crew,&rdquo; Weinstein recalled. &ldquo;That&rsquo;s how I happened to go on the fateful Kassel Mission.&rdquo;</p><p>After bombing, the 445th drifted off course toward G&ouml;ttingen and, now without escort, was swarmed by roughly 150 German fighters. The German crash record (MACR 9391) fixes the end coldly: the ship went down about 11:03&ndash;11:09, cause &ldquo;by fighters on the return flight,&rdquo; crashing at Nesselr&ouml;den, one kilometre northeast on the Ziegenberg.</p><p>Inside the burning Liberator, two men barely escaped. Navigator 2nd Lt. Eric W. Smith Jr. felt the bombardier pull him clear: &ldquo;I helped my bombardier, Lt. Ira Weinstein, out of the nose turret and out the nose wheel hatch. I then grabbed my chest-chute and took the plunge.&rdquo; Weinstein&rsquo;s own escape nearly killed him &mdash; he had drawn an unfamiliar back-pack chute, and as he dropped through the hatch the straps snagged on the bombsight while the plane fell into a flat spin: &ldquo;I chinned myself back up into the airplane, undid the strap, and bailed out a second time. By the time I bailed out, I figure I was at the most maybe at 2,500 feet.&rdquo;</p><p>The pilot was not so fortunate. Of the men aboard, only the two Smiths, Weinstein, and Donald cleared the ship; the other six went down with it. Weinstein gave the most direct account of his pilot&rsquo;s fate: Donald bailed out but was injured on landing, &ldquo;and pretty soon some farmers came along and they pitchforked him to death.&rdquo; As a prisoner, detailed by the Germans to recover the dead, Weinstein found his own ship and crew. In <em>Burial Detail</em> he wrote: &ldquo;I came across the pilot&rsquo;s body in a ravine about 1/2 mile from the plane. His chute had been cut off of him and he was stripped of all of his flying apparel. His body and face were in a badly mauled condition.&rdquo; He also buried the five men who burned in the wreck, and after the war sought out the dead men&rsquo;s parents to spare them the silence of a bare telegram: &ldquo;those parents must wonder what happened. All they get is a KIA notice, nothing else.&rdquo;</p><p>For more than forty years Weinstein shut the war away &mdash; &ldquo;I have wiped out the war years and the P.O.W. years,&rdquo; he wrote in 1987 &mdash; refusing to own a German car or set foot on German soil. Only in September 2000, at 81, did he return, standing at the reconciliation memorial in the Seulingswald Forest near the field where his Liberator fell. &ldquo;One can never get rid of the memories,&rdquo; he told a German reporter, &ldquo;but one can overcome the feelings.&rdquo;</p><p><em>Sources: German crash-data sheet, MACR 9391; Ira Weinstein, &ldquo;Burial Detail&rdquo; and interview with Aaron Elson; Eric W. Smith Jr., &ldquo;From the High Right Squadron&rdquo; (1994); Weinstein, &ldquo;They Say, You Can&rsquo;t Go Back!&rdquo; (KMMA, 2001). KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">SLOT ELEMENT</p>",
+        "outcome-details": "<p id=\"\">Crashed 1 Km Northeast of Nesselroden, Germany - MACR 9391</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24H",
+        "serial-number": "42-51287",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Donald Crew",
+        "slug": "donald"
+      }
+    },
+    {
+      "id": "64548b426b2083d2dcdd1940",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:20:56.397Z",
+      "fieldData": {
+        "participants": [
+          "645491c2270fb06179738b7b",
+          "645491c17f8503357c0ccfeb",
+          "645491c1a397bb274dd2c6e8",
+          "645491c013dde1523bd99a5c",
+          "645491c030fb41c05b8db40b",
+          "645491bf61bbe5a55e83db5e",
+          "645491bf417e15fb50075dfe",
+          "645491be42b5d635fb329139",
+          "645491be0dd6637e44ae5f63"
+        ],
+        "squadron": "642c9705bc923d1ab10e8638",
+        "about": "<h3>1st Lt. Donald E. Brent and the Crew of &ldquo;Eileen&rdquo;</h3><p>On 27 September 1944, B-24H Liberator <em>Eileen</em> (42-50324, squadron code WV-S) lifted off from Tibenham with the 702nd Squadron, bound for Kassel. At the controls was 1st Lt. Donald E. Brent, a steady, mechanically-minded Oregonian who had worked the railroads and dreamed of being a locomotive engineer. It was his thirty-third mission. Beside him sat co-pilot 2nd Lt. Walter Eugene George, a 20-year-old architecture student from Texas. The two flew as one mind: &ldquo;We were in harmony as a team, as pilots,&rdquo; George remembered. &ldquo;I knew what he was thinking before he said, and he knew what I was thinking.&rdquo;</p><p>Radio operator T/Sgt. Sammy Weiner felt the dread before takeoff &mdash; the breakfast pancakes were so cold he took only coffee. &ldquo;A week later,&rdquo; he wrote, &ldquo;I would have given a year of my life for a stack of those soggy cold cakes.&rdquo; Over the target an undercast forced instrument bombing, and Brent&rsquo;s voice came joyous over the interphone: they were heading home, only two missions to go. Then a navigational error pulled the 445th out of the bomber stream and stripped away its escort, and the Luftwaffe fell upon the isolated group. &ldquo;The skies were suddenly filled with Focke-Wulfs 190s that had risen out of nowhere for the kill,&rdquo; Weiner recalled. &ldquo;There were three simultaneous attacks, one up through the bomb bay.&rdquo; A 20mm shell tore through his transmitter and into his leg.</p><p>What George did next was extraordinary. With the bomb bay a wall of flame &mdash; the fuel gauges &ldquo;spitting like blowtorches&rdquo; &mdash; he ran the burning catwalk to reach the door switch: &ldquo;I could jump through all of this flame on the catwalk to get there, and I hit the switch on the way over &hellip; and the bomb bay doors opened.&rdquo; He hauled top-turret gunner Constant Galuszewski from his turret, snapped a parachute onto him, and went out himself. Weiner was thrown clear when the ship tore apart: &ldquo;There was a sudden, thunderous blast and the plane broke completely in two &hellip; throwing me out into the welcome blue space.&rdquo; He fell some six thousand feet before pulling his cord; George free-fell most of 23,000 feet to stay below the fighters, opening his chute at treetop height with his oxygen mask melted to his burned face.</p><p>Only three men survived &mdash; George, Weiner, and Galuszewski, all taken prisoner. The aircraft burned into three sections before crashing about 2.5 km southeast of Ulfen. Galuszewski, though beaten by civilians, later identified the wreck &ldquo;by its name <em>Eileen</em> and by our squadron markings.&rdquo; Six men did not come home: bombardier Harold Mercier and gunner Donald Larsen, killed by the fire that raked the nose; nose gunner George Linkletter, waist gunner Milton Smisek, and tail gunner Woodard Watts; and Brent himself, who bailed out about a minute before the ship burst but whose chute was found with its shroud lines severed, and who was believed killed on the ground. George never stopped honoring the pilot he flew beside. Decades later he handed Brent&rsquo;s family the pocket Bible he had carried, telling them, &ldquo;This rode next to Brent on 17 missions.&rdquo;</p><p><em>Sources: Eugene George interview with Aaron Elson (2001); Sammy Weiner memoir, &ldquo;The Fatal Twentieth Mission&rdquo;; Walter E. George letter to the War Department (1945); Individual Casualty Questionnaires and German crash-data sheet, MACR 9388. KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">HIGH RIGHT ELEMENT</p>",
+        "outcome-details": "<p id=\"\">Crashed 2.5 Km Southeast of Ulfen, Germany - MACR 9388</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24H",
+        "serial-number": "42-50324",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Brent Crew",
+        "slug": "brent"
+      }
+    },
+    {
+      "id": "64548b429076bd04c5469e23",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:02:35.297Z",
+      "fieldData": {
+        "participants": [
+          "645491bd4d7dcd6e99188b3d",
+          "645491bc8db9a6cbc0d5d064",
+          "645491bce3c85a73b47ad442",
+          "645491bc4d7dcdbd14188a82",
+          "645491bbf01dda485dd5f5bb",
+          "645491bb13dde161bdd995d7",
+          "645491ba7f85037dd50ccfd5",
+          "645491ba9076bd1f4d4f5091",
+          "645491b9417e159c910756ad"
+        ],
+        "squadron": "642c9705bc923d1ab10e8638",
+        "about": "<h3>&ldquo;King Kong&rdquo; and the Baynham Crew</h3><p>To the men of 1st Lt. James C. Baynham&rsquo;s crew, 27 September 1944 began like any of the deep-penetration raids the 702nd Squadron seemed always to draw. &ldquo;The day of the mission came as any other day,&rdquo; Baynham wrote in 1950, &ldquo;with getting up early, eating breakfast and going to the briefing room&hellip; Nothing out of the ordinary. And taking off, forming, crossing the channel were all routine.&rdquo; Their B-24H #42&ndash;50383 &mdash; &ldquo;King Kong&rdquo; &mdash; flew with the lead group into Germany under solid cloud.</p><p>The day&rsquo;s undoing began at the Initial Point. &ldquo;The navigator was map reading by radar and made a wrong identification,&rdquo; Baynham recalled, &ldquo;so we turned at that point and made a bomb run on a town about 30 miles away from Kassel.&rdquo; The trailing groups corrected and bombed Kassel; the 445th pressed on alone, far off course. With no flak over the false target, the crew relaxed &mdash; &ldquo;small talk over the intercom, &lsquo;Milk Run,&rsquo; &lsquo;Sure an easy one.&rsquo;&rdquo; Then co-pilot Charley Bousquet jammed his flak helmet back on: &ldquo;I looked out my window and saw a mass of fighter planes coming up from the cloud cover below.&rdquo;</p><p>Top-turret engineer T/Sgt. Howard Boldt saw them too. &ldquo;I called our tail gunner, John W. Knox &hellip; He replied, &lsquo;Yes and I hope they are ours.&rsquo;&rdquo; They were not. Cannon fire caught the ship between No.&nbsp;1 and No.&nbsp;2 engines; the bomb bay caught fire, fed by gasoline fumes. &ldquo;I looked at the glass in the door to the bomb bay,&rdquo; Boldt wrote. &ldquo;It was red as if you were looking into a furnace.&rdquo;</p><blockquote>&ldquo;I hit the auxiliary bomb door lever. The left two doors opened all the way but the right doors only opened about six inches&hellip; As only fumes were burning, opening the doors blew all the flames out. It was at this time that I was hit, breaking both legs, and out I went.&rdquo; &mdash; T/Sgt. Howard Boldt</blockquote><p>Baynham held the diving ship steady. &ldquo;Charley, Boldt and Fields bailed out at 18,000 ft. I stayed in the ship holding it steady until it reached 12,000.&rdquo; In the waist, the stunned, half-blinded tail gunner Knox was pulled from his wrecked turret and clipped to his chute by waist gunner Ray Lemons; navigator John Cowgill came forward with his face covered in blood and was pushed out the hatch. &ldquo;Just a few seconds after I bailed out,&rdquo; Baynham wrote, &ldquo;I saw the ship explode and go down in pieces.&rdquo;</p><p>Five of the nine lived to be captured. Boldt, both legs broken, hung in a tree for hours before German soldiers carried him out on a litter of his own parachute lines; Knox, blind in one eye, was operated on without anesthetic. But the cruelest fate met the men who reached the ground near Nentershausen: navigator John Cowgill and bombardier Hector Scala were murdered by civilians. The war-crimes record of Scala&rsquo;s death is stark &mdash; he &ldquo;landed safely, surrendered unarmed,&rdquo; was forced to run a gauntlet and beaten by seven men, &ldquo;and was shortly thereafter shot to death.&rdquo;</p><p><em>Sources: Howard Boldt&rsquo;s draft 8th AF News article and KMHS narrative; James Baynham&rsquo;s account (3 June 1950) and 2010 interview with Aaron Elson; John Knox&rsquo;s roster and 2006 KM Chronicles account; George Collar&rsquo;s crew sheet; UN War Crimes / POW-MedSearch records; German MACR 9390. KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">HIGH RIGHT ELEMENT</p>",
+        "outcome-details": "<p id=\"\">Crashed in Germany &nbsp; &nbsp; &nbsp; &nbsp;MACR 9390</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24H",
+        "serial-number": "42-50383",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Baynham Crew",
+        "slug": "baynham"
+      }
+    },
+    {
+      "id": "64548b412e46dc942dd87092",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:20:56.395Z",
+      "fieldData": {
+        "participants": [
+          "645492349330fe65203a2033",
+          "64549234338d6c44e967c8e5",
+          "645492331151a532835de661",
+          "6454923328518b28b3c07115",
+          "64549233338d6c818967c8de",
+          "645492323aea44773d905705",
+          "64549232415b85750d589846",
+          "64549231a397bb3a66d2f583",
+          "645492311151a5c9475de65a",
+          "64549231a397bb429bd2f57c"
+        ],
+        "squadron": "642c9451b61e8a6c754f84d3",
+        "about": "<h3>The Walther Crew &mdash; B-24J #44-10490, 701st Squadron</h3><p>On the morning of 27 September 1944, 1st Lt. Edgar N. Walther lifted his B-24J Liberator off the runway at Tibenham bound for Kassel on what the men had been told would be a &ldquo;milk run.&rdquo; Walther flew deputy lead, tucked in as 1st Lt. Reginald Smith&rsquo;s right wingman and riding last in the high-high-right squadron &mdash; the most exposed slot in the formation. When a navigational error carried the 445th away from the bomber stream and its fighter escort, more than a hundred German fighters fell on the isolated group, and in minutes the squadron was annihilated around him.</p><p>Walther himself never saw the end. His account, preserved in Missing Air Crew Report #9383, is one of the most haunting documents in the Society&rsquo;s files precisely because of what he could <em>not</em> remember:</p><blockquote>&ldquo;I suffered a brain concussion and amnesia for five days. I awoke in a German prison hospital and discovered that I had received a bullet in my right elbow and torn ligaments in my right knee. To this day I have no knowledge of the accident. My opinion is that the ship blew up and I was thrown clear &hellip; That is absolutely all I can honestly recall about this mission or the fate of my fellow crewmen.&rdquo; &mdash; 1st Lt. Edgar Walther, MACR #9383</blockquote><p>The blast that erased Walther&rsquo;s memory was triggered by a fighter that struck the tail; the explosion hurled the wounded pilot clear of the disintegrating aircraft, and he came down by parachute to be taken prisoner. The bomber crashed in the fields and orchards above Lauchr&ouml;den, in the Werra valley. On the back of his casualty questionnaire, in a shaky hand, Walther listed his nine crewmen by name and wrote three stark words across the page: <em>Plane blew up.</em> What he did not yet know was that every other man aboard had died.</p><p>A German eyewitness gave the Society the view from the ground. Horst, fifteen years old and working the fields near Lauchr&ouml;den that day, was found decades later standing in the very field where the ship came down: &ldquo;It was a cloudy overcast day and we could not see the planes until they dropped from the sky and we heard the firing of their guns. Pieces of planes, bodies &hellip; men with and without parachutes coming down.&rdquo;</p><p>The dead &mdash; co-pilot Martin Geiszler Jr., navigator Ross Brower, bombardier John Becker, nose gunner Kenneth Meeks, top-turret gunner Richard Vernor, radio operator Glenn Bergquist, waist gunners John Wise and Norman Hollis, and tail gunner Milo Mann &mdash; were gathered and buried in a common grave at Lauchr&ouml;den. They were young men with whole lives sketched out: Geiszler, just 21, killed on his fifteenth mission, left a fianc&eacute;e in Los Angeles; waist gunner John Wise, 28, dreamed of a farm or orchard and had written home only weeks earlier, &ldquo;It would be nice to get home by Christmas.&rdquo; In an earlier, happier photograph the ten men lounge across the wing of a Liberator chalked &ldquo;The Bird and the Boys,&rdquo; every signature still legible. Edgar Walther alone survived to carry the question that titles his account &mdash; <em>What happened?</em></p><p><em>Sources: Edgar Walther casualty statement, MACR #9383 (handwritten original and 8th AF News reprint); German crash-data sheet for #44-10490 (courtesy Walter Hassenpflug); &ldquo;Uncle John F. Wise&rdquo; family memoir incl. the &ldquo;Horst&rdquo; eyewitness account; Bell, California clipping on Martin Geiszler; Rutgers College memorial for Ross Brower. KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">LEAD ELEMENT</p>",
+        "outcome-details": "<p>Crashed at Lauchroden, Germany - MACR 9383</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24J",
+        "serial-number": "44-10490",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Walther Crew",
+        "slug": "walther"
+      }
+    },
+    {
+      "id": "64548b416663c57115aa323c",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:47:51.709Z",
+      "fieldData": {
+        "participants": [
+          "6454921b3aea44414f9056a3",
+          "6454921b7504123d56c0d05c",
+          "6454921b61bbe534d483e853",
+          "6454921a415b8506fb589819",
+          "6454921aa397bb212ad2f4cd",
+          "6454921961bbe5d15583e849",
+          "6454921938243d20ec1c61e9",
+          "645492198db9a61354d63d14",
+          "645492187eba3a17279d8b03"
+        ],
+        "squadron": "642c9451b61e8a6c754f84d3",
+        "about": "<h3>1st Lt. Paul Swofford &mdash; &ldquo;Sweetest Rose of Texas&rdquo;</h3><p>On 27 September 1944, 1st Lt. Paul Swofford flew B-24H #42-51105, &ldquo;Sweetest Rose of Texas,&rdquo; on the left wing of the low element of the 445th Bomb Group&rsquo;s 701st Squadron. It was, as Swofford recalled, only his crew&rsquo;s seventh mission. His original bombardier, 1st Lt. Augustine &ldquo;Og&rdquo; Mandino &mdash; later the celebrated author of <em>The Greatest Salesman in the World</em> &mdash; was hospitalized that day; a transient nose gunner whose name the survivors could never recover filled the slot. Navigator Henry &ldquo;Hank&rdquo; Dobek was aboard for what would be his last flight with the crew before the group&rsquo;s leadership moved him to a lead crew.</p><p>Flying tight formation in a heavy aircraft demanded everything. As Swofford put it, &ldquo;my concentration is not, &lsquo;Where is the bomber stream going?&rsquo; My concentration is, &lsquo;Am I socked in there on the wing of the plane I&rsquo;m supposed to be dressing off of?&rsquo;&rdquo; When the group lead turned at the IP onto a target &ldquo;several miles northeast of Kassel,&rdquo; Swofford never knew the formation had strayed: &ldquo;We didn&rsquo;t know that we were going astray. But there were people who did, and didn&rsquo;t do anything about it.&rdquo;</p><p>After bombs away, the group turned off the target with no fighter cover and was struck by more than 100 enemy fighters. &ldquo;The first thing I knew was I could see several of the other planes just start shredding,&rdquo; Swofford remembered. Then disaster struck his own aircraft: the No.&nbsp;2 engine was killed, hydraulics and radio failed, a 20-mm round tore a fist-sized chunk from a propeller blade, and the cockpit windshield shattered. &ldquo;Both my co-pilot, Ward Smith, and myself got a face full of flying glass. I felt the blood running down my face, and I looked over at the co-pilot; blood is running down his face.&rdquo; Engineer Phil Vosburgh, seeing only blood, thought both pilots were finished. Radio operator Gene Thum took shrapnel in the leg; Vosburgh applied a tourniquet.</p><p>Fearing fighters would finish a visibly crippled bomber, Swofford delayed feathering the dead engine and ordered every red Very flare fired to call back &ldquo;our little friends.&rdquo; Unable to keep formation speed on three engines, he firewalled the throttles and nursed the aircraft home alone. Reaching Tibenham, with gear cranked down by hand and no brakes, he was waved off the first approach by a storm of red flares from the tower: &ldquo;They waved me off at my own base on three engines, back from a combat mission&hellip; It&rsquo;s been 55 years, but I still get angry when I think about it.&rdquo; On the second approach he put her down: &ldquo;that airplane just rolled as straight as a die right down the middle of that runway,&rdquo; finally veering off into soft ground near the runway&rsquo;s end.</p><p>The Society&rsquo;s crew sheet records the outcome plainly: the aircraft &ldquo;made it back to Tibenham, but ran off end of runway, due to loss of hydraulic pump in #3 engine, hit by German fighter.&rdquo; Of 35 bombers that reached the target area, only four returned to Tibenham; Swofford&rsquo;s was one. He flew again eight days later, completed all 35 missions, and retired a Lt. Col., USAF. Bitterly, he noted that apart from Thum&rsquo;s Purple Heart, his crew received &ldquo;not one atom&rdquo; of recognition: &ldquo;my engineer and my co-pilot performed valiantly.&rdquo;</p><p><em>Sources: An Interview with Paul Swofford (Aaron Elson, Lakeland, FL, 19 April 1999); &ldquo;The Kassel Mission &mdash; An Overview&rdquo; (Paul Swofford, Lakeland, FL, 2004); Paul Swofford &mdash; A Brief Bio (2005, updated 2008); Swofford crew sheet; labeled crew photograph; gunners&rsquo; Encounter/Combat Forms (Vosburgh, Waller), 27 September 1944. KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">LOW LEFT ELEMENT</p>",
+        "outcome-details": "<p>Returned to Tibenham</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24H",
+        "serial-number": "42-51105",
+        "outcome": "ca2e997b6d5ece53237dfaf9dd4977f3",
+        "name": "Swofford Crew",
+        "slug": "swofford"
+      }
+    },
+    {
+      "id": "64548b4080c5acaa7cc9b6b2",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:47:51.711Z",
+      "fieldData": {
+        "participants": [
+          "645492147504126180c0d040",
+          "64549214123c052691ea758c",
+          "64549213a64641a6883445df",
+          "64549213a397bb0b96d2f4a1",
+          "6454921228518b70cbc070f0",
+          "645492126c4f3179de962420",
+          "645492127881e81ad52629cb",
+          "64549211f01ddad1e6d651d6",
+          "6454921138243d47441c56f1",
+          "645492107f85037d060cd0d4"
+        ],
+        "squadron": "642c9451b61e8a6c754f84d3",
+        "about": "<h3>The Donald H. Smith Crew &mdash; 701st Squadron, High-Right Lead</h3><p>On the morning of 27 September 1944, 1st Lt. Donald H. Smith of Salt Lake City lifted his B-24 off the runway at Tibenham at the head of the 445th Bomb Group&rsquo;s high-right squadron, bound for the locomotive and tank works at Kassel and G&ouml;ttingen. His radio operator that day, Jack Laswell, kept a mathematician&rsquo;s diary of every mission, and his record of this one reads almost casually at the start: &ldquo;The mission seemed like any other &lsquo;milk run.&rsquo; We were leading the High Right Squadron. We hit the target and made our turn.&rdquo; It was in that turn, Laswell believed, that the squadron&rsquo;s slide &ldquo;over to the left side&hellip;probably saved us.&rdquo;</p><p>What followed was the disaster that has since defined the Kassel Mission. From his left waist window &mdash; &ldquo;away from all the action&rdquo; &mdash; Laswell first mistook the shapes climbing from the rear for friendly fighters: &ldquo;saw what appeared to be P-51&rsquo;s barrel rolling up from our rear.&rdquo; A second look corrected him. &ldquo;On looking closer they were Me 109&rsquo;s with enlarged scoops underneath, at the same time we saw red balls exploding in front of the Airplanes below. Then all hell broke loose.&rdquo; Behind the Messerschmitts came what he later learned from G-2 was a force of roughly 180 Focke-Wulf 190s. The Luftwaffe attack fell on the trailing 445th squadrons; Smith&rsquo;s high-right position, displaced by that fortunate turn, escaped the worst of it.</p><p>The crew fought back as the air filled with burning aircraft. With the Liberators&rsquo; ball turrets recently removed, the fighters worked the bellies of the formation, then &ldquo;would come in, fire, roll over, then head for another target.&rdquo; One came too close. As Laswell recorded it: &ldquo;One Fw 190 came up on the left between our tail and our wing, so close that I could see his face, and I fired until he dropped from view. I&rsquo;m sure that I didn&rsquo;t miss, since his windshield was completely shattered.&rdquo; In the tail, S/Sgt. Eldon E. Gray of Plainview, Texas, made his own claim that day, filing a combat form on a fighter that &ldquo;came in at 6 o&rsquo;clock&hellip;and pulled in right behind our ship. I started shooting&hellip;until he peeled off smoking&rdquo; &mdash; a claim the interrogating officer marked as a probable.</p><p>Smith&rsquo;s Liberator &mdash; known to the crew simply as &ldquo;710 E (easy)&rdquo; &mdash; came home alone. &ldquo;We were the only plane to land back at Tibenham,&rdquo; Laswell wrote; G-2 told the crew that of the 445th&rsquo;s aircraft, one other landed in southern England and one in Belgium. The shock outlasted the relief: &ldquo;when we went to get our shot of whisky, which was standard practice&hellip;we could have more than one because nobody else was coming back to the base. Although we had lost others before during combat this was quite a shock to a 20 year old just recently out of High School.&rdquo;</p><p>The newspapers caught the same dismay. An Associated Press dispatch from London quoted the pilot by name: &ldquo;&lsquo;The planes were dropping like flies. I never thought I would see so many planes on fire at once,&rsquo; said Lt. Donald H. Smith&hellip;a pilot. &lsquo;It was indescribable. Hollywood couldn&rsquo;t think of anything to match it.&rsquo;&rdquo; Ten days later, on 6 October 1944, the same crew again led the high-right squadron &mdash; to Hamburg (Glinde) &mdash; and earned a &ldquo;Peachy&rdquo; Lead Crew Commendation &ldquo;for their meritorious achievement in the destruction of the target.&rdquo;</p><p><em>Sources: Jack Laswell account letter to Chris McDougal, 3 November 1986; Jack Laswell letter to William R. Dewey, postmarked 4 May 2000; S/Sgt. Eldon E. Gray combat claim form, 27 September 1944; &ldquo;Peachy&rdquo; Lead Crew Commendation, 6 October 1944; Associated Press clipping, &ldquo;Planes Fell Like Flies, Says Salt Lake Pilot,&rdquo; 1944. KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">LEAD ELEMENT</p>",
+        "outcome-details": "<p id=\"\">Returned to Tibenham</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24J",
+        "serial-number": "42-50710",
+        "outcome": "ca2e997b6d5ece53237dfaf9dd4977f3",
+        "name": "Smith Crew",
+        "slug": "smith"
+      }
+    },
+    {
+      "id": "64548b402e46dcce9fd86e31",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:14:35.237Z",
+      "fieldData": {
+        "participants": [
+          "6454920c13dde16663d9ae27",
+          "6454920c61bbe5c3a883e816",
+          "6454920b4d7dcd800b18e9a8",
+          "6454920b270fb0053a7396ab",
+          "6454920b61bbe5516583e80f",
+          "6454920a30fb41e1858e1296",
+          "6454920a13dde1bf2dd9ae0d",
+          "64549209a397bb6c99d2f462",
+          "64549209123c05faa6ea6b32"
+        ],
+        "squadron": "642c9451b61e8a6c754f84d3",
+        "about": "<h3>&ldquo;Little Audrey&rdquo; and the Long Road Home</h3><p>On the morning of 27 September 1944, the B-24J Liberator <em>Little Audrey</em> (42&ndash;50579) lifted off from Tibenham with the 701st Squadron, bound for the Henschel works at Kassel. At the controls was 2nd Lt. Donald N. Reynolds, beside him co-pilot 2nd Lt. Herbert Robinson. In the nose flew a borrowed navigator, 1st Lt. James &ldquo;Jim&rdquo; Withey, on his thirtieth and final required mission. &ldquo;As it was my last mission,&rdquo; Withey wrote, &ldquo;I was not too interested in the &lsquo;milk run.&rsquo;&rdquo;</p><p>It was no milk run. Shortly after bombs-away, tail gunner Harry Twigg&rsquo;s warning opened one of the worst single-mission losses in Eighth Air Force history. Engineer James Engleman remembered it precisely: &ldquo;Barely had the tail gunner spoken when exploding shells were hitting the plane while others exploded in close proximity. We were badly damaged. The left inboard engine spewed flames reaching back to the left rudder.&rdquo; <em>Little Audrey</em> survived the pass but was mortally hurt &mdash; oxygen, hydraulics, radio and intercom shot out, two feet of wing gone aft of No.&nbsp;2 engine.</p><p>When the sky cleared, Engleman saw &ldquo;no other aircraft, friend or foe. We were now alone.&rdquo; With No.&nbsp;2 engine afire and refusing to feather, the pilots smothered the flames and turned west for the advancing Allied lines. A lone P-51 slid alongside, its pilot motioning to his ear &mdash; but the radios were dead, and after a burst of flak the little friend departed. With wounded aboard and no oxygen, bailing out was ruled out; they would try to fly to the front.</p><blockquote>&ldquo;Soon we got hit again with 20mm shells and knew it was over. I told the pilot, Don, to crash land on the upslope of a small hill &hellip; I must say it was one of the best landings I had ever been on.&rdquo; &mdash; 1st Lt. James Withey</blockquote><p>They crossed the Rhine at about 800 feet into a wall of ground fire and bellied in near the railroad station at Polch, about twelve miles southwest of Koblenz, around noon. Just before touchdown a rudder tore away, slewing the ship so it ripped open by the pilots&rsquo; shoulders; Withey was pinned until German soldiers pried the wreck open with a machine-gun barrel and he slid his head down between the seats. &ldquo;Lucky for all of us there was no fire.&rdquo;</p><p>The cost was heavy. Waist gunner Lars Larsen was killed aboard. Nose-turret gunner Robert Long &mdash; hit in the arm and stomach &mdash; had left his guns to tend the other wounded; he died that night at a hospital in Bendorf. Co-pilot Robinson, lying wounded nearby, recorded Long&rsquo;s last hours: &ldquo;I remember Long asking me to get him a protestant preacher, but I must have gone under again &hellip; the Catholic Sister told me he had died during the night.&rdquo; Danner and Twigg were wounded too &mdash; &ldquo;all four men had been hit two or three times in the last hour,&rdquo; Engleman wrote. The six who could walk were marched into captivity. Engleman left the crew&rsquo;s epitaph: &ldquo;like the others, our help was used up, and Little Audrey was as far as she would go.&rdquo;</p><p><em>Sources: James Engleman, &ldquo;Crash Landing Near Koblenz&rdquo; (8th AF News, 1989) and letters (1988&ndash;1990); James Withey letters (1990, 1999); Herbert Robinson and crew casualty questionnaires; German crash-data form, MACR 9761. KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">SLOT ELEMENT</p>",
+        "outcome-details": "<p>Crashed 18 Km Southwest of Koblenz, Germany&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MACR 9761</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24J",
+        "serial-number": "42-50579",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Reynolds Crew",
+        "slug": "reynolds"
+      }
+    },
+    {
+      "id": "64548b3f6b20832d2ddd191e",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:47:51.719Z",
+      "fieldData": {
+        "participants": [
+          "645491e48db9a67601d60460",
+          "645491e3a6464157d434451c",
+          "645491e328518b32e2c07005",
+          "645491e38db9a685c9d60332",
+          "645491e242b5d6e8b53293a9",
+          "645491e228518bd66cc06ff3",
+          "645491e1a397bb8f0ad2f39b",
+          "645491e1123c05f915ea3cc1",
+          "645491e128518b791cc06feb"
+        ],
+        "squadron": "642c9451b61e8a6c754f84d3",
+        "about": "<h3>&ldquo;Ole Baldy&rdquo; and the Golden Crew &mdash; Kassel, 27 September 1944</h3><p>The day began like most others at Tibenham. &ldquo;It showed signs of rain as I plodded through the mud from the mess hall to the briefing room,&rdquo; radio operator S/Sgt. Jack M. Erickson wrote of that morning. When the curtain drew back, the target was revealed as the Henschel aircraft plant at Kassel, and the 445th Bomb Group was to mount a maximum effort &mdash; 37 Liberators, with 2nd Lt. William F. Golden&rsquo;s crew assigned the lead element. Erickson climbed aboard a battered olive-drab B-24H decorated with a devil holding Neptune&rsquo;s fork, which he believed was &ldquo;probably one of the oldest Liberators that was still operational in our group.&rdquo;</p><p>Over a 10/10ths overcast, the group missed its initial point, drifted toward G&ouml;ttingen, and emerged from the bomb run &ldquo;well out of the main bomber stream&hellip;on our own without fighter escort.&rdquo; Then came the storm. &ldquo;After about 10 minutes of routine flying we were suddenly attacked by Focke Wulf 190 fighters,&rdquo; Erickson recalled. &ldquo;More than 100 FW190s attacked the group from below&hellip;in waves 10 planes wide.&rdquo; He watched a wingman&rsquo;s Liberator break apart and fall 20,000 feet: &ldquo;I did not see any parachutes emerge from the flaming pieces.&rdquo;</p><blockquote>&ldquo;Suddenly, our plane shuddered as it took hits in the number three engine&hellip;a cloud of black smoke pour[ed] out&hellip;A few seconds later the plane shook badly as the tail turret took a direct hit by a 20 mm cannon shell. Sgt. Norman Stewart, the tail gunner, was gravely wounded and was removed from the shattered turret by Sgts. Bagley and Feltus.&rdquo; &mdash; Jack M. Erickson</blockquote><p>With a wing holed and control wires dangling in the slipstream, Golden and co-pilot Lt. Christie fought to hold the aircraft level. Erickson keyed an SOS on the liaison transmitter, &ldquo;relaying the destruction of the 445th from the Luftwaffe&rsquo;s onslaught.&rdquo; Golden gave the order to bail out. Because the wounded Stewart could not jump himself, the crew &ldquo;hooked Stewarts parachute rip cord to a static line and dropped him out through the camera hatch.&rdquo; Erickson found the bomb-bay doors frozen by failed hydraulics and cranked them open by hand: &ldquo;I edged my way to the emergency crank and began to turn it.&rdquo;</p><p>One by one the crew went out. Erickson climbed beside his pilot a final time: &ldquo;I told him that everyone else had jumped. He told me to go and I gave him a salute&hellip;That was the last time I ever saw him.&rdquo; Lt. Golden was killed in action. The aircraft came down roughly 2.5 km northeast of Braunhausen, south of Cornberg. Of the 445th&rsquo;s 37 Liberators, only a handful reached home; the air battle, Erickson noted, &ldquo;had lasted less than five minutes.&rdquo;</p><p><em>Sources: Excerpts from &ldquo;A Wartime Log&rdquo; by Jack M. Erickson, T/Sgt., 701st Bomb Squadron, 445th Bomb Group; annotated Golden crew photograph; contemporary 1944 press clippings reproduced in the same log. KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">LOW LEFT ELEMENT</p>",
+        "outcome-details": "<p id=\"\">Crashed 2 Km South of Cornberg, Germany - MACR 9395</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24H",
+        "serial-number": "42-94863",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Golden Crew",
+        "slug": "golden"
+      }
+    },
+    {
+      "id": "64548b3f3aea44caff8bb598",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T05:53:30.023Z",
+      "fieldData": {
+        "participants": [
+          "645491d8a397bbf8e2d2e27f",
+          "645491d813dde1a53ad9adae",
+          "645491d7123c0527e0ea2f31",
+          "645491d761bbe572bf83e6f3",
+          "645491d6123c055a26ea2dd5",
+          "645491d628518bb503c067d7",
+          "645491d56fbb788117c41e1c",
+          "645491d5123c056f7cea2d3c",
+          "645491d46bc44821e4dfcd7d"
+        ],
+        "squadron": "642c9451b61e8a6c754f84d3",
+        "about": "<h3>The Dewey Crew on the Kassel Mission</h3><p>On the morning of 27 September 1944, 2nd Lt. William R. Dewey lifted his B-24J off the runway at Tibenham for his eighth combat mission. His aircraft was number 855, nicknamed <em>A-Abel</em> &mdash; the &lsquo;A&rsquo; ship of the 701st Squadron. The target was the Henschel works at Kassel. Forty planes were dispatched in four ten-ship squadrons; three aborted. Dewey flew left wing of the lead element of the high-high-right squadron, and could not have known the day would become the worst single-mission loss any group suffered in the war.</p><p>After bombs-away the group turned for England, and the Luftwaffe&rsquo;s Sturmgruppen fell on them. Dewey&rsquo;s tail gunner, Ruben &ldquo;Monty&rdquo; Montanez, called it first.</p><blockquote>&ldquo;I see fighters, I see flak.&rdquo; Then the entire plane began to shudder and shake, with the guns in the rear firing simultaneously and from the impact of 20mm and 30mm enemy shells. &mdash; William R. Dewey, &ldquo;Divine Providence,&rdquo; <em>8th AF News</em>, 1989</blockquote><p>The intercom to the rear was severed within seconds; top-turret gunner Charley Craig reported five fighters on their tail. Then, in &ldquo;maybe three to five minutes,&rdquo; it was over. Only seven Liberators were left to form on the surviving pathfinder ship. More fighters at eleven o&rsquo;clock low proved friendly &mdash; P-51s of the 361st Fighter Group, sweeping in to break up the slaughter.</p><p><em>A-Abel</em> was wrecked but flying: the tail turret afire, both waist gunners and the tail gunner wounded, a huge hole in the right waist, control cables partly cut, and a three-foot hole in the wing behind the No.&nbsp;3 engine spilling 100-octane fuel into the slipstream. With the waist out of oxygen, navigator Herb Bailey took over the nose turret while nose gunner Les Medlock made trip after trip through the bomb bay carrying oxygen bottles to the wounded, covering them with his jacket and giving first aid.</p><p>Rather than risk ditching in the Channel, Dewey chose to nurse the ship to the nearest field to get his wounded to a hospital faster. He called air-sea rescue &mdash; &ldquo;Colgate&rdquo; &mdash; which fixed his position and gave him a heading, while an enemy 109 trailed below for minutes waiting for them to fall. About an hour later they broke through the cloud to the white cliffs of Dover and the long runways of RAF Manston.</p><blockquote>&ldquo;The landing gear went down and locked perfectly, the flaps went down all the way and the tires were fully inflated. The landing was one of the best I ever made in a B-24 &mdash; like we were on feathers. A day we will never forget &mdash; 27 September 1944!&rdquo; &mdash; William R. Dewey</blockquote><p>Decades later, William Dewey founded the <strong>Kassel Mission Memorial Association</strong>, gathering combat reports, German records and survivor accounts &mdash; American and German alike &mdash; into <em>The Kassel Mission Reports</em> and the <em>Kassel Mission Chronicles</em>, and helping dedicate the 1990 memorial near Bad Hersfeld. &ldquo;None of us bear any animosity,&rdquo; he told schoolchildren that year. &ldquo;We were doing our duty as soldiers, and they were protecting their country.&rdquo;</p><p><em>Sources: William R. Dewey, &ldquo;Divine Providence&rdquo; and &ldquo;Disaster at Kassel&rdquo;; gunners&rsquo; combat narratives (Montanez, Johnson, Bartkow); KM Chronicles (1998). KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">LEAD ELEMENT</p>",
+        "outcome-details": "<p id=\"\">Landed at Manston Emergency Field, Kent, England</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24J",
+        "serial-number": "42-50855",
+        "outcome": "675c31c81d3b3090bad7db9a27189710",
+        "name": "Dewey Crew",
+        "slug": "dewey"
+      }
+    },
+    {
+      "id": "64548b3edbac5b41031cc160",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:47:51.712Z",
+      "fieldData": {
+        "participants": [
+          "645491cb9330fe37a83a18cc",
+          "645491cb270fb0f3217395bd",
+          "645491cc9076bd7f664f666c",
+          "645491cc42b5d68fdd329377",
+          "645491cc38243d6b9a1c0622",
+          "645491cd0dd6638c5cae66cc",
+          "645491cd42b5d6836c32937e",
+          "658d135da45b4262198d1333",
+          "645491cff01dda20dad60fe1"
+        ],
+        "squadron": "642c9451b61e8a6c754f84d3",
+        "about": "<h3>The Bruland Crew &mdash; B-24H &ldquo;Texas Rose,&rdquo; 701st Squadron</h3><p>On the morning of 27 September 1944, 2nd Lt. Palmer M. Bruland climbed into a B-24H Liberator he barely knew, with a crew he had never met. His ship was <em>Texas Rose</em>, serial 41-28922, of the 701st Squadron, flying out of Tibenham against the marshalling yards at Kassel. Bruland and his co-pilot, 2nd Lt. Peter S. Belitsos, had been thrown together with a borrowed crew only hours before takeoff. As Belitsos later wrote, he was tapped on the shoulder before dawn and told he was flying with Bruland&rsquo;s crew: &ldquo;I was taken to the hardstand where I met Palmer Bruland for the first time. I introduced myself&hellip; This took place before dawn and I did not meet the rest of the crew or see them face to face except for the engineer.&rdquo;</p><p>The Kassel Mission became the costliest single-group air battle of the Eighth Air Force. When German fighters fell on the 445th, they struck with annihilating speed. Belitsos remembered no warning at all: &ldquo;The first sign for me was a thud that shook the plane and then the inboard engine on my side caught fire. Simultaneously I saw that almost all of the planes in my line of vision were on fire.&rdquo; Bruland took over the controls as Belitsos worked the feathering procedure with the engineer; the fire would not go out. They nursed <em>Texas Rose</em> down from 20,000 feet, hoping to reach France, but at last the order came to bail out. &ldquo;Everyone cleared the plane,&rdquo; Belitsos wrote. &ldquo;Bruland was the last man out.&rdquo;</p><p>All nine men aboard parachuted alive. The German crash report (MACR 9386) records the Liberator going down near Gie&szlig;en at about 11:25, &ldquo;durch J&auml;ger beim R&uuml;ckflug&rdquo; &mdash; by fighters on the return flight. Yet survival in the air did not mean safety on the ground. Two of the gunners reassigned to this scratch crew that very morning &mdash; nose-turret gunner S/Sgt. Ferdinand K. Flach and waist gunner S/Sgt. Lee R. J. Huffman &mdash; came down by parachute, were taken prisoner, and were then murdered by German military personnel. The crash sheet marks both men with the single German word <em>tot</em> &mdash; dead &mdash; while their seven crewmates are listed as POW.</p><p>The killings became a United States war-crimes case, tried at Dachau in 1946 (Case No. 12-472, <em>United States v. Hermann Noack and Karl Georg Boess</em>). The court found that two captured, unarmed American airmen were driven from the village of Hattenrod under guard, marched into the fields, and shot. A witness testified that as one body lay in an open field, Hauptmann Hermann Noack &mdash; a former Luftwaffe paratrooper who ran a local Hitler Youth camp &mdash; was reported to have said, &ldquo;Revenge for the first sergeant.&rdquo; Each man had been shot under the pretense of &ldquo;attempting to escape.&rdquo; Noack was sentenced to death by hanging; his driver, the butcher Karl Georg Boess &mdash; whose own teenage son had been killed when his train was strafed by Allied planes shortly before &mdash; received eight years.</p><p>The Society&rsquo;s archive preserves the long aftermath. A memoir by an American officer who served at Landsberg War Crimes Prison records that Noack escaped one stormy night by a knotted bedsheet rope, was recaptured and shot in the leg (later amputated), attempted suicide, and was finally hanged on 21 March 1947. Asked for his last words, &ldquo;Noack mumbled barely audible words saying he was not angry at the two pilots.&rdquo; Lee Huffman rests today beneath a grave marker at the Netherlands American Cemetery, Margraten. He and Flach were on Bruland&rsquo;s plane for one mission, strangers to the men beside them, and they did not come home.</p><p><em>Sources: Peter Belitsos, &ldquo;Fill-In Co-Pilot,&rdquo; The Kassel Mission Reports, Addendum 1994; German US Aircraft Crash Data sheet, MACR 9386; Bruland crew photograph and roster; Review and Recommendations, United States v. Hermann Noack and Karl Georg Boess, Case No. 12-472 (1946); Tom Atkinson, &ldquo;Captor &amp; Captive&rdquo; (Girtman Press); Lee Huffman grave-marker photograph, Margraten, courtesy Jean Vankan. KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">SLOT ELEMENT</p>",
+        "outcome-details": null,
+        "additional-details": null,
+        "aircraft-type": "B-24H",
+        "serial-number": "41-28922",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Bruland Crew",
+        "slug": "bruland"
+      }
+    },
+    {
+      "id": "645419b063d9549945a6dcc6",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:47:51.717Z",
+      "fieldData": {
+        "participants": [
+          "645492306fbb78fe56c43d4b",
+          "6454923061bbe5a48683e8a6",
+          "6454923013dde15764d9aeaf",
+          "6454922f8db9a6518ad65f35",
+          "6454921f320f4e69cdbba478",
+          "6454921f29c8316256052c4e",
+          "6454921e415b853954589827",
+          "6454921e38243d7f081c66bd",
+          "6454921d8db9a60a25d64587",
+          "6454921d7f850337710cd12b",
+          "6454921c13dde194fbd9ae5a",
+          "6454921c7504121361c0d06d",
+          "6454921c61bbe50efe83e85f"
+        ],
+        "squadron": "642c7c6e93baf8c356581d2a",
+        "about": "<h3>The Uebelhoer Crew &mdash; Deputy Lead of the 445th</h3><p>On the morning of 27 September 1944, Capt. Web L. Uebelhoer of the 700th Bomb Squadron lifted his B-24J off the runway at Tibenham not as a wingman but as the <em>deputy lead</em> of the entire 445th Bomb Group &mdash; the second-in-command ship, carrying deputy mission commander Capt. James Graham in the right seat. It was Uebelhoer&rsquo;s 18th mission, and by his own reckoning &ldquo;mentally, it was an average mission.&rdquo; It would become anything but.</p><p>A combat veteran who had crossed with the 492nd Bomb Group and belly-landed out of fuel on his very first sortie (&ldquo;that&rsquo;s the way I started out in combat&rdquo;), Uebelhoer understood the iron discipline of the deputy slot. As his navigator, 1st Lt. Don Whitefield, put it: &ldquo;We were deputy lead, and when you&rsquo;re deputy lead, you do what lead plane does&hellip;. If he&rsquo;s wrong, we have to follow right with that lead.&rdquo; That obedience is the heart of the tragedy. Battling a 75-mph headwind &mdash; &ldquo;we were up there in a damn hurricane,&rdquo; Whitefield recalled &mdash; the lead ship turned left off course past the Initial Point. Through 100 percent cloud, the formation drifted, then bombed not Kassel but the vicinity of G&ouml;ttingen. Over interphone Uebelhoer heard his crew&rsquo;s alarm: &ldquo;Hey! We&rsquo;re drifting away from the main stream!&rdquo; But with command pilot Graham aboard, he kept silent on the radio &mdash; &ldquo;I was flying the aircraft, and I was talking to my crew.&rdquo;</p><p>When the formation turned for the reassembly point, the cost of the error became plain: &ldquo;we looked out, and we were thirty-some airplanes all alone. And the fighter planes did not see us go.&rdquo; Then tail gunner John Hubicz called: &ldquo;Captain, there&rsquo;s a hell of a lot of aircraft behind us!&rdquo; Uebelhoer assumed they were friendly &mdash; until the cannon bursts began to spot the sky. More than 100 Luftwaffe fighters fell on the isolated 445th. Flying perhaps 50 feet off the lead ship, Uebelhoer watched Maj. Donald McCoy in the right-seat window &ldquo;signaling me but I didn&rsquo;t know what&rdquo; &mdash; an image Whitefield independently confirmed. An FW-190 stood on its tail, the lead ship glowed &ldquo;an orange appearance,&rdquo; and Chilton&rsquo;s aircraft rolled left and went down. &ldquo;Now in the meantime,&rdquo; Uebelhoer said simply, &ldquo;the lead ship&rsquo;s shot down so I&rsquo;m the leader.&rdquo;</p><p>He took the formation. His nose gunner sprayed the armored Germans &ldquo;like a garden hose&rdquo;; he got on the interphone and chewed out his own crew &mdash; &ldquo;Hey, let&rsquo;s get in this fight!&rdquo; &mdash; until &ldquo;every weapon on that ship was firing.&rdquo; Then four P-38s swept overhead and &ldquo;we realized the cavalry had arrived.&rdquo; Uebelhoer brought his ship home to Tibenham &mdash; one of only a handful to return &mdash; with a single projectile through the No.&nbsp;2 engine&rsquo;s self-sealing oil reservoir. Taxiing in, he only learned the truth when &ldquo;somebody later said, &lsquo;Hey, you got shot.&rsquo;&rdquo;</p><p>That night, amid a confused debriefing, even Jimmy Stewart drove to the base and stood on the edge of the crowd, listening &mdash; &ldquo;I think that he almost became ill listening to what had happened.&rdquo; Days later the 445th went back to Kassel, and &ldquo;those fighter pilots made damn sure that they protected us this time.&rdquo; When Col. Jones later offered Uebelhoer a squadron command &mdash; a promotion that meant returning to combat &mdash; he weighed it and answered, &ldquo;Thanks but no thanks.&rdquo;</p><p><em>Sources: Web Uebelhoer interview by Aaron Elson, Savannah, GA, 30 Sept. 1999; Don Whitefield, recollections to Linda Dewey, 27 July 2007 and 26 Feb. 2008; KMHS crew photo and roster (courtesy Web Uebelhoer). KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">DEPUTY LEAD</p>",
+        "outcome-details": "<p>Returned to Tibenham</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24J-5 FO",
+        "serial-number": "42-51547",
+        "outcome": "ca2e997b6d5ece53237dfaf9dd4977f3",
+        "name": "Uebelhoer Crew",
+        "slug": "uebelhoer"
+      }
+    },
+    {
+      "id": "645419991a2f5043ab973d3b",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T05:53:30.020Z",
+      "fieldData": {
+        "participants": [
+          "645492057564d4177fa5897b",
+          "6454920561bbe5df7883e7e5",
+          "6454920530fb41a0438e07f5",
+          "64549204e3c85a45367aec44",
+          "645492047881e8248c2629a8",
+          "6454920330fb413a748dfee1",
+          "64549203e3c85af1277aec3a",
+          "64549203a397bbcebed2f44d",
+          "64549202123c05f4dfea65d8"
+        ],
+        "squadron": "642c7c6e93baf8c356581d2a",
+        "about": "<h3>The Pearson Crew on the Kassel Mission</h3><p>On 27 September 1944, 1st Lt. Ralph H. Pearson of Falconer, New York, took B-24J Liberator 44-10497 off the runway at Tibenham with the 700th Squadron. It was his 29th mission, and the first 28 had been almost routine &mdash; &ldquo;We didn&rsquo;t even blow a tire,&rdquo; he told the Jamestown <em>Post-Journal</em>. &ldquo;On the 29th mission, however, that was a different story.&rdquo;</p><p>After a navigational error carried the 445th off its briefed track and away from its fighter escort, an estimated 100&ndash;200 Focke-Wulf 190s and Messerschmitt 109s fell on the unprotected formation near Eisenach. &ldquo;The Storm would fly into battle 15 abreast to force the formation to scatter,&rdquo; Pearson recalled. Flying the vulnerable low slot, his ship was among the first hit; radio operator Doye O&rsquo;Keefe believed they &ldquo;were probably the first plane shot down.&rdquo;</p><p>The first shell exploded in the nose, killing navigator 2nd Lt. Arthur Stearns and bombardier F/O Henry Henrikson at their stations. A second started a gasoline fire between the bomb bay and the nose; O&rsquo;Keefe fought it but found burning aviation fuel almost impossible to put out. With the cockpit ablaze and the control cables finally burning through, Pearson ordered the crew out.</p><blockquote>&ldquo;When the chute opened, it jerked me so hard that my beautiful fleece-lined flight boots came off. As I floated down in my stocking feet I thought, &lsquo;Nuts, some German kid is going to be wearing those comfortable boots.&rsquo;&rdquo; &mdash; 1st Lt. Ralph Pearson, &ldquo;Shot Down on the Kassel Raid&rdquo;</blockquote><p>Pearson clawed back through the fire to the bomb bay &mdash; searing off his eyebrows and badly burning his face &mdash; waved engineer Robert Johnson out ahead of him, and jumped from about 25,000 feet. The German fighters circled his parachute; he played dead, and they only radioed his position. He came down near Herleshausen, about 200 meters south of the Siegelshof, and was driven by motorcycle sidecar to a Luftwaffe hospital, his face bandaged &ldquo;like a mummy.&rdquo; He spent eight months as a prisoner at Stalag Luft I; his German interrogation folder, he later learned, bore a single word &mdash; <em>kr&auml;ftig</em>, &ldquo;strong soldier.&rdquo;</p><p>Of the 35 crews over the target, only four planes returned to Tibenham. The Pearson crew lost three men killed &mdash; navigator Stearns, bombardier Henrikson, and top-turret gunner T/Sgt. Robert D. Johnson; the rest survived as prisoners of war.</p><p><em>Sources: Ralph Pearson, &ldquo;Shot Down on the Kassel Raid&rdquo; (in</em> A Hometown Went to War<em>); Doye O&rsquo;Keefe oral history (1985); Harry Tachovsky in</em> The Morning Call <em>(1995); German crash-data form, MACR 9384. KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">LOW LEFT ELEMENT</p>",
+        "outcome-details": "<p id=\"\">Crashed in Germany&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MACR 9384</p><p>‍</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24J",
+        "serial-number": "44-10497",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Pearson Crew",
+        "slug": "pearson"
+      }
+    },
+    {
+      "id": "6454198ac692952e3613acba",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:47:51.715Z",
+      "fieldData": {
+        "participants": [
+          "645491f561bbe5c63a83e78e",
+          "645491f538243d2cda1c3455",
+          "645491f461bbe53a2f83e787",
+          "645491f48db9a6386cd61762",
+          "645491f3417e15451607657f",
+          "645491f36bc4485f3ddfcdd2",
+          "645491f3750412e70ac0cfd5",
+          "645491f242b5d6804d3293db",
+          "645491f2a3b4ea10896c11d5",
+          "645491f2750412ba59c0cfc8",
+          "645491f142b5d6d29a3293d2"
+        ],
+        "squadron": "642c7c6e93baf8c356581d2a",
+        "about": "<h3>The Hunter Crew &mdash; B-24H &ldquo;Terrible Terry&rsquo;s Terror&rdquo;</h3><p>On 27 September 1944, the B-24H Liberator <em>Terrible Terry&rsquo;s Terror</em> (serial 42-94810) flew the left-wing slot of the lead element of the 700th Bomb Squadron, 445th Bomb Group, on the mission that would become known as the Kassel disaster. At the controls was 1st Lt. William F. Hunter of Essex Junction, Vermont. The ship had been named for the group&rsquo;s first commander, Col. Robert H. Terrill &mdash; a nose-art tribute that the crew would soon make legendary in its own right.</p><p>Riding along that day was a photo observer, S/Sgt. Thomas G. Spera of Philadelphia, whose account survives in the Society&rsquo;s archive and remains the most vivid record of what the crew endured. Spera recalled that the run began deceptively: &ldquo;Up until that time, I had chalked up the mission as a &lsquo;milk run.&rsquo;&rdquo; Then, after the bombs were away, more than 200 Luftwaffe fighters fell on the under-escorted formation. &ldquo;In less time than it takes to tell, the sky was full of debris from exploding ships,&rdquo; he wrote. &ldquo;The leading Liberator, on fire from nose to tail, came swinging toward us like a severely wounded animal, then peeled away as if to pick a spot away from us to die.&rdquo;</p><p>Then <em>Terrible Terry&rsquo;s Terror</em> was hit. &ldquo;A 20-millimeter shell tore through the bomb bay, ripping off the doors and severing fuel lines. Two fires started simultaneously in the bay.&rdquo; What followed was the act that defined the crew. The engineer, T/Sgt. Robert N. Ratchford of Gastonia, North Carolina, &ldquo;threw off his parachute, grabbed a fire extinguisher, and put both fires out before the 100-octane gas had been ignited,&rdquo; then plugged the leaks while &ldquo;fuel was pouring out like water from a fire hydrant.&rdquo; Gasoline soaked the three men in the waist; a bubble of it pooled on the camera hatch. The Society&rsquo;s crew file records the verdict plainly: the men &ldquo;were lucky there was no fire, as the bomb bay and waist had been awash with leaking gas. The engineer, Ratchford, did a heroic job in plugging these leaks even though he was soaked in fuel.&rdquo;</p><p>The gunners gave as good as they got. Spera watched a Focke-Wulf &ldquo;hang by his propeller only a few yards off our left wing&rdquo; before it was &ldquo;riddled by fire from our top turret guns,&rdquo; manned by Sgt. Robert W. Sarber; the interrogating officer&rsquo;s report notes the enemy fighter &ldquo;virtually blew up.&rdquo; Tail gunner S/Sgt. Fred C. Schaffer, Jr. sent another down in flames, and right-waist gunner S/Sgt. Joseph K. Selser claimed a probable. A bullet through the waist proved a strange mercy: Spera&rsquo;s oxygen line had pulled loose and he was blacking out until the round prompted a gunner to look around, see his trouble, and reconnect the line.</p><p>Six minutes later the attacks ended as abruptly as they had begun &mdash; of four squadrons, Spera could count only ten surviving ships. With one engine gone and a second quitting on approach, Hunter limped the crippled bomber toward newly liberated France, an escort of P-51 Mustangs answering the radioman&rsquo;s call. He &ldquo;cleared a clump of trees by inches, clipped a set of high tension wires, and brought the ship down on a potato patch&rdquo; near the village of Willems, east of Lille. The only injury was a cut hand; the aircraft was a total loss. Villagers &ldquo;stopped at nothing to make us comfortable,&rdquo; Spera wrote, and the crew left for an RAF base &ldquo;still marveling to find ourselves alive.&rdquo;</p><p>Lt. Hunter received the Distinguished Flying Cross for his airmanship that day. The story does not end happily. The men became a lead crew and transferred to the 389th Bomb Group; on 9 March 1945, over Munster, their Liberator took a direct flak burst in the wing fuel tanks and went down in flames. Only Schaffer and a recently assigned radar officer escaped, both badly burned and taken prisoner. Hunter and most of his Kassel crew were killed and are buried at Margraten, Holland. Spera, who had moved on before that final flight, survived the war.</p><p><em>Sources: S/Sgt. Thomas G. Spera, eyewitness account (via Mary Beth Barnard, 445th BG historian; submitted by George M. Collar, 1990); 445th BG crew-data forms and annotated crew photographs (George Collar); 700th BS combat encounter reports of Schaffer, Selser, and Sarber (27 Sept 1944); Missing Air Crew roster, Munster raid, 9 Mar 1945; &ldquo;Blaze of Glory&rdquo; newspaper clipping. KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">LEAD ELEMENT</p>",
+        "outcome-details": "<p>Crash-landed 12 Km East of Lille, France</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24H",
+        "serial-number": "42-94810",
+        "outcome": "87393fdcc67275e3bc4b9c722a0c37f1",
+        "name": "Hunter Crew",
+        "slug": "hunter"
+      }
+    },
+    {
+      "id": "64541972eeb0d6ec3abf22b9",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:11:37.425Z",
+      "fieldData": {
+        "participants": [
+          "645491f128518bc06dc070ae",
+          "645491f129c83171c0052c30",
+          "645491f0270fb00b347395e4",
+          "645491f0415b8529d45897ba",
+          "645491f0750412ae12c0cfbd",
+          "645491efe3c85aed3d7aec04",
+          "645491ef9330fe115b3a1fd4",
+          "645491ee61bbe5dbef83e771",
+          "645491eee3c85abffa7aebfc"
+        ],
+        "squadron": "642c7c6e93baf8c356581d2a",
+        "about": "<h3>1st Lt. Raymond V. Heitz Crew &mdash; B-24H &ldquo;Bugs Bunny,&rdquo; 700th Squadron</h3><p>On 27 September 1944 the crew of 1st Lt. Raymond V. Heitz flew B-24H Liberator #42-95210, &ldquo;Bugs Bunny,&rdquo; on the 445th Bomb Group&rsquo;s strike toward Kassel. It was, by the reckoning of the ship&rsquo;s radio operator, a milestone sortie. &ldquo;I was radio operator on Lt. Heitz&rsquo;s crew and we were on our 23rd mission,&rdquo; Fabian Mack wrote in a 1990 letter preserved in the Society&rsquo;s files. What began as a routine count toward the end of a combat tour became one of the most violent few minutes any of them would know.</p><p>When the Luftwaffe&rsquo;s massed fighters fell on the unescorted 445th, the gunners of &ldquo;Bugs Bunny&rdquo; met them head-on. Tail gunner S/Sgt. Maynard B. Watson left an account of extraordinary intensity. As eleven FW-190s dived and three turned in on his ship, he opened fire at long range: &ldquo;The center one was exactly 6 o&rsquo;clock. He came into my fire to about 600 yards and blew up all at once, into about 4 pieces and a million smaller ones.&rdquo; A second fighter followed &mdash; &ldquo;the pilot pops out and the plane starts into a dive and bursts into flames&rdquo; &mdash; then a third, which &ldquo;stalled in the air and started down, then exploded, almost in my face.&rdquo;</p><p>Then the bomber itself was hit. &ldquo;All hell broke loose,&rdquo; Watson wrote. &ldquo;I was hit in the back and several shells exploded under my feet. I was blown out of the turret.&rdquo; A news clipping in the archive records that cannon fire &ldquo;destroyed the oxygen and hydraulic systems, cut the interphone connections, pierced fuel tanks, and set fire to five emergency dinghies stored in the waist.&rdquo; Waist gunner S/Sgt. Louis Ochevsky was killed and S/Sgt. Elroy Palm wounded; Watson, recovering consciousness, smothered the fire in the tail, took over the unmanned waist gun, and with Palm jettisoned the smoldering dinghies, &ldquo;averting an otherwise fatal explosion from the igniting gas fumes.&rdquo;</p><blockquote>&ldquo;We lost two engines during the attack &hellip; with three badly wounded aboard we got our gear down and with the aid of two chutes set her down in a field about 15 miles East of Brussels.&rdquo; &mdash; T/Sgt. Fabian Mack, radio operator</blockquote><p>Flight engineer T/Sgt. Homer Harrison had already shown his nerve: when the bomb-bay doors jammed open, his wife Christine recalled, he &ldquo;walked the broken bomb bay doors&rdquo; without a parachute and kicked them shut. He bailed out just before the rough landing, reasoning &ldquo;it would be better to roll out rather than blow up.&rdquo; On the ground in liberated Belgium, Mack got the casualties to a British field hospital with the help of Belgian civilians: &ldquo;One passed away that evening, the other two recovered and came back to finish their tour.&rdquo;</p><p>Louis Ochevsky was awarded the Silver Star and credited with a fighter destroyed &mdash; posthumously; Palm and Watson each received the Silver Star as well. Years later, the bonds outlasted the war: Harrison spotted co-pilot Harold Vedera on a Sacramento street, and found Palm &mdash; by then an English policeman &mdash; on a street in England. &ldquo;We went merrily along,&rdquo; Watson had written of the moment the sky cleared over Belgium, &ldquo;as happy as if we all had good sense.&rdquo;</p><p><em>Sources: Fabian Mack letter (9 Jan 1990); Maynard Watson&rsquo;s account and combat claim forms (27 Sept 1944); &ldquo;2 Lib Gunners Silver Starred&rdquo; clipping; interview with Christine Harrison; Heitz crew roster; 2nd ADA Journal (Winter 1989). KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">SLOT ELEMENT</p>",
+        "outcome-details": "<p id=\"\">Crash-landed at Brussels, Belgium</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24H",
+        "serial-number": "42-95210",
+        "outcome": "87393fdcc67275e3bc4b9c722a0c37f1",
+        "name": "Heitz Crew",
+        "slug": "heitz"
+      }
+    },
+    {
+      "id": "64541965a738ccf1d95785be",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:07:42.115Z",
+      "fieldData": {
+        "participants": [
+          "645491e88db9a68a72d60a73",
+          "645491e7a646410d63344532",
+          "645491e657eb6966d8b62d42",
+          "645491e629c8318eea052c1b",
+          "645491e6a64641a08434452b",
+          "645491e5a3b4ea5fac6c1198",
+          "645491e5f01dda1293d627e8",
+          "645491e538243d22a01c245e",
+          "645491e442b5d6314d3293bf"
+        ],
+        "squadron": "642c7c6e93baf8c356581d2a",
+        "about": "<h3>The Hansen Crew &mdash; B-24H #42-95078, 700th Squadron</h3><p>At 0215 on 27 September 1944, the charge of quarters woke the crew of 2nd Lt. Robert N. &ldquo;Pappy&rdquo; Hansen with word that briefing was at 0500. When the curtain came back from the map, the target was Kassel &mdash; deep enough to matter, but, as bombardier 2nd Lt. John C. &ldquo;Woody&rdquo; Woodley recalled, it &ldquo;while far from being a &lsquo;milk run,&rsquo; wasn&rsquo;t too far into Germany, and we stood a good chance of getting back early for chow.&rdquo; Their own ship, &ldquo;fondly christened &lsquo;Patches,&rsquo;&rdquo; had been marked off the board, so the men drew a reserve B-24H, #42-95078, and lifted off from Tibenham into a routine assembly over a 10/10ths undercast.</p><p>As the 445th turned off the target it drifted from the bomber stream and was left alone. Woodley remembered the false calm: &ldquo;About 1000 we were all feeling good, and Pappy Hansen, our pilot, and I were talking about how lucky we were to have gotten a milk run.&rdquo; Then the gunners called out fighters &mdash; co-pilot Herbert Bridges later estimated &ldquo;approximately 150 FW 190&rsquo;s.&rdquo;</p><blockquote>&ldquo;20 MM shells were breaking in front, looking exactly like small flak bursts. They were pumping explosives into our midsection, and I saw several ships fall away, either exploding or burning fiercely&hellip; At this time I noticed that our left wing tip had been carried away.&rdquo; &mdash; 2nd Lt. John C. Woodley, diary</blockquote><p>Woodley fired until his turret guns went dead, then found &ldquo;the midsection of the ship was blazing, and the fire extended as far forward as the rear of the nose wheel doors.&rdquo; He crawled to the nose-wheel hatch: &ldquo;About this time the ship gave a lurch, and out and away I fell.&rdquo; The clearest record of the final moments comes from co-pilot Bridges, who in July 1945 wrote the War Department a careful account: the navigator, Porter Pile, wounded in the leg, &ldquo;would not jump when told by bombardier&rdquo;; waist gunner S. E. Howell, shot in the chest, was pushed out the rear hatch; tail gunner Ralph Bode stood ready to follow.</p><blockquote>&ldquo;Pilot, R. N. Hansen, was still at the controls and engineer, C. C. Palmer, and radio operator, J. M. Triplett, were standing by top escape hatch dubious about jumping. Since I was off oxygen, I went on out&hellip; right after bailing out, I looked up and could see nothing but two chutes.&rdquo; &mdash; 2nd Lt. Herbert C. Bridges, casualty report, 1945</blockquote><p>Of the nine men, only three lived. The German crash-data form (MACR 9396) records the ship going down between about 11:03 and 11:09 &ldquo;Im Trottenwald (Oberschaar), 2 km s&uuml;dwestlich Richelsdorf,&rdquo; the cause noted simply as &ldquo;durch J&auml;ger beim R&uuml;ckflug&rdquo; &mdash; by fighters on the return flight. Six were killed; Bridges, Woodley, and waist gunner Elwyn Hornsby were taken prisoner. Woodley&rsquo;s descent read like deliverance: &ldquo;Everything was very quiet and peaceful after the terrific din of engines and guns.&rdquo; On the ground he helped interpret for a German woman, Margarete Scherer, who treated him and a badly burned gunner from another downed ship before they were carried off to captivity, and Stalag Luft I &mdash; where he kept the diary that preserves this story.</p><p><em>Sources: John C. Woodley diary and POW accounts; Herbert C. Bridges casualty report (1945); German crash-data form, MACR 9396; &ldquo;Ex-POWs of Alabama&rdquo; (1984). KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">SLOT ELEMENT</p>",
+        "outcome-details": "<p id=\"\">Crashed in Germany &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;MACR 9396</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24H",
+        "serial-number": "42-95078",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Hansen Crew",
+        "slug": "hansen"
+      }
+    },
+    {
+      "id": "64541958cc5426fce242cb68",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T05:53:30.029Z",
+      "fieldData": {
+        "participants": [
+          "645491e0f01dda53cbd623fe",
+          "645491e0320f4efdd2bb67ac",
+          "645491df28518b270dc06fd9",
+          "645491dea397bb0682d2ea1a",
+          "645491de123c051f46ea3849",
+          "645491dda3b4ea2f996c1185",
+          "645491dd750412c497c0cf3e",
+          "645491dd13dde14504d9add5",
+          "645491dc61bbe5158383e736"
+        ],
+        "squadron": "642c7c6e93baf8c356581d2a",
+        "about": "<p>Many valuable accounts and interviews have been generously left behind by these veterans of the Kassel Mission. All are riveting. The diary of S/Sgt. Herbert R. Schwartz, below, stands out among these.</p><p><strong>The original crew of Lt. John French.</strong> Back row, L to R: Lt. John French, pilot; Lt. Claude Switzler, bombardier; Lt. Robert Tims, navigator; Lt. Robert Cochran, copilot. Front row, L to R: Sgt. Calvin Hayward; Sgt. Moynnihan, engineer; Sgt. David Greenley; Sgt. Mitchell O'Kelly, radio operator; Sgt. Ostertag, tail gunner; Sgt. Harold Winand. Of this crew, only French, Cochran, Tims, and Greenley flew the Kassel Mission.</p><h3>The French Crew on the Kassel Mission</h3><p>On 27 September 1944, 1st Lt. John E. French and his crew lifted off from Tibenham in B-24J Liberator 42-50784, flying lead of the high-right element. When the lead radar operator fixed on the wrong town &mdash; G&ouml;ttingen instead of Kassel &mdash; the whole group drifted off the bomber stream and out from under its escort. Navigator Robert T. Tims described the moment the trap closed:</p><blockquote>&ldquo;Suddenly, coming in at six o&rsquo;clock low, wave after murderous wave, the FW-190s, over a hundred of them &hellip; firing tracers and 30 mm cannon bursts blinking like Christmas tree lights; then everywhere around us burning and exploding B-24s &hellip; the chutes gently sprouting like white mushrooms below us.&rdquo; &mdash; Robert T. Tims, <em>Carnage Over Kassel</em></blockquote><p>The crew&rsquo;s gunners fought back hard, and three of them were credited with destroying FW-190s. From the tail, S/Sgt Herbert Schwartz held his sights on a fighter boring straight in and set it afire at seventy-five yards; from the right waist, S/Sgt Charles Huddleston sent another down in flames; and from the left waist, S/Sgt James Corman knocked down the fighter that had shot out their No.&nbsp;1 engine, then a second.</p><blockquote>&ldquo;The second plane &hellip; flew a perfect pursuit curve. I saw the pilot&rsquo;s face and shot him; his fuselage caught on fire. Then the right wing fell off and the pilot pitched forward.&rdquo; &mdash; S/Sgt James Corman</blockquote><p>The Liberator was mortally hurt &mdash; a 20mm shell tore off the bomb-bay doors and started two fires over the fuel tanks. The engineer threw off his own parachute, seized an extinguisher and beat out both fires before the gasoline caught. With the No.&nbsp;1 engine dead and the right rudder shot away, French nursed the shuddering bomber west on two and three engines, a lost straggler, and aimed for liberated France. Photo-observer T/Sgt Thomas Spera, riding in the waist, recorded the final seconds:</p><blockquote>&ldquo;By inches, clipped a set of high-tension wires, and brought the ship down on a potato patch &hellip; only to have one wheel catch in a hole, buckle, and dig the right wing into the ground. We all took a severe bouncing, but our only casualty was a cut hand for the bombardier.&rdquo; &mdash; T/Sgt Thomas Spera</blockquote><p>The Liberator was a total loss; all nine aboard walked away &mdash; one of only a handful of the group&rsquo;s ships to escape the slaughter.</p><p><em>Sources: Robert T. Tims, &ldquo;Carnage Over Kassel&rdquo; (2nd ADA Journal, 1989); Thomas Spera account; gunners&rsquo; combat claim forms, 27 Sept 1944. KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">HIGH RIGHT ELEMENT</p>",
+        "outcome-details": "<p id=\"\">Crash-landed at Metz-Frescaty Airfield, France</p>",
+        "additional-details": null,
+        "aircraft-type": "B-24J",
+        "serial-number": "42-50784",
+        "outcome": "87393fdcc67275e3bc4b9c722a0c37f1",
+        "name": "French Crew",
+        "slug": "french"
+      }
+    },
+    {
+      "id": "64541949ac10bf21902c6860",
+      "isDraft": true,
+      "lastUpdated": "2026-06-30T06:02:35.300Z",
+      "fieldData": {
+        "participants": [
+          "645491d47564d4d76aa5477e",
+          "645491d36bc4484027dfcd74",
+          "645491d23aea445e68903e88",
+          "645491d26bc4487561dfcd6c",
+          "645491d1a397bb2390d2d9c7",
+          "645491d1a64641bc4334450b",
+          "645491d19330fec7193a1ebd",
+          "645491cf6fbb780231c41879",
+          "645491cf415b852a6858970a"
+        ],
+        "squadron": "642c7c6e93baf8c356581d2a",
+        "about": "<h3>The Carrow Crew &mdash; B-24J &ldquo;Patches&rdquo;</h3><p>27 September 1944 &ldquo;began as all the others had,&rdquo; pilot 1st Lt. Raphael E. Carrow remembered, &ldquo;being rudely awakened in the earliest hours of the morning. A thick fog reflected the sharp beam of the bicycle light as I pedalled, more intuitively than visually, to the mess hall.&rdquo; His Liberator, <em>Patches</em>, flew the low-left element in the No.&nbsp;9 position of the lead squadron &mdash; the 445th was the lead group, &ldquo;the first over the North Sea, the first to cross the mainland.&rdquo; It was the crew&rsquo;s twenty-first mission.</p><p>Cloud forced a radar drop, and the lead ship veered off course. Carrow saw it at once. &ldquo;We were supposed to keep radio silence but some of us didn&rsquo;t,&rdquo; he recalled. &ldquo;I was one of those who didn&rsquo;t. I said, &lsquo;We&rsquo;re going the wrong way!&rsquo;&rdquo; The order came back to stay in line. The 445th bombed G&ouml;ttingen by mistake, then turned for home alone, fifty miles behind the protected main force. Near Bad Hersfeld some 150 fighters fell on them.</p><blockquote>&ldquo;All around us was fire, black smoke, planes going down, more parachutes&hellip; machine guns firing &mdash; the shudder of 20mm shells hitting &mdash; another engine gone &mdash; intercom out &mdash; plane out of control &mdash; a gripping fear-near panic &mdash; then, fire! The bomb bay was a roaring inferno.&rdquo; &mdash; Raphael Carrow, <em>Just Another Rude Awakening</em></blockquote><p>Carrow touched co-pilot Newell Brainard on the arm and pointed to the fire; Brainard left his seat, and Carrow never saw him again. Then came the moment that nearly killed him: &ldquo;Now I had to find a way out, but I was frozen to the seat!&rdquo; Unbuckling the belt, shedding flak vest and Mae West &mdash; each &ldquo;presented an alternative death.&rdquo; That very paralysis saved him. By the time he wrenched free, the aircraft had torn apart: &ldquo;Instead of the expected inferno, I saw blue sky. The plane had broken in two and the other half had taken the fire with it.&rdquo; He shoved into space and pulled the cord inside a cloud, breaking clear barely two hundred yards above the ground, the hair burned from the back of his head.</p><p><em>Patches</em> came down at Iba, about 44 miles southeast of Kassel. Carrow landed inside a fenced slave-labor camp, where an elderly guard leveled a rifle and spat one word: &ldquo;Jude?&rdquo; Carrow &mdash; a Brooklyn-born Jew who never wore dog tags on a mission &mdash; said nothing and was marched into the stockade. Five of the nine aboard were killed and four taken prisoner. The cruelest fate fell to Brainard: wounded in the head and first given Red Cross aid, he was taken to the labor camp at Nentershausen, interrogated, beaten, led outside and shot, then buried in a single grave. His family was told only &ldquo;killed in action&rdquo; &mdash; until German historian Walter Hassenpflug pieced the truth together and his sister read a burial report on which one word &ldquo;could clearly be read: &lsquo;Murdered.&rsquo;&rdquo;</p><p>Carrow was interrogated at Dulag Luft &mdash; where his recovered flight log had already given the Germans the crew&rsquo;s names &mdash; and imprisoned at Stalag Luft I at Barth. He entered captivity near 180 pounds and left at 120, liberated by the Russians in 1945.</p><p><em>Sources: Raphael Carrow, &ldquo;Just Another Rude Awakening&rdquo; (Kassel Mission Reports Addendum, 1994) and Aaron Elson interview (1999); German crash-data form, MACR 9399; Duane Giesler KMHS narrative; Kay Brainard Hutchins,</em> The Palm Beach Post <em>(1992). KMHS archive.</em></p>",
+        "formation-details": "<p id=\"\">LOW LEFT ELEMENT</p>",
+        "outcome-details": "<p id=\"\">Crashed in Germany - MACR 9399<br><br>Five airmen were killed, and the plane crashed at Iba, Germany. The remaining four crewmen were captured and held at Stalag Luft I at Barth, Germany and Stalag Luft IV at Gross Tychow, Poland.</p>",
+        "additional-details": "<p>Reference: Carrow crew German crash-data form (PDF) &mdash; https://static1.squarespace.com/static/53f7e605e4b0e6c68d78bdc4/t/56baa1deb6aa60f43e8a8182/1455071711631/Carrow+Crew+German+Form001.pdf</p>",
+        "aircraft-type": "B-24J",
+        "serial-number": "42-110022",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Carrow Crew",
+        "slug": "carrow"
+      }
+    },
+    {
+      "id": "642c892ab55820f158ec0f48",
+      "isDraft": false,
+      "lastUpdated": "2026-05-13T20:51:30.650Z",
+      "fieldData": {
+        "participants": [
+          "645491c96fbb78558bc4126b",
+          "645491c8415b8544ac58911d",
+          "645491c842b5d6b57232935f",
+          "645491c77881e85ad526269d",
+          "645491c738243d5d231c0084",
+          "645491c6f01dda661fd6019b",
+          "645491c529c831133d050e48",
+          "645491c43aea44a17d903303",
+          "645491c3123c0512fdea178a",
+          "645491c29076bd35eb4f5c4b"
+        ],
+        "squadron": "642c7c6e93baf8c356581d2a",
+        "about": "<p id=\"\">The Kassel Mission was the 10th mission for <a href=\"/participant/bruce\">William Bruce </a>and most of his crew. They lost their original copilot on an earlier mission. (See that unbelievable story by clicking <a href=\"/participant/brown\">clicking here</a>). The Bruce crew was one of the only crews to fly its original aircraft, the Bonnie Vee, named for Bruce's wife, Verlyn. Unfortunately, Bonnie Vee exploded in this battle, and everyone but the pilot and his radio operator were killed.</p>",
+        "formation-details": "<p id=\"\">HIGH RIGHT ELEMENT</p>",
+        "outcome-details": "<p id=\"\">Crashed in Germany - MACR 9397<br><br>Bonnie Vee exploded in this battle, and everyone but the pilot and his radio operator were killed.</p>",
+        "additional-details": "<h2 id=\"\">THE BONNIE VEE STORY</h2><h3 id=\"\">BOMBARDIER AND KMMA HISTORIAN GEORGE COLLAR TELLS THE BRUCE CREW STORY, AS RECORDED BY KMHS ORAL HISTORIAN AARON ELSON.</h3><p id=\"\">Bill Bruce was on a mission. The ship he flew was called Bonnie V, and it was named after his wife, whose name was Verlyn. And he was on about his tenth...mission, so he was still a second lieutenant when he got shot down on the Kassel raid.</p><p id=\"\">But anyway, they went, I think it was in July or sometime prior to the Kassel Mission, on this bomb run and they got hit by flak in the tail, and I've got a picture of that damn thing with the tail all shot up, and he had a hell of a time getting home with it. And the co-pilot was a fellow named Brown that lives down in North Carolina, and a piece of flak practically severed his leg.</p><p id=\"\">Well, you know what they did? The gunner got down, the top gunner come down and put a tourniquet on it, and it took two of them to get this plane [under control]. Everything was shot up and ready to go down, and fighting the stick was tough, see. And that guy stayed conscious and helped get that damn plane back down. And when they got him home, they took him out of there and they thought he was gonna die, he lost a lot of blood.</p><p id=\"\">By God, he come out of it, and Mrs. Bruce told me over to the phone, she said, he's still alive and lives in North Carolina and he makes his own prostheses, because he didn't like the ones they had. He plays golf and everything. <br><br>What was unique about Bruce is the fact that his first co-pilot got his leg shot off, and then the second guy came, a guy by the name of Walter [correction: John] Willett who was a first lieutenant, and poor old Bruce is still a second lieutenant, and this Willett had a lot of flying time but he'd never been in combat, and somebody told him if you ever want to go up the ladder you've got to get in combat. So he had a friend at the 445th who said \"Come on over.\" And so he joined up with the 445th, and they put him on as co-pilot, and it might have been his first—well, no, I don't know how many missions Bruce did between the time Brown got it and Willett—but Willets got shot, his head or something, got shot right off [ed. note: a rocket sheared Willett in two through the torso], sitting right next to Bruce. It's in his story.</p><h3 id=\"\">FROM THE DIARY OF HERBERT R. SCHWARTZ, TAIL GUNNER, FRENCH CREW, WHICH FLEW JUST IN FRONT OF BONNIE VEE</h3><p id=\"\">Everyone started firing &amp; before I knew it, they were in on us. 100 Fockewolfes (<em id=\"\">sic)</em>, and I was half scared to death. They were thru us and started to re-form for tail attack &amp; I knew it was my job to hold them off. I pulled my flak suit off, threw my helmet off, turned on my trigger switch &amp; was ready for what may come. They headed for Bruce &amp; Pearson, flying off our wings before they hit us in numbers. Everything started to run thru my mind. Pilot said to be careful and take it easy. An FW came for me and I started shooting. Every attack but two were at 6:00 level and a dead-on shot. I let him have both guns and he started smoking &amp; peeled beneath us. I looked up &amp; saw Lt. Bruce's ship being attacked in formation by 7 fighters &amp; at the same time, a fighter coming in at his waist. His guns were all firing away &amp; at that split second, another fighter came in at his top side of fuselage. He was on fire and his plane got out of control. Another fighter started at his left waist and after throwing quite a bit of ammo, turned &amp; headed for my tail, his engine already smoking. Fleming, left waist gunner, had hit him and now not knowing he was in trouble, he came in on me. I let go &amp; after firing about 30 rounds, he blew up at about 50 yards away from my turret. He had it &amp; Fleming &amp; I were responsible for the kill. Lt. Bruce was completely in flames as I was later told by right waist gunner; no chutes emerged...His ship started toward us out of control, but French was on lookout for same. Another FW came in. I fired but he peeled off to our left.</p><p>‍</p>",
+        "aircraft-type": "B-24H",
+        "serial-number": "42-95128",
+        "outcome": "4fa0f6f23f9813f09ae8a5d18427f351",
+        "name": "Bruce Crew",
+        "slug": "bruce"
+      }
+    }
+  ]
+}

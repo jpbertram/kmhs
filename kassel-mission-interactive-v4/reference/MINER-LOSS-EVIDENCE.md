@@ -1,0 +1,11 @@
+# Miner loss: participant evidence
+
+Source: local OneDrive archive, `Eighth Air Force/Bomb Groups/445th BG/Crews by Squadron/702nd Squadron/Miner/Accounts/Interviews/Reg Miner Interview with Aaron Elson.doc`, interview April 11, 1999. Targeted loss/bailout passages read using native document text conversion; unrelated portions not comprehensively reviewed.
+
+Miner described autopilot failure, manual control, wing fires near the fuel caps, and loss of intercom communication. His copilot asked permission to leave. Near approximately 10,000 feet Miner decided to escape, found the bomb bay closed, removed equipment, and moved through the tunnel to the already-open nose-wheel doors. He recalled the aircraft starting to spin after he released the controls and before he dropped head first through the exit. He delayed opening his parachute to avoid the spinning aircraft and recalled very little canopy descent before landing. He also recalled seeing three P-51s approaching from his left shortly before leaving.
+
+He described Gilfoil as wounded in the knee area and assisted out over the battle area. His statement that Gilfoil died of bleeding or shock during descent is explicitly his belief, not a confirmed medical finding. Do not collapse this into death inside the aircraft or claim an exact cause/time of death.
+
+Runtime correction: remove the erroneous assertion that spin began only after Miner's final exit. Keep his depicted exit after the authored spin onset rather than the generic early bailout schedule. The 0.76 spin and 0.78 exit phases are illustrative ordering, not measured timestamps.
+
+The pilot canopy now stays visually packed for 0.65 playback seconds before inflation. This duration is a presentation estimate, not a historical measurement. Horizontal motion inherits the sampled aircraft velocity and relaxes illustratively; vertical motion still uses the generic descent approximation. This does not yet recreate his head-first freefall, delayed opening altitude or short canopy ride. Exit geometry, approximately 10,000-ft control release, P-51 arrival ordering and the remaining individual crew sequence still require implementation/reconciliation. No aerodynamic validation follows from this account.
