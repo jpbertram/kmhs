@@ -3957,6 +3957,7 @@ V2.buildClouds=function(scene){
       var s=sMin+Math.random()*sVar;
       sp.scale.set(s*2.2,s,1);
       sp.userData.drift=0.4+Math.random()*0.8;
+      sp.userData.baseOpacity=m.opacity;
       group.add(sp);puffs.push(sp);
     }
   }
@@ -3973,10 +3974,22 @@ V2.buildClouds=function(scene){
 };
 
 V2.driftClouds=function(dt){
+  var route=KM._missionT||0;
+  var fadeIn=Math.max(0,Math.min(1,(route-.61)/.04));
+  var fadeOut=Math.max(0,Math.min(1,(.96-route)/.04));
+  var action=fadeIn*fadeOut;
+  var anchor=KM._anchor&&KM._anchor.pos;
   (V2._cloudGroups||[]).forEach(function(cg){
+    var eventWeather=cg.group.parent===KM._s&&anchor&&action;
     cg.puffs.forEach(function(sp){
       sp.position.x-=sp.userData.drift*dt*2.2; /* wind from the east */
       if(sp.position.x<-TER.W*0.55)sp.position.x=TER.W*0.55;
+      var shade=0;
+      if(eventWeather){
+        var distance=Math.hypot(sp.position.x-anchor.x,sp.position.z-anchor.z);
+        shade=eventWeather*(.78+.22*(1-Math.min(1,distance/(180+sp.scale.x*.55))));
+      }
+      sp.material.opacity=sp.userData.baseOpacity*(1-.90*shade);
     });
   });
 };
@@ -8851,8 +8864,8 @@ V2.makeContrails=function(scene,count){
   for(var i=0;i<count;i++){pos[i*3]=-99999;pos[i*3+1]=-99999;pos[i*3+2]=-99999;}
   geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
   var pts=new THREE.Points(geo,new THREE.PointsMaterial({
-    map:V2.softTex(),color:0xe6ecf4,size:4.4,transparent:true,
-    opacity:0.32,depthWrite:false,blending:THREE.NormalBlending}));
+    map:V2.softTex(),color:0xe6ecf4,size:.24,transparent:true,
+    opacity:0.18,depthWrite:false,blending:THREE.NormalBlending}));
   pts.frustumCulled=false;
   scene.add(pts);
   return {geo:geo,pos:pos,count:count,next:0,frame:0,
@@ -8864,9 +8877,9 @@ V2.emitContrail=function(sys,plane,engines){
   for(var e=0;e<engines.length;e++){
     var off=engines[e].clone().multiplyScalar(s).applyQuaternion(q);
     var i=sys.next;sys.next=(sys.next+1)%sys.count;
-    sys.pos[i*3]=plane.position.x+off.x+(Math.random()-0.5)*0.6;
-    sys.pos[i*3+1]=plane.position.y+off.y+(Math.random()-0.5)*0.6;
-    sys.pos[i*3+2]=plane.position.z+off.z+(Math.random()-0.5)*0.6;
+    sys.pos[i*3]=plane.position.x+off.x+(Math.random()-0.5)*.045;
+    sys.pos[i*3+1]=plane.position.y+off.y+(Math.random()-0.5)*.045;
+    sys.pos[i*3+2]=plane.position.z+off.z+(Math.random()-0.5)*.045;
     sys.age[i]=now;
   }
   sys.geo.attributes.position.needsUpdate=true;
@@ -8922,7 +8935,7 @@ V2.startLoop=function(){
         }
       }
     }
-    if(sys&&(frames%30)===0)V2.ageContrails(sys,16);
+    if(sys&&(frames%30)===0)V2.ageContrails(sys,8);
     if(V2.route)V2.route.tick(dt);
   }
   loop();
