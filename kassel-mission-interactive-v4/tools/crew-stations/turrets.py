@@ -292,8 +292,8 @@ def build_top():
 
 # ======================================================================= ball
 def build_ball():
-    """Sperry A-13 after JP's references: unpainted aluminium ball with riveted
-    frames, a round sighting window between the guns, lattice windows down the
+    """Sperry A-13 after JP's references: ball with riveted frames (painted olive
+    drab outside to match the olive-drab mission aircraft; aluminium inside), a round sighting window between the guns, lattice windows down the
     sides, a spoked entry door, a heavy mounting flange with gearbox and hand
     crank on top, the gunner curled on his back with ammunition boxes above."""
     C = (0, -5.92, -1.45)                  # lowered: about 0.4 m of the ball below the belly
@@ -340,7 +340,7 @@ def build_ball():
         return p.y > 0 and abs(abs(p.x) - 0.38) < 0.035 and abs(p.z) < 0.045
 
     open_ = lambda p: region(p) in ('front', 'lattice', 'door') or slot(p)
-    sphere_shell(r, ALU, lambda p: not open_(p), name='ball_outer')
+    sphere_shell(r, OD, lambda p: not open_(p), name='ball_outer')
     sphere_shell(r - 0.014, ALUD, lambda p: not open_(p), name='ball_inner')
     sphere_shell(r - 0.004, GLASS, lambda p: region(p) in ('lattice', 'door'), name='lattice_glass')
     sphere_shell(r - 0.006, AGLASS, lambda p: region(p) == 'front', segs=128, rings=64, name='sight_window')
@@ -351,9 +351,9 @@ def build_ball():
     # lattice frames: meridians and parallels across the side window bands
     for s in (-1, 1):
         for lon in (0.62, 0.9, 1.18, 1.46, 1.75):
-            L.tube([on_sphere(s * lon, -0.95 + j * 1.07 / 18) for j in range(19)], 0.016, ALU, segs=6)
+            L.tube([on_sphere(s * lon, -0.95 + j * 1.07 / 18) for j in range(19)], 0.016, OD, segs=6)
         for lat in (-0.95, -0.55, -0.2, 0.12):
-            L.tube([on_sphere(s * (0.62 + j * 1.13 / 20), lat) for j in range(21)], 0.016, ALU, segs=6)
+            L.tube([on_sphere(s * (0.62 + j * 1.13 / 20), lat) for j in range(21)], 0.016, OD, segs=6)
     # riveted frames: two bands about the trunnion axis and a parallel at the flange
     for ang in (math.radians(-38), math.radians(38)):
         pts = []
@@ -361,7 +361,7 @@ def build_ball():
             t = 2 * math.pi * j / 96
             p = Matrix.Rotation(ang, 3, 'Z') @ (Vector((0, math.cos(t), math.sin(t))) * (r + 0.004))
             pts.append(tuple(p))
-        L.tube(pts, 0.013, ALU, segs=6)
+        L.tube(pts, 0.013, OD, segs=6)
         for j in range(0, 96, 3):
             t = 2 * math.pi * j / 96
             p = Matrix.Rotation(ang, 3, 'Z') @ (Vector((0, math.cos(t), math.sin(t))) * (r + 0.016))
@@ -381,7 +381,7 @@ def build_ball():
     L.cyl(tuple(dc - door_axis * 0.01), tuple(dc + door_axis * 0.02), 0.045, ALU)
     # trunnion hubs and the yoke up to the mounting flange
     for s in (-1, 1):
-        L.cyl((s * (r - 0.02), 0, 0), (s * (r + 0.05), 0, 0), 0.15, ALU, segs=40, bevel=0.01)
+        L.cyl((s * (r - 0.02), 0, 0), (s * (r + 0.05), 0, 0), 0.15, OD, segs=40, bevel=0.01)
         L.cyl((s * (r + 0.05), 0, 0), (s * (r + 0.1), 0, 0), 0.065, ALUD, segs=24)
         L.cyl((s * (r - 0.12), 0, 0), (s * (r - 0.02), 0, 0), 0.11, ALUD, segs=32)
         for dy in (-0.12, 0.12):

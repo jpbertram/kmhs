@@ -164,8 +164,8 @@
     "sha256": "795753d2f29f68f04391cb76c5eae8e4ab4e8c967b9ab3afd5055863825689da"
   },
   "kassel-mission-interactive-v4/b24-ball-turret.glb": {
-    "bytes": 810312,
-    "sha256": "d95c47ed30c11cb85b3f5185b191459d8318a7dc00b89d455f9329edeba1eb4c"
+    "bytes": 925692,
+    "sha256": "bcc832c87dcd25100abfe22f4cd491e2e4e6ba753653137734ebd888c09ddb00"
   },
   "kassel-mission-interactive-v4/b24-cockpit-vr.html": {
     "bytes": 82469,
@@ -564,8 +564,8 @@
     "sha256": "da15a4498b26016ad11b3ead637e830fc5d4cdccbf5c9ec147f3db3ac9af3412"
   },
   "kassel-mission-interactive-v4/tools/crew-stations/README.md": {
-    "bytes": 1878,
-    "sha256": "faf3fed29b4e020b30854b7c51dc2620c5b13138c7bd5e590629d2832b52721a"
+    "bytes": 3407,
+    "sha256": "5b2234393d5698262214a42b8c82333d10b2f335e59d5f74d97cece36aa5c45e"
   },
   "kassel-mission-interactive-v4/tools/crew-stations/__pycache__/b24lib.cpython-311.pyc": {
     "bytes": 41092,
@@ -604,8 +604,8 @@
     "sha256": "acbc0d92cac20bedd3d77d2b87ed481e4c225a233cae3a5fc134ac09753518fd"
   },
   "kassel-mission-interactive-v4/tools/crew-stations/turrets.py": {
-    "bytes": 34795,
-    "sha256": "20a6efd5e109dc74ab797ba28dca0247ada0ffde91dee4f4daefaedbb5fe1de4"
+    "bytes": 34858,
+    "sha256": "937b04dbd91930691203a59f32737c752dc93d639cf6648ed34e26723b582fbd"
   },
   "kassel-mission-interactive-v4/tools/crew-stations/waist.py": {
     "bytes": 9129,
