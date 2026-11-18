@@ -6941,7 +6941,12 @@ V2.updateDamage=function(p,cue){
   dmgFit(p,pd,D);
   var u=p.userData;
   if(!u.dmgEvents)u.dmgEvents=D.schedule(pd.pilot,pd.fate,pd.fateTime);
-  if(!u.dmgEvents.length&&!u.dmgOpen)return;
+  if(!u.dmgEvents.length&&!u.dmgOpen){
+    /* nothing to show (e.g. scrubbed back before the bailouts): take down what was drawn */
+    if(u.dmgGroup&&u.dmgGroup.parent){u.dmgGroup.parent.remove(u.dmgGroup);u.dmgGroup=null;u.dmgSig=null;}
+    (u.dmgSkin||[]).forEach(function(m){if(window.KasselDamageVisuals)window.KasselDamageVisuals.setEntries(m,[]);});
+    return;
+  }
   var surf=dmgSurface();if(!surf||surf.props.length!==4)return;
   var st=D.stateAt(u.dmgEvents,cue);u.dmgState=st;var sig=Object.keys(u.dmgOpen||{}).join(',')+'|'+st.count+':'+st.engines.map(function(e){return (e.fire?1:0)+(e.dead?2:0)+(e.feathered?4:0);}).join('')+':'+Object.keys(st.fires).join(',');
   if(!u.dmgGroup||u.dmgGroup.parent!==p||u.dmgSig!==sig){
@@ -6954,7 +6959,8 @@ V2.updateDamage=function(p,cue){
          exposed structure as real geometry (aircraft-damage-visuals.js) */
       var L=VX.layout(surf,st,u.dmgEvents,cue,pd.pilot),open=dmgOpenings(surf,u.dmgOpen,g,sh);
       L.entries=open.concat(L.entries);
-      var skin=L.entries.length?dmgPatchSkin(p,u):[];
+      /* an already patched skin is cleared to no features when scrubbed back before the hits */
+      var skin=(L.entries.length||u.dmgSkin)?dmgPatchSkin(p,u):[];
       skin.forEach(function(m){VX.setEntries(m,L.entries);});
       var pg=VX.petalGeometry(THREE,L.petals.slice(0,48));
       if(pg){var pm=new THREE.Mesh(pg,sh.petal);pm.userData.dmgOwn=true;pm.name='km-damage-petals';g.add(pm);}
@@ -7875,6 +7881,25 @@ function crewHandoffLens(elapsed,startFov){
   };
 })();
 
+/* Smoke, fire, flak and contrail points are sized in world units, so one
+   that passes close to the camera grows to fill the screen (a white
+   contrail or additive fire puff then blows out the whole view). Cap every
+   point's on-screen size and fade the ones that would have been far bigger,
+   so nearby puffs thin out instead of covering the battle. */
+function kmCapPoints(m){
+  if(!m||m.userData.kmCapped)return;m.userData.kmCapped=true;
+  var prev=m.onBeforeCompile,prevKey=m.customProgramCacheKey?m.customProgramCacheKey.call(m):'';
+  m.onBeforeCompile=function(sh,r){
+    if(prev)prev.call(this,sh,r);
+    sh.vertexShader='varying float vKmFade;\n'+sh.vertexShader.replace('#include <fog_vertex>',
+      '#include <fog_vertex>\n float kmPs=gl_PointSize;gl_PointSize=min(kmPs,140.0);vKmFade=1.0-smoothstep(140.0,320.0,kmPs);');
+    sh.fragmentShader='varying float vKmFade;\n'+sh.fragmentShader.replace('#include <alphatest_fragment>',
+      'diffuseColor.a*=vKmFade;\n#include <alphatest_fragment>');
+  };
+  m.customProgramCacheKey=function(){return prevKey+'|km-cap-points';};
+  m.needsUpdate=true;
+}
+V2.capPoints=function(scene){scene.traverse(function(o){if(o.isPoints)kmCapPoints(o.material);});};
 /* ---------- deterministic state for scrubbing ---------- */
 function applyBattleState(scene,battleT){
   clearChutes();
@@ -7892,6 +7917,7 @@ function applyBattleState(scene,battleT){
     if(!p.userData.v2)initPlaneBattle(p,scene);
     var v=p.userData.v2;
     v.startPos=null;v.ctrl=null;v.fwd=null;v.devastated=false; /* recompute when needed */
+    v.chutesOut=0;v.bailoutSchedule=null;p.userData.dmgOpen=null; /* doors shut again until someone bails out */
     var ft=v.ft;
     if(v.beh!=='stay'&&ft!=null&&battleT>ft+(v.beh==='fall'?v.dur:140)){
       p.visible=false;p.userData.alive=false;
@@ -8103,7 +8129,8 @@ KM._buildAnimation=function(){
         if(KM._camState)KM._camState.shakeIntensity=
           (KM._missionT<RETURN_START&&KM._battleT>20&&KM._battleT<360)?Math.min(1.2,KM._battleT/120):0;
       }
-      updateAnchor(KM._missionT,KM._battleT,dt*KM._speed);
+      /* the attack plays at a quarter pace (mission-timeline.js); the anchor follows the same pace */
+      updateAnchor(KM._missionT,KM._battleT,dt*KM._speed*(KMMissionTimeline.pace?KMMissionTimeline.pace(KM._playbackSeconds||0):1));
       elapsed=KMMissionTimeline.secondsAt(KM._missionT);
       var mapView=KM._camState&&(KM._camState.mode==='topdown'&&KM._camState.tdH>=45||KM._camState.mode==='orbit'&&KM._camState.radius>=45);
       scene.children.forEach(function(o){if(o.userData.geoMarker)o.visible=!!mapView;});
@@ -8144,6 +8171,7 @@ KM._buildAnimation=function(){
         lossPool.geo.attributes.plume.needsUpdate=true;
       }
 
+      if(V2._frame%30===1)V2.capPoints(scene);
       /* fighters + escorts + tracers + chutes + flashes */
       var fighterClock=KMMissionTimeline.battleCueAtPlayback(KM._playbackSeconds||0);
       updateFighters(fighterClock,sdt,elapsed,scene);
