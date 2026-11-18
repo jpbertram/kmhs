@@ -11,7 +11,7 @@ const before=new T.Box3().setFromObject(man).getSize(new T.Vector3());
 for(let age=0;age<150;age+=.1){for(const landed of [0,.25,1,2.5,20]){const p=pose(age,landed,-5.26);assert.equal(p.bodyScale,1);assert(p.rigScaleY>=.12-1e-10&&p.rigScaleY<=1);assert(Number.isFinite(p.rigOffsetY));if(!landed)assert(Math.abs(p.rigOffsetY-3.68*p.rigScaleY+3.68)<1e-10,'Riser anchor remains fixed during opening');}}
 const after=new T.Box3().setFromObject(man).getSize(new T.Vector3());assert(before.distanceTo(after)<1e-12);
 const runtime=fs.readFileSync(path.join(__dirname,'km3d-v3.js'),'utf8');new vm.Script(runtime);
-assert(runtime.includes("rig:g.getObjectByName('parachute-canopy-rig')"));assert(runtime.includes('ground:gy-.2*feetY'));
+assert(runtime.includes("rig:g.getObjectByName('parachute-canopy-rig')"));assert(runtime.includes('ground:gy-rootScale*feetY'));
 assert(!runtime.includes('ch.sp.scale.y=0.2*Math.max'));assert(!runtime.includes('ch.sp.scale.y=Math.max(0.15'));
 assert.throws(()=>pose(-1,0,-5));assert.throws(()=>pose(1,NaN,-5));
 assert.equal(pose(.4,0,-5,.65).rigVisible,false,'Delayed canopy remains packed');
@@ -24,12 +24,13 @@ assert.throws(()=>pose(1,0,-5,-1));
 Object.assign(context,{V2:{_chutes:[],demReady:true,elevAt:()=>50},KM:{_battleT:0,_missionT:.85},ELEV_SCALE:.35,RETURN_START:.92,KMMissionTimeline:require('./mission-timeline.js'),KasselParachutePose:{pose},hash:()=>100});
 const section=runtime.slice(runtime.indexOf('function chuteTemplate(){'),runtime.indexOf('function clearChutes(){'));
 vm.runInContext(section,context);
-const scene=new T.Scene();context.spawnChute(scene,new T.Vector3(0,100,0),{n:'Test airman'},{pilot:'Test aircraft'},0,0);
+const scene=new T.Scene();context.spawnChute(scene,new T.Vector3(0,100,0),{n:'Test airman'},{pilot:'Test aircraft'},0,0,null,0,500);
+const rootScale=24*.3048/(4.8*500);
 const chute=context.V2._chutes[0],airman=chute.sp.getObjectByName('parachuting-airman');
 const attackPlayback=context.KMMissionTimeline.playbackAtBattleCue(0);
 for(const age of [0,.4,1,30,120,1,120]){
  context.KM._missionT=context.KMMissionTimeline.routeAt(attackPlayback+age);context.updateChutes(0,age);
- assert.deepEqual(chute.sp.scale.toArray(),[.2,.2,.2],'Whole person must not be compressed during deployment or landing');
+ assert.deepEqual(chute.sp.scale.toArray(),[rootScale,rootScale,rootScale],'Whole person must not be compressed during deployment or landing');
  assert.deepEqual(airman.scale.toArray(),[.75,.75,.75]);
  if(age===120){chute.sp.updateMatrixWorld(true);const foot=new T.Box3().setFromObject(airman).min.y;assert(Math.abs(foot-(50*.35+.03))<1e-6,`Feet must contact sampled terrain, got ${foot}`);assert(new T.Box3().setFromObject(chute.rig).min.y>=foot-1e-6,'Collapsed rig must not pass below the ground');}
  if(age===1){assert(Math.abs(chute.rig.scale.y-1)<1e-9,'Rewinding must undo a collapsed canopy');assert.equal(chute.rig.position.x,0,'Rewind must undo settled-cloth offset');}

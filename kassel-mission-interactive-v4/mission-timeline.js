@@ -48,8 +48,36 @@
     // 0..420 are legacy choreography coordinates, NOT physical seconds.
     return cue<=420?secondsAt(.84+cue/420*.08):240+(cue-420)/5.6;
   }
+  // Leave most of the control available for the five-minute documentary
+  // sequence. The final fifth becomes seekable when loss playback extends it.
+  var documentaryEnd=300,documentaryShare=.8;
+  function seekSeconds(fraction,end){
+    var f=Math.max(0,Math.min(1,fraction));
+    if(end<=documentaryEnd)return f*documentaryEnd;
+    if(f<=documentaryShare)return f/documentaryShare*documentaryEnd;
+    return documentaryEnd+(f-documentaryShare)/(1-documentaryShare)*(end-documentaryEnd);
+  }
+  function seekFraction(seconds,end){
+    var t=Math.max(0,Math.min(end,seconds));
+    if(end<=documentaryEnd)return t/documentaryEnd;
+    if(t<=documentaryEnd)return t/documentaryEnd*documentaryShare;
+    return documentaryShare+(t-documentaryEnd)/(end-documentaryEnd)*(1-documentaryShare);
+  }
+  // Presentation time after the return blends from normal speed into
+  // a 90-second time-lapse. Trajectory sampling still uses source seconds.
+  function advancePlayback(seconds,delta,end){
+    var next=seconds+delta;
+    var remaining=end-documentaryEnd,display=90;
+    if(next<=documentaryEnd||remaining<=display)return Math.min(end,next);
+    var acceleration=(remaining-display)/(display*display);
+    var elapsed=Math.max(0,seconds-documentaryEnd);
+    var displayElapsed=seconds<documentaryEnd?seconds-documentaryEnd:
+      2*elapsed/(1+Math.sqrt(1+4*acceleration*elapsed));
+    var t=Math.min(display,displayElapsed+delta);
+    return Math.min(end,documentaryEnd+t+acceleration*t*t);
+  }
   var api={duration:300,marks:marks,
-    routeAt:routeAt,
+    routeAt:routeAt,advancePlayback:advancePlayback,seekSeconds:seekSeconds,seekFraction:seekFraction,
     secondsAt:secondsAt,
     playbackAtBattleCue:playbackAtBattleCue,
     battleCueAtPlayback:function(seconds){return seconds>240?420+(seconds-240)*5.6:Math.max(0,Math.min(420,(routeAt(seconds)-.84)/.08*420));},

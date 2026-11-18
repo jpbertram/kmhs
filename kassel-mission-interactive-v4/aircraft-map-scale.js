@@ -1,13 +1,16 @@
 (function(root){'use strict';
  const cache=new WeakMap();
  function fit(T,plane,spanM,metresPerSceneUnit){
-  if(!plane.children.length)return null;
-  const first=plane.children[0],old=cache.get(plane);
-  if(!old||old.first!==first||old.count!==plane.children.length){
-   const model=plane.clone();model.position.set(0,0,0);model.quaternion.identity();model.scale.set(1,1,1);model.updateMatrixWorld(true);
+  const children=plane.children.filter(child=>!child.userData.rebuiltInterior&&!child.userData.inspectionInterior);
+  if(!children.length)return null;
+  const first=children[0],old=cache.get(plane);
+  if(!old||old.first!==first||old.count!==children.length){
+   const model=plane.clone(false);
+   children.forEach(child=>model.add(child.clone()));
+   model.position.set(0,0,0);model.quaternion.identity();model.scale.set(1,1,1);model.updateMatrixWorld(true);
    const box=new T.Box3().setFromObject(model),nativeSpan=box.max.z-box.min.z;
    if(!(nativeSpan>0)||!Number.isFinite(nativeSpan))throw Error('Finite aircraft mesh bounds required');
-   cache.set(plane,{first,count:plane.children.length,scale:spanM/nativeSpan/metresPerSceneUnit,nativeBounds:box.clone(),spanM});
+   cache.set(plane,{first,count:children.length,scale:spanM/nativeSpan/metresPerSceneUnit,nativeBounds:box.clone(),spanM});
   }
   plane.userData.mapGeometryScale=cache.get(plane).scale;
   plane.scale.setScalar(plane.userData.mapGeometryScale);
@@ -29,5 +32,21 @@
   return true;
  }
  function supportDepth(plane){const fit=cache.get(plane);return fit?Math.max(0,-fit.nativeBounds.min.y*plane.scale.y):0;}
- const api={fit,orientedBounds,intersects,supportDepth};root.KasselAircraftMapScale=api;if(typeof module==='object')module.exports=api;
+ function clearTerrain(T,plane,groundAt){
+  if(!groundAt||!cache.has(plane))return;
+  const bounds=orientedBounds(T,plane);
+  const extent=axis=>bounds.half.reduce((sum,half,i)=>sum+half*Math.abs(bounds.axes[i][axis]),0);
+  const {x,y,z}=bounds.centre;
+  const halfX=extent('x'),halfZ=extent('z');
+  let floor=groundAt(x,z)??-Infinity;
+  for(const dx of [-halfX,halfX])for(const dz of [-halfZ,halfZ]){
+   const ground=groundAt(x+dx,z+dz);
+   if(ground!==undefined)floor=Math.max(floor,ground);
+  }
+  const gap=y-extent('y')-floor;
+  const blend=.005;
+  if(gap<=-blend)plane.position.y-=gap;
+  else if(gap<blend)plane.position.y+=(gap-blend)**2/(4*blend);
+ }
+ const api={fit,orientedBounds,intersects,supportDepth,clearTerrain};root.KasselAircraftMapScale=api;if(typeof module==='object')module.exports=api;
 })(typeof window==='object'?window:globalThis);

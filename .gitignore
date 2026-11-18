@@ -6,3 +6,12 @@ node_modules/
 playwright-report/
 test-results/
 *.log
+
+# Local imagery experiments and the uncleared facsimile are outside the public release.
+/kassel-mission-interactive-v4/textures/imagery-*.jpg
+/kassel-mission-interactive-v4/textures/terrain-*
+/kassel-mission-interactive-v4/textures/flight-record.jpg
+
+# Cloudflare build output
+/dist/
+/.wrangler/
