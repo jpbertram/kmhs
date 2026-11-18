@@ -22,20 +22,23 @@
  * bundled GLTFLoader without a decoder), textures as JPEG/PNG. */
 (function(global){
  'use strict';
- var V='?v=20261118-r7';
- var PARTS={flightdeck:'b24-flight-deck.glb',aftdeck:'b24-aft-deck.glb',nose:'b24-nose-compartment.glb',waist:'b24-waist.glb'};
+ var V='?v=20261118-r8';
+ var PARTS={flightdeck:'b24-flight-deck.glb',aftdeck:'b24-aft-deck.glb',topturret:'b24-top-turret.glb',nose:'b24-nose-compartment.glb',waist:'b24-waist.glb',ball:'b24-ball-turret.glb',tail:'b24-tail-turret.glb'};
  var M_PER_UNIT=20.47/33;
  var PILOT_EYE_M=[-0.48,1.18,0],PILOT_EYE_UNITS=[7.55,1.12];
  // eye positions and look directions in the GLB frame (the GLBs carry matching camera nodes)
  var STATIONS={
-  pilot:{parts:['flightdeck','aftdeck'],eye:[-0.48,1.18,0],look:[0,-0.1593,-0.9872]},
-  copilot:{parts:['flightdeck','aftdeck'],eye:[0.48,1.18,0],look:[0,-0.1593,-0.9872]},
-  radio:{parts:['flightdeck','aftdeck'],eye:[0.2,1.2,1.38],look:[0.921,-0.3868,-0.0461]},
+  pilot:{parts:['flightdeck','aftdeck','topturret'],eye:[-0.48,1.18,0],look:[0,-0.1593,-0.9872]},
+  copilot:{parts:['flightdeck','aftdeck','topturret'],eye:[0.48,1.18,0],look:[0,-0.1593,-0.9872]},
+  radio:{parts:['flightdeck','aftdeck','topturret'],eye:[0.2,1.2,1.38],look:[0.921,-0.3868,-0.0461]},
+  ttop:{parts:['flightdeck','aftdeck','topturret'],eye:[0,2.045,2.29],look:[0,0,-1]},
   nav:{parts:['nose'],eye:[0.14,0.42,-1.86],look:[0.4963,-0.4467,-0.7444]},
   bomb:{parts:['nose'],eye:[0,0.12,-2.72],look:[0,-0.6,-0.8]},
   nose:{parts:['nose'],eye:[0,0.74,-4.2],look:[0,-0.0599,-0.9982]},
+  ball:{parts:['ball'],eye:[0,-1.32,6.16],look:[0,-0.1944,-0.9809]},
   waistL:{parts:['waist'],eye:[-0.1,1.031,8.2],look:[-0.9929,-0.1191,0]},
-  waistR:{parts:['waist'],eye:[0.1,1.031,8.2],look:[0.9929,-0.1191,0]}
+  waistR:{parts:['waist'],eye:[0.1,1.031,8.2],look:[0.9929,-0.1191,0]},
+  tail:{parts:['tail'],eye:[0,0.86,14.64],look:[0,-0.02,0.9998]}
  };
  var FLOOR_M={waistL:-0.62,waistR:-0.62};
  function toUnits(p){

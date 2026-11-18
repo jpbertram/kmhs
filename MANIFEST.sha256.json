@@ -36,8 +36,8 @@
     "sha256": "59bc0c1cde2445708a7b4cbb207c64d91abe3928848ea2e16da77d1ac93d7a64"
   },
   "build-simulator.cjs": {
-    "bytes": 2181,
-    "sha256": "1f15e7478ef118bc6c5ec1a57d8ea0c6fd7484f69de3b800ac824d5a3f4375b5"
+    "bytes": 2246,
+    "sha256": "cd0b4d5674acb1d4e3647c4c95a544814dd8c05f4d84468f4a7cf4567984d94f"
   },
   "check-package.cjs": {
     "bytes": 1652,
@@ -160,8 +160,12 @@
     "sha256": "39f7c38249a091dda7301c19fee60bbcfdc43b0e55af997ff3029b6ce1f601b9"
   },
   "kassel-mission-interactive-v4/b24-aft-deck.glb": {
-    "bytes": 1018772,
-    "sha256": "84c60efcf464229f951031de86ccf84c9ddc43539553fefba3c52ca223f13230"
+    "bytes": 963640,
+    "sha256": "795753d2f29f68f04391cb76c5eae8e4ab4e8c967b9ab3afd5055863825689da"
+  },
+  "kassel-mission-interactive-v4/b24-ball-turret.glb": {
+    "bytes": 810312,
+    "sha256": "d95c47ed30c11cb85b3f5185b191459d8318a7dc00b89d455f9329edeba1eb4c"
   },
   "kassel-mission-interactive-v4/b24-cockpit-vr.html": {
     "bytes": 82469,
@@ -174,6 +178,14 @@
   "kassel-mission-interactive-v4/b24-nose-compartment.glb": {
     "bytes": 1569700,
     "sha256": "ccf673bbe4956bc7f4566d1e630c7045e3484b6c4cd84ece005ad27bffdd80f6"
+  },
+  "kassel-mission-interactive-v4/b24-tail-turret.glb": {
+    "bytes": 931368,
+    "sha256": "eab501acdf9e8f8ece3e6f91226698409e73c8b211e9e5247189e697ad5077ff"
+  },
+  "kassel-mission-interactive-v4/b24-top-turret.glb": {
+    "bytes": 834688,
+    "sha256": "dfa5b7436d632fee800adadf107fbe56aba20844fea1867abf4a8163b2cebbbe"
   },
   "kassel-mission-interactive-v4/b24-waist.glb": {
     "bytes": 1531212,
@@ -204,8 +216,8 @@
     "sha256": "3fa916c9b9ab8330fa0634b393c9c3f02da1e11be8ce021a2d8cc21c0f05f6db"
   },
   "kassel-mission-interactive-v4/crew-compartments.js": {
-    "bytes": 5315,
-    "sha256": "937ec221d61f67351ce13533122b2722632c44a77ba844f2dd2beaa69553737e"
+    "bytes": 5657,
+    "sha256": "cc5aedc950a8d1ee7d410eaafacd326bff28163afbc2c53f7f4a261d02ae3213"
   },
   "kassel-mission-interactive-v4/crew-exterior.js": {
     "bytes": 1376,
@@ -555,17 +567,21 @@
     "bytes": 1878,
     "sha256": "faf3fed29b4e020b30854b7c51dc2620c5b13138c7bd5e590629d2832b52721a"
   },
+  "kassel-mission-interactive-v4/tools/crew-stations/__pycache__/b24lib.cpython-311.pyc": {
+    "bytes": 41092,
+    "sha256": "63d6e8ce32e3fddfacca48cd9e162b18d5e1e91d0d2d24d3289f608d3e479fa3"
+  },
   "kassel-mission-interactive-v4/tools/crew-stations/aftdeck.py": {
-    "bytes": 9387,
-    "sha256": "61f9a0fa380c57d78facf5868566e05230265f67a678bd47e19035a739811687"
+    "bytes": 8063,
+    "sha256": "48f2a32536351d121cc98033af6f4bc206ed13b2cd7ff7f7102d65e02fc0d417"
   },
   "kassel-mission-interactive-v4/tools/crew-stations/b24lib.py": {
     "bytes": 17221,
     "sha256": "866401958e137bf248ee966ad874f4a59aba8a9592d30f667264df6eea96ff4c"
   },
   "kassel-mission-interactive-v4/tools/crew-stations/build.sh": {
-    "bytes": 1055,
-    "sha256": "ac15e98c3e7aeb6ff92164c2b1ac9b4c36fca736e062b03c8d5f28507cdf13b6"
+    "bytes": 1397,
+    "sha256": "c23cad442ee77f564d0902669150ef5c140f7ab8819120621d191659c7244d46"
   },
   "kassel-mission-interactive-v4/tools/crew-stations/nose.py": {
     "bytes": 13244,
@@ -586,6 +602,10 @@
   "kassel-mission-interactive-v4/tools/crew-stations/trim.mjs": {
     "bytes": 1801,
     "sha256": "acbc0d92cac20bedd3d77d2b87ed481e4c225a233cae3a5fc134ac09753518fd"
+  },
+  "kassel-mission-interactive-v4/tools/crew-stations/turrets.py": {
+    "bytes": 34795,
+    "sha256": "20a6efd5e109dc74ab797ba28dca0247ada0ffde91dee4f4daefaedbb5fe1de4"
   },
   "kassel-mission-interactive-v4/tools/crew-stations/waist.py": {
     "bytes": 9129,
@@ -660,8 +680,8 @@
     "sha256": "6218504702e4047f3425de2b7203258b3f67d44dc6bdd933314b5ef5f17e1d31"
   },
   "kassel-mission-interactive-v4/verify-crew-compartments.js": {
-    "bytes": 6653,
-    "sha256": "895af206c4b85e41b3e49939b6ade83684b677cd4262952322b27e815aa70f07"
+    "bytes": 6717,
+    "sha256": "bcae9f302277701a6e1e20ff5a8e6d05e3d2f895efb1a21c16ff5a292ecca72b"
   },
   "kassel-mission-interactive-v4/verify-crew-handoff-lens.js": {
     "bytes": 1254,

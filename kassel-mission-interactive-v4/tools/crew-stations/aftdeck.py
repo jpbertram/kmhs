@@ -46,7 +46,7 @@ def sec(y):
 
 holes = [L.side_window(sec, +1, -1.4, 1.12, 0.5, 0.36, 0.1, FRAME, GLASS),     # radio operator's window
          L.side_window(sec, -1, -1.35, 1.12, 0.46, 0.34, 0.1, FRAME, GLASS)]
-turret = lambda y, x, z: z > 1.35 and x * x + (y + 2.15) ** 2 < 0.5 ** 2
+turret = lambda y, x, z: z > 1.35 and x * x + (y + 2.15) ** 2 < 0.6 ** 2
 L.shell(Y1, Y0, sec, GREEN, holes=holes + [turret], name='skin')
 L.shell(Y1, Y0, sec, GLASS, only=lambda y, x, z: any(h(y, x, z) for h in holes), thick=0, name='glass')
 for y in (-1.02, -1.75, -2.4, -2.72):
@@ -119,24 +119,8 @@ L.box((-0.93, -1.9, 0.9), (0.08, 0.36, 0.3), BLACK, bevel=0.015)      # fuel tra
 L.panel((-0.885, -1.9, 0.92), 0.33, 0.165, GAUGES, normal=(1, 0, 0), up=(0, 0, 1))
 L.cyl((-0.82, -1.05, 0.05), (-0.82, -1.05, 0.5), 0.07, RED, bevel=0.02)  # fire extinguisher
 L.cyl((-0.82, -1.05, 0.5), (-0.82, -1.05, 0.58), 0.025, ALU)
-L.box((-0.9, -2.45, 0.4), (0.14, 0.4, 0.8), OD, bevel=0.015)         # ammo boxes for the turret
-L.box((-0.9, -2.45, 0.82), (0.14, 0.38, 0.04), ALU, bevel=0.006)
-# Martin upper turret: ring in the roof, glazed dome above, pedestal and stand below
-TY = -2.15
-L.lathe([(0.47, 0), (0.54, 0), (0.54, 0.08), (0.47, 0.08)], (0, TY, 1.38), (0, 0, 1), ALU, segs=48, name='turret_ring')
-L.lathe([(0.47, 0), (0.47, 0.28), (0.44, 0.45), (0.33, 0.62), (0.16, 0.72), (0.0, 0.74)], (0, TY, 1.46), (0, 0, 1), GLASS, segs=40)
-for k in range(8):
-    a = 2 * math.pi * k / 8
-    L.tube([(math.cos(a) * r, TY + math.sin(a) * r, 1.46 + h) for (r, h) in [(0.47, 0), (0.47, 0.28), (0.44, 0.45), (0.33, 0.62)]], 0.012, FRAME, segs=6)
-L.lathe([(0.0, 0), (0.42, 0), (0.42, 0.22), (0.0, 0.22)], (0, TY, 1.25), (0, 0, 1), FRAME, segs=40, arc=(math.radians(200), math.radians(340)))
-for s in (-1, 1):  # gun breeches inside the dome
-    L.box((s * 0.18, TY + 0.05, 1.72), (0.1, 0.55, 0.13), STEEL, bevel=0.01)
-    L.cyl((s * 0.18, TY + 0.33, 1.72), (s * 0.18, TY + 1.1, 1.72), 0.024, STEEL)
-L.cyl((0, TY, 0.0), (0, TY, 1.25), 0.06, ALU)                         # central column
-L.box((0, TY, 0.62), (0.42, 0.3, 0.05), ALU, bevel=0.01)              # gunner's step
-L.box((0, TY - 0.05, 1.05), (0.34, 0.3, 0.06), PAD, bevel=0.02)       # sling seat
-L.tube([(-0.22, TY - 0.2, 1.05), (-0.22, TY - 0.2, 1.3)], 0.015, ALU)
-L.tube([(0.22, TY - 0.2, 1.05), (0.22, TY - 0.2, 1.3)], 0.015, ALU)
+# The Martin upper turret itself (ring, dome, guns, tub) is its own model:
+# turrets.py -> b24-top-turret.glb, loaded with this one.
 
 # ------------------------------------------------------------- eyepoints
 L.eye('eye_radio', (0.2, -1.38, 1.2), (1.0, 0.05, -0.42))

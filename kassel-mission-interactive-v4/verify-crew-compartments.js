@@ -38,8 +38,8 @@ function place(scene){
 }
 const solid=h=>h.object.material&&!h.object.material.transparent;
 (async()=>{
- const files={};for(const k of ['flightdeck','aftdeck','nose','waist'])files[k]=null;
- const parts={flightdeck:'b24-flight-deck.glb',aftdeck:'b24-aft-deck.glb',nose:'b24-nose-compartment.glb',waist:'b24-waist.glb'};
+ const files={};
+ const parts={flightdeck:'b24-flight-deck.glb',aftdeck:'b24-aft-deck.glb',topturret:'b24-top-turret.glb',nose:'b24-nose-compartment.glb',waist:'b24-waist.glb',ball:'b24-ball-turret.glb',tail:'b24-tail-turret.glb'};
  const loaded={},summary=[];
  for(const [k,file] of Object.entries(parts)){
   const {gltf,bytes}=await parse(file);dequantize(gltf.scene);const holder=place(gltf.scene);
@@ -49,7 +49,7 @@ const solid=h=>h.object.material&&!h.object.material.transparent;
   loaded[k]={holder,cams};summary.push(`${file} ${(bytes/1e6).toFixed(1)}MB ${Math.round(tris)}tris`);
  }
  const seats=cc.seats();
- const camName={pilot:'Pilot_eye',copilot:'Co-pilot_eye',radio:'eye_radio',nav:'eye_nav',bomb:'eye_bomb',nose:'eye_nose',waistL:'eye_waistL',waistR:'eye_waistR'};
+ const camName={pilot:'Pilot_eye',copilot:'Co-pilot_eye',radio:'eye_radio',ttop:'eye_ttop',nav:'eye_nav',bomb:'eye_bomb',nose:'eye_nose',ball:'eye_ball',waistL:'eye_waistL',waistR:'eye_waistR',tail:'eye_tail'};
  const report=[];
  for(const [station,def] of Object.entries(cc.stations)){
   const group=new T.Group();def.parts.forEach(p=>{const k=Object.keys(parts).find(n=>parts[n]===p)||p;group.add(loaded[k].holder);});
