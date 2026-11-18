@@ -6287,9 +6287,7 @@ function updateTracers(dt){
 /* ---------- the bomb drop — visible, falling, impacting ---------- */
 var bombs=[];
 var bombVisual;
-function spawnBombs(scene){
-  var all=(KM._fp||[]).concat(KM._b24?[KM._b24]:[]);
-  var droppers=all.filter(function(p){return p.visible;}).slice(0,18);
+function prepareBombVisual(){
   if(!bombVisual){
     var outline=[[0,-1.15],[.21,-.97],[.32,-.60],[.32,.55],[.17,.85],[.14,1.1]];
     var tailPoints=[];
@@ -6312,45 +6310,50 @@ function spawnBombs(scene){
       nose:new THREE.Vector3(0,-1,0),velocity:new THREE.Vector3()
     };
   }
-  droppers.forEach(function(p,pi){
-    for(var i=0;i<4;i++){
-      var b=new THREE.Mesh(bombVisual.geometry,bombVisual.material);
-      b.add(new THREE.Mesh(bombVisual.tail,bombVisual.material));
-      b.scale.setScalar(p.userData.mapGeometryScale||p.scale.x);
-      b.visible=false;
-      scene.add(b);
-      bombs.push({mesh:b,scene:scene,plane:p,vy:-10,vx:KM._anchor.dir.x*7,vz:KM._anchor.dir.z*7,
-        delay:pi*0.12+i*0.28});
-    }
-  });
 }
-function updateBombs(dt){
+function queueBombs(scene,plane,index,release,samplePosition){
+  prepareBombVisual();
+  var scale=plane.userData.mapGeometryScale||plane.scale.x;
+  for(var i=0;i<4;i++){
+    var born=release+index*.12+i*.28;
+    var route=KMMissionTimeline.routeAt(born);
+    var launch=new THREE.Vector3();
+    samplePosition(launch,route);
+    launch.y-=2.5*scale;
+    var track=KM._full;
+    var direction=track?track.getTangentAt(Math.min(1,fullArc(route)/(track.__len||track.getLength()))):KM._anchor.dir;
+    var mesh=new THREE.Mesh(bombVisual.geometry,bombVisual.material);
+    mesh.name='mission-bomb';
+    mesh.add(new THREE.Mesh(bombVisual.tail,bombVisual.material));
+    mesh.visible=false;
+    scene.add(mesh);
+    bombs.push({mesh:mesh,scene:scene,born:born,launch:launch,scale:scale,vx:direction.x*7,vz:direction.z*7});
+  }
+}
+function updateBombs(seconds,camera,showImpacts){
+  var canvas=KM._ren.domElement;
+  var pixelSpan=2*Math.tan(camera.fov*Math.PI/360)/Math.max(1,canvas.clientHeight);
   for(var i=bombs.length-1;i>=0;i--){
-    var b=bombs[i];
-    if(b.delay>0){b.delay-=dt;continue;}
-    if(dt<=0)continue;
-    if(!b.mesh.visible){
-      b.mesh.position.copy(b.plane.position);
-      b.mesh.position.y-=2.5*b.mesh.scale.y;
-      b.mesh.visible=true;
-    }
-    b.vy-=dt*30;                 /* gravity (faster so it strikes while the formation is still over the target) */
-    b.mesh.position.x+=b.vx*dt;
-    b.mesh.position.y+=b.vy*dt;
-    b.mesh.position.z+=b.vz*dt;
-    /* nose over with the velocity vector */
-    b.mesh.quaternion.setFromUnitVectors(bombVisual.nose,bombVisual.velocity.set(b.vx,b.vy,b.vz).normalize());
-    var gy=(V2.groundAt&&V2.groundAt(b.mesh.position.x,b.mesh.position.z))??2;
-    if(b.mesh.position.y<=gy){
-      var bxp=b.mesh.position.x, bzp=b.mesh.position.z;
-      killFlash(b.scene,new THREE.Vector3(bxp,gy+.08,bzp),.35);
-      /* a rising smoke column so the strike on Goettingen is unmistakable */
-      for(var sC=0;sC<4;sC++){
-        emitPool(KM._smoke,bxp,gy+.18+sC*.25,bzp);
+    var b=bombs[i],age=seconds-b.born;
+    if(age<0)continue;
+    var pos=b.mesh.position;
+    // Use the playback clock so the same drop is visible after a seek.
+    pos.set(b.launch.x+b.vx*age,b.launch.y-10*age-15*age*age,b.launch.z+b.vz*age);
+    var gy=(V2.groundAt&&V2.groundAt(pos.x,pos.z))??2;
+    if(pos.y<=gy){
+      if(showImpacts){
+        killFlash(b.scene,new THREE.Vector3(pos.x,gy+.08,pos.z),.35);
+        for(var puff=0;puff<4;puff++)emitPool(KM._smoke,pos.x,gy+.18+puff*.25,pos.z);
       }
       b.scene.remove(b.mesh);
       bombs.splice(i,1);
+      continue;
     }
+    b.mesh.visible=true;
+    // A minimum screen size keeps a distant payload legible. It affects
+    // the display mesh only, never the sampled release or impact position.
+    b.mesh.scale.setScalar(Math.max(b.scale,pixelSpan*camera.position.distanceTo(pos)*2));
+    b.mesh.quaternion.setFromUnitVectors(bombVisual.nose,bombVisual.velocity.set(b.vx,-10-30*age,b.vz).normalize());
   }
 }
 function clearBombs(){
@@ -6587,7 +6590,7 @@ function clearDevastation(){
 }
 
 /* ---------- plane placement per frame ---------- */
-function placePlane(p,battleT,elapsed,scene,dt){
+function placePlane(p,battleT,elapsed,scene,dt,bombRelease,bombIndex){
   /* Losses must continue after the attack clock caps at 420 seconds. */
   battleT=KMMissionTimeline.battleCueAtPlayback(KM._playbackSeconds||0);
   var v=p.userData.v2,a=KM._anchor;
@@ -6670,6 +6673,7 @@ function placePlane(p,battleT,elapsed,scene,dt){
     p.userData._formationBank=state.coordinatedBankRad*(1-sampleLanding);
   }
   var beh=v.beh,ft=v.ft;
+  if(bombRelease!==undefined)queueBombs(scene,p,bombIndex,bombRelease,formPos);
   var active=ft!=null&&battleT>=ft&&beh!=='stay';
   if(!active){
     p.visible=true;p.userData.alive=true;
@@ -7491,6 +7495,7 @@ KM._buildAnimation=function(){
   if(KM._animRunning)return;KM._animRunning=true;
   if(KM._setupInput)KM._setupInput();
   initTracers(scene);
+  var release=KMMissionTimeline.secondsAt(BOMBS_AWAY);
   var all=(KM._fp||[]).concat(KM._b24?[KM._b24]:[]);
   all.forEach(function(p){initPlaneBattle(p,scene);});
   V2._frame=0;
@@ -7536,17 +7541,14 @@ KM._buildAnimation=function(){
       (V2._crashGroups||[]).forEach(function(cg){if(cg.scene===scene){cg.group.visible=!!mapView;cg.labels.visible=!!mapView;}});
       var battleT=KM._battleT;
 
-      /* planes */
-      all.forEach(function(p){placePlane(p,battleT,elapsed,scene,dt);});
-
-      /* bombs away near Göttingen — you SEE them fall and strike */
-      if(KM._missionT>=BOMBS_AWAY&&KM._missionT<BATTLE_START&&!V2._bombed){
-        V2._bombed=true;
-        spawnBombs(scene);
-      }
-      if(KM._missionT<BOMBS_AWAY)V2._bombed=false;
-      updateBombs(sdt*KM._speed);
-
+      var playback=KM._playbackSeconds||0;
+      var prepareDrops=playback>=release&&playback<release+9&&!V2._bombed;
+      all.forEach(function(p,index){
+        placePlane(p,battleT,elapsed,scene,dt,prepareDrops&&index<18?release:undefined,index);
+      });
+      if(prepareDrops)V2._bombed=true;
+      if(playback<release&&V2._bombed){clearBombs();V2._bombed=false;}
+      if(bombs.length)updateBombs(playback,camera,KM._playing&&!prepareDrops);
       // A seek beyond the attack can construct previously unvisited routes.
       // Keep End anchored to the end if that construction extends the track.
       if(!KM._playing&&KM._seekToEnd&&KM._playbackSeconds<KM._playbackEndSeconds-1e-7){
