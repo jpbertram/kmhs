@@ -86,7 +86,7 @@ The 445BG-PDF name column is blank for all of these, and no other source found n
 
 ## Gaps in the simulator roster (`km3d-v3.js`, `V2.ROSTER`)
 
-These are notes for whoever paints the noses. Nothing was changed.
+These are notes for whoever paints the noses. Nothing was changed. JP approved these fixes on 18 Nov 2026, to be made after that night's release has merged.
 
 - `nick:'Uncle'` on Heitz should be "Bugs Bunny". "Uncle" is the call sign.
 - `nick:'Maria Lupine'` on Smith may be anachronistic for September 1944 (see group 2).
