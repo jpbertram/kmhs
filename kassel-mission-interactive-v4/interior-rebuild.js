@@ -51,7 +51,9 @@
    source:'NASA CR-114271, printed 1-5; 1950 flying-personnel basis; not individual 1944 crew measurements',
    geometryStatus:'Estimated airframe/floor normalization, not factory schematic exact'};
   var looks={pilot:[1,-.32,0],copilot:[1,-.32,0],nav:[.4,-.25,1],bomb:[1,-.4,0],nose:[1,0,0],radio:[0,-.65,-1],ttop:[1,0,0],ball:[.5,-.7,0],waistL:[0,-.03,-1],waistR:[0,-.03,1],tail:[-1,0,0]};
-  if(station==='pilot'||station==='copilot'){
+  /* Procedural flight deck: kept only as the fallback when the refined
+     flight-deck model (flight-deck-cockpit.js) cannot load. */
+  function proceduralFlightDeck(){
    shell(5.9,8.75,1.75,1.8,function(y){return y>.40;});
    // Individual transparencies, not a photo of a cockpit wrapped on a tube.
    pane([[8.75,.42,-1.45],[9.2,1.13,-1.24],[8.55,1.92,-1.12],[8.05,.48,-1.68]],true);
@@ -74,6 +76,11 @@
    // Overhead auxiliary cluster visible above the windscreen centre.
    box([8.38,1.63,0],[.16,.44,.42],'black');gauge(8.29,1.65,0,.11,'COMPASS',.4);
    oxygen(6.3,-.2,-1.35);oxygen(6.3,-.2,1.35);
+  }
+  var defs=null,linearMaterials=new Set();
+  function proceduralStation(){
+  if(station==='pilot'||station==='copilot'){
+   proceduralFlightDeck();
   }else if(station==='nav'||station==='bomb'||station==='nose'){
    shell(9,12.3,1.45,1.55,function(y){return y>-.9;});
    for(var j=0;j<8;j++){var a=j/8*Math.PI*2,b=(j+1)/8*Math.PI*2;pane([[12.3,Math.sin(a)*1.55,Math.cos(a)*1.45],[13.2,Math.sin(a)*.8,Math.cos(a)*.75],[13.2,Math.sin(b)*.8,Math.cos(b)*.75],[12.3,Math.sin(b)*1.55,Math.cos(b)*1.45]],true);}
@@ -103,17 +110,34 @@
    for(var j=0;j<12;j++){var a=j/12*Math.PI*2,b=(j+1)/12*Math.PI*2;pane([[x+Math.cos(a)*r,y-.65,Math.sin(a)*r],[x+Math.cos(b)*r,y-.65,Math.sin(b)*r],[x+Math.cos(b)*r*.75,y+.65,Math.sin(b)*r*.75],[x+Math.cos(a)*r*.75,y+.65,Math.sin(a)*r*.75]],true);}
    var dir=station==='tail'?-1:1;[-.27,.27].forEach(function(z){gun(x+dir*.5,y-.25,z,[dir,0,0]);});seat(x-dir*.2,y-.75,0);rod([x+dir*.4,y-.5,0],[x+dir*.4,y-.18,0],.025,'metal');
   }
+  }
+  /* Reference-led compartment models (crew-compartments.js) replace the
+     procedural rooms for the flight deck, radio, nose and waist stations.
+     The procedural rooms stay as the fallback if a model cannot load. */
+  var cc=global.KasselCrewCompartments;
+  if(cc&&cc.available(T)&&cc.covers(station)){
+   var previous={},cs=cc.seats();
+   Object.keys(cs).forEach(function(k){previous[k]={p:seats[k],l:looks[k]};seats[k]=cs[k].pos;looks[k]=cs[k].look;});
+   root.userData.crewCompartments=cc.parts(station);
+   if(cc.floorMetres[station]!=null){var cal=root.userData.eyeCalibration;cal.waistFloorTop=cc.toUnits([0,cc.floorMetres[station],0])[1];
+    cal.geometryStatus='Waist compartment model floor (crew-compartments.js); estimated, not factory schematic exact';}
+   cc.attach(T,root,station,function(){
+    var n0=root.children.length;proceduralStation();
+    root.children.slice(n0).forEach(function(o){var m=o.material;if(o.isMesh&&m&&m.color&&!linearMaterials.has(m)){linearMaterials.add(m);m.color.convertSRGBToLinear();}});
+    if(defs)Object.keys(previous).forEach(function(k){var p=previous[k].p,l=previous[k].l;defs[k]={offset:{x:p[0],y:p[1],z:p[2]},look:{x:l[0],y:l[1],z:l[2]}};});
+   });
+  }else proceduralStation();
   // The scene already supplies daylight; cabin fills must not bleach paint.
   var light=new T.PointLight(0xffe9c9,.12,.65);light.position.set.apply(light.position,seats[station]||seats.pilot);root.add(light);
   // Batch static structure by material; keep lights and individually authored
   // instrument faces. This reduces frame/stringer draw calls by an order of magnitude.
-  var linearMaterials=new Set();root.children.forEach(function(o){if(o.isMesh){var m=o.material;if(m&&m.color&&!linearMaterials.has(m)){linearMaterials.add(m);m.color.convertSRGBToLinear();}}});
+  root.children.forEach(function(o){if(o.isMesh){var m=o.material;if(m&&m.color&&!linearMaterials.has(m)){linearMaterials.add(m);m.color.convertSRGBToLinear();}}});
   var batches=new Map();root.updateMatrixWorld(true);root.children.slice().forEach(function(o){if(!o.isMesh)return;var list=batches.get(o.material)||[];list.push(o);batches.set(o.material,list);});
   batches.forEach(function(objects,material){if(objects.length<2)return;var positions=[],normals=[],uvs=[];
    objects.forEach(function(o){var geo=o.geometry.index?o.geometry.toNonIndexed():o.geometry.clone();geo.applyMatrix4(o.matrix);var p=geo.attributes.position,n=geo.attributes.normal,u=geo.attributes.uv;for(var i=0;i<p.count;i++){positions.push(p.getX(i),p.getY(i),p.getZ(i));normals.push(n?n.getX(i):0,n?n.getY(i):1,n?n.getZ(i):0);uvs.push(u?u.getX(i):0,u?u.getY(i):0);}geo.dispose();o.geometry.dispose();root.remove(o);});
    var merged=new T.BufferGeometry();merged.setAttribute('position',new T.Float32BufferAttribute(positions,3));merged.setAttribute('normal',new T.Float32BufferAttribute(normals,3));merged.setAttribute('uv',new T.Float32BufferAttribute(uvs,2));merged.computeBoundingSphere();root.add(new T.Mesh(merged,material));
   });
-  var defs={};Object.keys(seats).forEach(function(k){var p=seats[k],l=looks[k];defs[k]={offset:{x:p[0],y:p[1],z:p[2]},look:{x:l[0],y:l[1],z:l[2]}};});
+  defs={};Object.keys(seats).forEach(function(k){var p=seats[k],l=looks[k];defs[k]={offset:{x:p[0],y:p[1],z:p[2]},look:{x:l[0],y:l[1],z:l[2]}};});
   return {group:root,seats:defs};
  }};
 })(window);

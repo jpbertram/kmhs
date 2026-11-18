@@ -8207,6 +8207,8 @@ V2.detachInterior=function(){
   active.forEach(function(obj){
     if(obj&&obj.parent)obj.parent.remove(obj);
     if(obj&&obj.userData.rebuiltInterior){
+      /* compartment models share geometry with their cached templates */
+      obj.children.filter(function(ch){return ch.userData.sharedCompartment;}).forEach(function(ch){obj.remove(ch);});
       var disposed=new Set();
       obj.traverse(function(o){if(o.geometry)o.geometry.dispose();
         if(o.material&&!disposed.has(o.material)){disposed.add(o.material);

@@ -23,3 +23,11 @@ Checked this Mac's Claude Code project transcripts and desktop session/audit fol
 ## Validation
 
 Syntax checks and existing timing/roster regression suite pass. Live browser: all eleven station controls loaded without console errors; seeking into Chilton's loss changed Pilot to Chase Camera while retaining Chilton and his pilot caption. Earlier builds and original assets remain available; this update is local only, not published to Webflow.
+
+# Crew compartment models — November 18, 2026
+
+- Pilot, co-pilot, radio, navigator, bombardier, nose-turret and waist views now load reference-led models (`crew-compartments.js`, four GLBs, source in `tools/crew-stations`). The procedural rooms in `interior-rebuild.js` remain only as the fallback if a model cannot load; top, ball and tail turrets are unchanged.
+- The flight deck is the VR cockpit JP reviewed (`b24-cockpit-vr.html`), trimmed behind the seats where the new aft deck joins it.
+- Radio operator moved to the right side behind the co-pilot, facing the right wall, per the B-24D to J-175 layout (Project Warbird restoration notes); the old station had him on the left.
+- Nose keeps the B-24H/J Emerson turret; the bombardier works below and behind it through the flat sighting window with the Norden on its stand.
+- Validation: `node verify-crew-compartments.js` parses every model with the bundled r128 loader and checks eye points, clearances and the 1.651 m waist standing eye. Offline Cycles renders were checked for each station. NOT yet checked in a real browser or headset; dimensions and panel detail remain estimates.
