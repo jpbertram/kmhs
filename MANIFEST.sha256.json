@@ -131,6 +131,14 @@
     "bytes": 3243,
     "sha256": "db82670aeaeb5faa034c0396eafb81d18da70248d3857c9a98576a778b4b385d"
   },
+  "kassel-mission-interactive-v4/aircraft-damage-data.js": {
+    "bytes": 39100,
+    "sha256": "efe0dba2aafdf8251bb73b82fc4766dd4e338e006b370a9aac2078645dd425f1"
+  },
+  "kassel-mission-interactive-v4/aircraft-damage.js": {
+    "bytes": 5819,
+    "sha256": "87b959b1e1ee6c4eda6e61e76f41f48370fe577fb7f597fe1b1d9368e3e1f394"
+  },
   "kassel-mission-interactive-v4/aircraft-map-scale.js": {
     "bytes": 2962,
     "sha256": "f80301a5e5aba1b11b1e0c78b2706756a91087ad3b92786d1671d469926fe7e5"
@@ -276,8 +284,8 @@
     "sha256": "ec4426568e2a8d75f9a602a8d2ed40f1e9d7c2e534847686cc8bd810ee296c22"
   },
   "kassel-mission-interactive-v4/km3d-v3.js": {
-    "bytes": 406888,
-    "sha256": "ce77bc2673a1964585f9d5930d15dbae5b3b982843b94e1f3045a214d1c0686b"
+    "bytes": 425794,
+    "sha256": "88a6ba2e2ca778bf3b9b4e42ab75edfe74bf4f184223a5f4837f61f5b8e8d774"
   },
   "kassel-mission-interactive-v4/loss-smoke.js": {
     "bytes": 1710,
@@ -292,8 +300,8 @@
     "sha256": "32d41a0fff23d5b9af34bcb7624ba3f376bf4484c836a0d18fd7d9a566d91a8c"
   },
   "kassel-mission-interactive-v4/mission-reconstruction.html": {
-    "bytes": 341610,
-    "sha256": "ab503a505dff1c721c3d818a1c2d3b571ecbf1bdd6f89de707ba1704036df6eb"
+    "bytes": 341737,
+    "sha256": "f7c8a06c3ec6b4752e3f3591217937a15436793051e773531daf887027799d97"
   },
   "kassel-mission-interactive-v4/mission-timeline.js": {
     "bytes": 4589,
@@ -320,8 +328,8 @@
     "sha256": "a793a0dd8dd641e121f3e88ea09bf3ebd3e88856df13519113c22aa76ed6483a"
   },
   "kassel-mission-interactive-v4/propeller-assembly.js": {
-    "bytes": 2225,
-    "sha256": "53f0e6878129ced18d2b655e93a53082c1e2df0cd90bb4c0357346aea8104ea0"
+    "bytes": 2420,
+    "sha256": "ff1eeb70921e6115cface5559f05b4da93de87075f561b21f57284267a26ec88"
   },
   "kassel-mission-interactive-v4/reconstruct-navigation.js": {
     "bytes": 1816,
@@ -334,6 +342,10 @@
   "kassel-mission-interactive-v4/reference/B24-TECHNICAL-SOURCE-ACCESS.md": {
     "bytes": 2636,
     "sha256": "bc87882deccd181912e9901fa680f43bc202a56cfe724f31a63b5e13ace78dc9"
+  },
+  "kassel-mission-interactive-v4/reference/BATTLE-DAMAGE.md": {
+    "bytes": 16684,
+    "sha256": "c63456784d14cadc6e5ece2538ebc39a45061c9e3a07179417ca59e055949b6e"
   },
   "kassel-mission-interactive-v4/reference/BATTLE-ROUTE-CONTRADICTION.md": {
     "bytes": 5402,
@@ -470,6 +482,10 @@
   "kassel-mission-interactive-v4/supplied-interior-review.js": {
     "bytes": 4569,
     "sha256": "76c3944392d175c2418f8c40e50a3b7dc0e6b535bf092ae43d1de58001e1124b"
+  },
+  "kassel-mission-interactive-v4/test-aircraft-damage.js": {
+    "bytes": 2445,
+    "sha256": "f7e9f3f742fcbfc679a5a11502910ebf96b1a44aa652aac838a73b96c497979b"
   },
   "kassel-mission-interactive-v4/test-coordinated-turn.js": {
     "bytes": 5198,
@@ -812,8 +828,8 @@
     "sha256": "9081355a91706c9da2f9da4e20e92f9ff8cbe8aa59d233e80770795776c3b316"
   },
   "run-m1.cjs": {
-    "bytes": 979,
-    "sha256": "48c3d5ef522901ce426996288270cf1e14b89869d57f322d4e545115831b6951"
+    "bytes": 1005,
+    "sha256": "54ff9170f021b73f87b7da77e2d1b979c0299a436ab0e4ad91e516c1ecd7f924"
   },
   "serve.cjs": {
     "bytes": 1270,
