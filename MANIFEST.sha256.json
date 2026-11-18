@@ -1,7 +1,7 @@
 {
   ".gitignore": {
-    "bytes": 89,
-    "sha256": "f2d80f3179088997bac63e70980c717e46266a962826cef2015e36e3913b96dd"
+    "bytes": 399,
+    "sha256": "5620e4b2c326c6383a08625f8138d6ad906abdb8bb4e5794f3f90c737fb47699"
   },
   "AGENTS.md": {
     "bytes": 1656,
@@ -24,8 +24,20 @@
     "sha256": "7594bdb67ac5a9d31983b1490b88eb7356b00a3597d18d1e75dc04519f222008"
   },
   "NETWORK-DEPENDENCIES.txt": {
-    "bytes": 258,
-    "sha256": "e1b727215b3ff4a552ba8771bb59e7c988597d0ee3fc4700ddb4ef3e762c5d01"
+    "bytes": 275,
+    "sha256": "d1df8cfe45e646c92656050fddc71544757ae3b5b134f8372a8f2897cdbf8fad"
+  },
+  "README.md": {
+    "bytes": 5,
+    "sha256": "623df910a07ac7df3512f5a5f113f7b7127c211bb31cb0d3dc2b96cc9e94544a"
+  },
+  "SIMULATOR-DEPLOYMENT.md": {
+    "bytes": 4025,
+    "sha256": "59bc0c1cde2445708a7b4cbb207c64d91abe3928848ea2e16da77d1ac93d7a64"
+  },
+  "build-simulator.cjs": {
+    "bytes": 2246,
+    "sha256": "cd0b4d5674acb1d4e3647c4c95a544814dd8c05f4d84468f4a7cf4567984d94f"
   },
   "check-package.cjs": {
     "bytes": 1652,
@@ -84,16 +96,16 @@
     "sha256": "aefd96772a90c42800b6e01abe6a929b2e4d092f52d7442e7c847c2da9aeff18"
   },
   "kassel-mission-interactive-v4/INTERIOR-REBUILD-NOTES.md": {
-    "bytes": 3513,
-    "sha256": "65af29edf3421628f9b91e52ab593e3a2f73682e8e3de5ddf7e48316af6ab601"
+    "bytes": 4658,
+    "sha256": "a6a851d4fb98f46e3d5f59de7b723aa061d6b74b62c5d9a4239ab1a8fbbfb31c"
   },
   "kassel-mission-interactive-v4/ITERATION-NOTES.md": {
     "bytes": 4116,
     "sha256": "c0ddc69c9e0d233ca6a1b35307b8fd0c69edfc756da22bdcfe230c1800da9290"
   },
   "kassel-mission-interactive-v4/PROGRESS.md": {
-    "bytes": 7656,
-    "sha256": "143bc43b107d873351e5670bca94c69d8cddcaf5b80000eb1f28ed5a5cba8105"
+    "bytes": 7859,
+    "sha256": "fdf087415bcb7f734aa9498f676f06ea564f9c17b13bb38bc0d42e058cd203ec"
   },
   "kassel-mission-interactive-v4/README-legacy-mission.md": {
     "bytes": 1413,
@@ -120,8 +132,8 @@
     "sha256": "db82670aeaeb5faa034c0396eafb81d18da70248d3857c9a98576a778b4b385d"
   },
   "kassel-mission-interactive-v4/aircraft-map-scale.js": {
-    "bytes": 2136,
-    "sha256": "a6557d083bc243e0cb827d17941a73b70a59261011e95d02966831da3021f5ed"
+    "bytes": 2962,
+    "sha256": "f80301a5e5aba1b11b1e0c78b2706756a91087ad3b92786d1671d469926fe7e5"
   },
   "kassel-mission-interactive-v4/aircraft-material-geometry.js": {
     "bytes": 2835,
@@ -147,6 +159,38 @@
     "bytes": 3839,
     "sha256": "39f7c38249a091dda7301c19fee60bbcfdc43b0e55af997ff3029b6ce1f601b9"
   },
+  "kassel-mission-interactive-v4/b24-aft-deck.glb": {
+    "bytes": 963640,
+    "sha256": "795753d2f29f68f04391cb76c5eae8e4ab4e8c967b9ab3afd5055863825689da"
+  },
+  "kassel-mission-interactive-v4/b24-ball-turret.glb": {
+    "bytes": 925692,
+    "sha256": "bcc832c87dcd25100abfe22f4cd491e2e4e6ba753653137734ebd888c09ddb00"
+  },
+  "kassel-mission-interactive-v4/b24-cockpit-vr.html": {
+    "bytes": 82469,
+    "sha256": "0ed1c66e80379900af0c3fd4e47651d3941848b86c14b34ccc7063cf4ca77f11"
+  },
+  "kassel-mission-interactive-v4/b24-flight-deck.glb": {
+    "bytes": 10943612,
+    "sha256": "45207e0bf93c85b5d1af1162e850695de4e4a574ebb98ee244b1d1b655463f7e"
+  },
+  "kassel-mission-interactive-v4/b24-nose-compartment.glb": {
+    "bytes": 1569700,
+    "sha256": "ccf673bbe4956bc7f4566d1e630c7045e3484b6c4cd84ece005ad27bffdd80f6"
+  },
+  "kassel-mission-interactive-v4/b24-tail-turret.glb": {
+    "bytes": 931368,
+    "sha256": "eab501acdf9e8f8ece3e6f91226698409e73c8b211e9e5247189e697ad5077ff"
+  },
+  "kassel-mission-interactive-v4/b24-top-turret.glb": {
+    "bytes": 834688,
+    "sha256": "dfa5b7436d632fee800adadf107fbe56aba20844fea1867abf4a8163b2cebbbe"
+  },
+  "kassel-mission-interactive-v4/b24-waist.glb": {
+    "bytes": 1544244,
+    "sha256": "e8a49cf0ec1987ba7dbb376a7fd39b54686727ce6751c2ff551a0be1b3b5f423"
+  },
   "kassel-mission-interactive-v4/b24j-interior-olive.obj": {
     "bytes": 24802899,
     "sha256": "c7470d3fd795c1c125673377b78fac1aa5cd0d3c15e91be1bee5d00961a00157"
@@ -156,8 +200,8 @@
     "sha256": "4c7f37a111ba9023b7dd84c4e262e90a8c9844f3148dded2ddf2c397eea6450a"
   },
   "kassel-mission-interactive-v4/ball-turret.js": {
-    "bytes": 7599,
-    "sha256": "b140ad2056d812760e65cebfdaca8ad75d7e2b14f61c03f12fdbfab0f991d984"
+    "bytes": 7859,
+    "sha256": "465e5b19eb25c5021bd73a71f37e210896f6d222f824d2927e4d6a2d1675481f"
   },
   "kassel-mission-interactive-v4/build-airman-anatomy.js": {
     "bytes": 1536,
@@ -171,17 +215,25 @@
     "bytes": 3899,
     "sha256": "3fa916c9b9ab8330fa0634b393c9c3f02da1e11be8ce021a2d8cc21c0f05f6db"
   },
+  "kassel-mission-interactive-v4/crew-compartments.js": {
+    "bytes": 5657,
+    "sha256": "cc5aedc950a8d1ee7d410eaafacd326bff28163afbc2c53f7f4a261d02ae3213"
+  },
+  "kassel-mission-interactive-v4/crew-exterior.js": {
+    "bytes": 1376,
+    "sha256": "9ac3b44a0c17aa165b9d4cd82c776feb13fe0d446fbc485ec4210c2cfa22f4c0"
+  },
   "kassel-mission-interactive-v4/crew-loss-focus.js": {
-    "bytes": 1017,
-    "sha256": "291da756f96b4f44212705e7ba1789d29292df02ccff98f28199d31eacbb912a"
+    "bytes": 1052,
+    "sha256": "fab4d23b86856f819b3df119384713f6b163c63a84113df523b8cafb9eb62a7a"
   },
   "kassel-mission-interactive-v4/crew-navigation.js": {
     "bytes": 3450,
     "sha256": "c4ea08f98f3bc52284e7dcc193ac89723afc35a56c63f9b2c364af0a4f5d54a5"
   },
   "kassel-mission-interactive-v4/crew-stations.js": {
-    "bytes": 1337,
-    "sha256": "457975771f452ef06593234ae2416781d92c2f5093b33408ae4d1d57032e96d2"
+    "bytes": 1444,
+    "sha256": "8944f51b6da3144ad755fa944cbd72b4b199f3f725aa7869eca2be4f0a71a685"
   },
   "kassel-mission-interactive-v4/fighter-targeting.js": {
     "bytes": 990,
@@ -204,32 +256,32 @@
     "sha256": "86dae712c1195e9a8e5be8aecfe87ef1f72ac2497393cb5681d10ecce3d01ad7"
   },
   "kassel-mission-interactive-v4/forward-endpoint-route.js": {
-    "bytes": 2817,
-    "sha256": "953e8327420b84472dbc239632116a88d2737428843bcbd0dd1a2e9c98627541"
+    "bytes": 3612,
+    "sha256": "491afca52f489768e674fd85c1d6e9610006413d05c1501acf8fdd43ee7659d6"
   },
   "kassel-mission-interactive-v4/geometry-review.html": {
     "bytes": 3520,
     "sha256": "59788c5ae9126272d653ac422514e8ac7171a396022e577fae058f19774407c6"
   },
   "kassel-mission-interactive-v4/historical-geometry.js": {
-    "bytes": 11733,
-    "sha256": "d6c9d29c8c52fd0fc4afcc58f756cc6f238490c911ceff156363e3264d2c91cf"
+    "bytes": 12547,
+    "sha256": "50916808a0ca1486775c158c8820f5796ff3ea0fa470b1db8c26b6c474a2a9e5"
   },
   "kassel-mission-interactive-v4/index.html": {
     "bytes": 448,
     "sha256": "05c698fd7ccfe87674045789fc1617a221248ba43ab55bf4e4fa41d8e2c6220c"
   },
   "kassel-mission-interactive-v4/interior-rebuild.js": {
-    "bytes": 14574,
-    "sha256": "d906d61fb35125eaa9035924c8bc63159f6c287e17369c0caa3004f54bb645f6"
+    "bytes": 30356,
+    "sha256": "ec4426568e2a8d75f9a602a8d2ed40f1e9d7c2e534847686cc8bd810ee296c22"
   },
   "kassel-mission-interactive-v4/km3d-v3.js": {
-    "bytes": 394345,
-    "sha256": "b278243986b3581d7a36dc648c3cdf2fa870d4f767fa81cf855b10febdb056ee"
+    "bytes": 406888,
+    "sha256": "ce77bc2673a1964585f9d5930d15dbae5b3b982843b94e1f3045a214d1c0686b"
   },
   "kassel-mission-interactive-v4/loss-smoke.js": {
-    "bytes": 1584,
-    "sha256": "c227294c7a129a073cb595a4bd8fe231659c533b7ef2497500520ac2a6032cf7"
+    "bytes": 1710,
+    "sha256": "a61c3ee091eecf6b5df7b5b207ff9aad7151e587033dab57ea0dfc1eb629b4b6"
   },
   "kassel-mission-interactive-v4/loss-trajectory.js": {
     "bytes": 3485,
@@ -240,20 +292,20 @@
     "sha256": "32d41a0fff23d5b9af34bcb7624ba3f376bf4484c836a0d18fd7d9a566d91a8c"
   },
   "kassel-mission-interactive-v4/mission-reconstruction.html": {
-    "bytes": 1425432,
-    "sha256": "39ccccd6f07a4fa915cc112d46ff55385cc751131aa59431eb3e21c1422c2de2"
+    "bytes": 341610,
+    "sha256": "ab503a505dff1c721c3d818a1c2d3b571ecbf1bdd6f89de707ba1704036df6eb"
   },
   "kassel-mission-interactive-v4/mission-timeline.js": {
-    "bytes": 3018,
-    "sha256": "32a1cc801c50459f3d1f8f37d5d9923231bb60b23ee08e54c74b1366d9378fe8"
+    "bytes": 4589,
+    "sha256": "58e0f2c92fd29255e614576c893b314089f5f0598b9039b11eafc741600a3b05"
   },
   "kassel-mission-interactive-v4/parachute-contact.js": {
     "bytes": 2133,
     "sha256": "9af1cc97b9ffa7388334abf0d1eccdb0d0d0cb39fc9e572d3a196e6dd52a94fa"
   },
   "kassel-mission-interactive-v4/parachute-geometry.js": {
-    "bytes": 1797,
-    "sha256": "8e1c2195eaf5f5172c6966c107374c4648ea7127c1d54955ca3dc36d62aeb965"
+    "bytes": 1834,
+    "sha256": "f62d5efb99bf15a369e6f535d30fc2d226c50aa49e05ac07a385f972c6b20544"
   },
   "kassel-mission-interactive-v4/parachute-pose.js": {
     "bytes": 1458,
@@ -403,6 +455,10 @@
     "bytes": 1935,
     "sha256": "7c846eda96cb06c6a49f2bbcbd4af57d6c1ccebe7c4c3bd9155ff0116c93a638"
   },
+  "kassel-mission-interactive-v4/simulator-config.js": {
+    "bytes": 101,
+    "sha256": "232815f3242dbb38cd3cf26f468a96211e303c99c2918849fe7d3cff92fcefea"
+  },
   "kassel-mission-interactive-v4/standard-atmosphere.js": {
     "bytes": 1516,
     "sha256": "b4a2c8e4256ce89951ef982c73dbedd8d507f2119626e62a38c6c2bc233937f0"
@@ -420,24 +476,40 @@
     "sha256": "c1cfcb39e175872d13040761bb3954c577a74750fa9b8d9beb91c938e402cba5"
   },
   "kassel-mission-interactive-v4/test-forward-endpoint-route.js": {
-    "bytes": 928,
-    "sha256": "08844ba8545849a229e95ae3682adb0586f782809d722382848bf2b2e700714c"
+    "bytes": 1366,
+    "sha256": "46a68dde7409e60cf697a6e009ecc98dd50aece788a3ae97c817a2127949443b"
+  },
+  "kassel-mission-interactive-v4/test-m1-aircraft-bounds.js": {
+    "bytes": 1149,
+    "sha256": "c5598f22f9a734ee5170924f8cca0d56f4927fcaeeaaa9197eba8bcbab608900"
   },
   "kassel-mission-interactive-v4/test-m1-boundaries.js": {
     "bytes": 1483,
     "sha256": "e445768905d08be31d954fa665bdfc77acc37a2f2c58be023b3ff17023dd9866"
+  },
+  "kassel-mission-interactive-v4/test-m1-cabin-cache.js": {
+    "bytes": 1691,
+    "sha256": "8d9fc033de56c2fa4b1a60d4dc4e6472c1db4df3a443e89160411d08b79d87db"
   },
   "kassel-mission-interactive-v4/test-m1-clearance.js": {
     "bytes": 1679,
     "sha256": "4f2fad2f5be81f0fe00dc2b330ed376c070545ff5df2dcaa9e3545a381d8c5aa"
   },
   "kassel-mission-interactive-v4/test-m1-clock.js": {
-    "bytes": 1052,
-    "sha256": "f026ea3f30173fe6de30bebf39be782ddc4dfcfccd30a41d19f3bd3cf76a6910"
+    "bytes": 2383,
+    "sha256": "b93c7a86e26bfbe6041b1c146c4d126051133b2f0755c6a234ecb84bd1e85f03"
+  },
+  "kassel-mission-interactive-v4/test-m1-crew-exterior.js": {
+    "bytes": 1049,
+    "sha256": "ce8456aa5905127367cb8b8abe2a2064d56e271be6eae1f561d264b35d790754"
   },
   "kassel-mission-interactive-v4/test-m1-fighters.js": {
-    "bytes": 1333,
-    "sha256": "74c8a2bfc1cc9944f48cae20b06fc5de56713c4876a2a3797eefd5cc7bbb3880"
+    "bytes": 1631,
+    "sha256": "0ee71ee2bc6aa29cb009cf7132d63a953bc45ea07f545f5bc449e211018f4b40"
+  },
+  "kassel-mission-interactive-v4/test-m1-imagery-service.js": {
+    "bytes": 1330,
+    "sha256": "507897a541f67042130336bd18db7c8af316f314d2416a7c3a5bec9b6f3b006e"
   },
   "kassel-mission-interactive-v4/test-m1-mission.js": {
     "bytes": 3564,
@@ -447,6 +519,14 @@
     "bytes": 945,
     "sha256": "104db1f1f912e65f21d639ac7e9b56109579d237173504dc3f57529215ae7933"
   },
+  "kassel-mission-interactive-v4/test-m1-terrain-contact.js": {
+    "bytes": 1071,
+    "sha256": "1bd1bbb7c84da9665a4d54a622b65e855c6d4fed39fd83ac379a7080cc2dadae"
+  },
+  "kassel-mission-interactive-v4/test-m1-terrain-loading.js": {
+    "bytes": 1190,
+    "sha256": "1a9637cdd8fbdfd7de196a2a742cee92aef0d5e0db3b24f0fcdf0c1e046f8938"
+  },
   "kassel-mission-interactive-v4/test-m1-transitions.js": {
     "bytes": 2745,
     "sha256": "896a04431b9060e2e9683d612340008252b5a6227dd77eb2ba56dbbabdfbcdce"
@@ -454,6 +534,82 @@
   "kassel-mission-interactive-v4/test-turn-browser.js": {
     "bytes": 3825,
     "sha256": "30c2080ae625b2ef1932b6611759a4cba6a732733890a586c9d08384cd1a1744"
+  },
+  "kassel-mission-interactive-v4/textures/cabin-cloth-normal.jpg": {
+    "bytes": 48564,
+    "sha256": "99dacfd0f32b426aa6055bb5bfc70aec9b1cbee790f9ebd6a693d2d7654a7cd8"
+  },
+  "kassel-mission-interactive-v4/textures/cabin-cloth-roughness.jpg": {
+    "bytes": 73789,
+    "sha256": "34be1d1eae9e7247649f7eaca7aa129f13bb2c328f53a270487bb1c832b6891c"
+  },
+  "kassel-mission-interactive-v4/textures/cabin-cloth-tone.jpg": {
+    "bytes": 115272,
+    "sha256": "b0917443a6c82f12c861283505c8d52d1f479b06d73a8538edd21f98c52d4c69"
+  },
+  "kassel-mission-interactive-v4/textures/cabin-enamel-normal.jpg": {
+    "bytes": 71099,
+    "sha256": "88bc295994bc783f7c8f7ef0ae025eb25fb6a6b317956c4906886042f4fb0b25"
+  },
+  "kassel-mission-interactive-v4/textures/cabin-enamel-roughness.jpg": {
+    "bytes": 66162,
+    "sha256": "bda8913a9fdcb45303bcb99faeb7dbf2267d70bf933fbc5066a136324a89a738"
+  },
+  "kassel-mission-interactive-v4/textures/cabin-enamel-tone.jpg": {
+    "bytes": 173127,
+    "sha256": "545310e246c02cc33839b2b7b67c8763445e5f3127fcc3e18fba3883c2002bbd"
+  },
+  "kassel-mission-interactive-v4/textures/elevation-7-60-38.png": {
+    "bytes": 5734331,
+    "sha256": "da15a4498b26016ad11b3ead637e830fc5d4cdccbf5c9ec147f3db3ac9af3412"
+  },
+  "kassel-mission-interactive-v4/tools/crew-stations/README.md": {
+    "bytes": 3536,
+    "sha256": "e44342db6829e9327b2a101c77abcf99f441e2e97aa01a8f58399823ff4ed0d6"
+  },
+  "kassel-mission-interactive-v4/tools/crew-stations/__pycache__/b24lib.cpython-311.pyc": {
+    "bytes": 41092,
+    "sha256": "63d6e8ce32e3fddfacca48cd9e162b18d5e1e91d0d2d24d3289f608d3e479fa3"
+  },
+  "kassel-mission-interactive-v4/tools/crew-stations/aftdeck.py": {
+    "bytes": 8063,
+    "sha256": "48f2a32536351d121cc98033af6f4bc206ed13b2cd7ff7f7102d65e02fc0d417"
+  },
+  "kassel-mission-interactive-v4/tools/crew-stations/b24lib.py": {
+    "bytes": 17221,
+    "sha256": "866401958e137bf248ee966ad874f4a59aba8a9592d30f667264df6eea96ff4c"
+  },
+  "kassel-mission-interactive-v4/tools/crew-stations/build.sh": {
+    "bytes": 1397,
+    "sha256": "c23cad442ee77f564d0902669150ef5c140f7ab8819120621d191659c7244d46"
+  },
+  "kassel-mission-interactive-v4/tools/crew-stations/nose.py": {
+    "bytes": 13244,
+    "sha256": "75e2155d84764a32a2292c94f6af64e4b9bee35b4bc9ebf3556696c752d8b667"
+  },
+  "kassel-mission-interactive-v4/tools/crew-stations/package.json": {
+    "bytes": 329,
+    "sha256": "04edb754a8747d8264d0652e9906957a6d3903ec74aaec10957eef103e5c2a2e"
+  },
+  "kassel-mission-interactive-v4/tools/crew-stations/prep.mjs": {
+    "bytes": 1330,
+    "sha256": "5cf4c56aebf1f401b72edefc6f5d8e6f2a6bae3e5c680d60bb6feeeba41c4407"
+  },
+  "kassel-mission-interactive-v4/tools/crew-stations/textures.py": {
+    "bytes": 12738,
+    "sha256": "93dd00c2c9fd9066459a5b21bf4e4743fc7d8d6511ceb5bf99b95af55f16b16d"
+  },
+  "kassel-mission-interactive-v4/tools/crew-stations/trim.mjs": {
+    "bytes": 1801,
+    "sha256": "acbc0d92cac20bedd3d77d2b87ed481e4c225a233cae3a5fc134ac09753518fd"
+  },
+  "kassel-mission-interactive-v4/tools/crew-stations/turrets.py": {
+    "bytes": 34858,
+    "sha256": "937b04dbd91930691203a59f32737c752dc93d639cf6648ed34e26723b582fbd"
+  },
+  "kassel-mission-interactive-v4/tools/crew-stations/waist.py": {
+    "bytes": 10668,
+    "sha256": "17aae48d37ab6ee7bec45217c80217e46da9c18ffb0b81d59fcc000509992fbc"
   },
   "kassel-mission-interactive-v4/turn-browser-preview.png": {
     "bytes": 142725,
@@ -511,6 +667,10 @@
     "bytes": 945,
     "sha256": "58afe9e98ef82612fd57c633973d02e8ef2462897f6a9ffcce8d58ac478c6023"
   },
+  "kassel-mission-interactive-v4/verify-cabin-crew.js": {
+    "bytes": 6703,
+    "sha256": "f2add38e8acf856262a31312f52c79a3b34719abed2114dfe6526695f1adfc92"
+  },
   "kassel-mission-interactive-v4/verify-coordinated-bank.js": {
     "bytes": 787,
     "sha256": "cc0269a8c505fe2086c83e466411e7d802fbd570289dc08df054c8c35d441619"
@@ -518,6 +678,10 @@
   "kassel-mission-interactive-v4/verify-crash-effect-timing.js": {
     "bytes": 2729,
     "sha256": "6218504702e4047f3425de2b7203258b3f67d44dc6bdd933314b5ef5f17e1d31"
+  },
+  "kassel-mission-interactive-v4/verify-crew-compartments.js": {
+    "bytes": 6717,
+    "sha256": "bcae9f302277701a6e1e20ff5a8e6d05e3d2f895efb1a21c16ff5a292ecca72b"
   },
   "kassel-mission-interactive-v4/verify-crew-handoff-lens.js": {
     "bytes": 1254,
@@ -608,8 +772,8 @@
     "sha256": "53066a693e01bea5cf5578569c5a0148eae021213828d19880a544d11bbd678a"
   },
   "kassel-mission-interactive-v4/verify-parachute-pose.js": {
-    "bytes": 5233,
-    "sha256": "4ff8b2b2434054c6f518f00cb6c361f1f83180ab311efe2fb8e8882a24acace1"
+    "bytes": 5308,
+    "sha256": "3dfbfafb4df7611d7ed0ff6b5fc34d4dceadfa980d52cdd8886d969072bd4f66"
   },
   "kassel-mission-interactive-v4/verify-physical-geodesy.js": {
     "bytes": 2068,
@@ -626,6 +790,10 @@
   "kassel-mission-interactive-v4/verify-standard-atmosphere.js": {
     "bytes": 1110,
     "sha256": "6f00f49eafdccfa9b9d3a0a89c2f0ec0eea2458785937c045a4846df4912209e"
+  },
+  "kassel-mission-interactive-v4/verify-terrain-daylight.js": {
+    "bytes": 979,
+    "sha256": "dc7e19704a9cadcf50cd052fc464b2855857defd32b12457c8b7863d52f26950"
   },
   "kassel-mission-interactive-v4/verify-turret.js": {
     "bytes": 1409,
@@ -644,8 +812,8 @@
     "sha256": "9081355a91706c9da2f9da4e20e92f9ff8cbe8aa59d233e80770795776c3b316"
   },
   "run-m1.cjs": {
-    "bytes": 811,
-    "sha256": "1fc17f9cc3c39d091751c9a223333bbf6ea789b036b9003e0412c0f890f1efa1"
+    "bytes": 979,
+    "sha256": "48c3d5ef522901ce426996288270cf1e14b89869d57f322d4e545115831b6951"
   },
   "serve.cjs": {
     "bytes": 1270,
@@ -658,5 +826,9 @@
   "tmp/three-r128.js": {
     "bytes": 603445,
     "sha256": "9274bbcec8d96168626c732b5d31c775aa8cfb7eaa0599bec0c175908a2c1ce2"
+  },
+  "wrangler.jsonc": {
+    "bytes": 165,
+    "sha256": "35e1e00b23665015595c59ccc2014c301bb1675845a2df53c766c9666736d942"
   }
 }

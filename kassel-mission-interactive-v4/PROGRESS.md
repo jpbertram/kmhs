@@ -42,3 +42,4 @@
 - Next three: reconcile the overly long loss clock without sacrificing entry continuity; verify imported/fighter bounds and full extended timeline; verify DEM-backed contact and browser controls/camera after physical scaling.
 - M1 NOT COMPLETE. Numerical passes are partial evidence, not full runtime/browser/terrain acceptance. M2 not started.
 - `PASS forward endpoint geometry: 359640 samples, 360 endpoint bearings, exact endpoints, forward launch and tangent-aligned motion; ESTIMATED routes, not aerodynamics`
+- 2026-11-18 (outside M1 scope, at JP's request): crew views use new compartment models (`crew-compartments.js`, `verify-crew-compartments.js` PASS); see INTERIOR-REBUILD-NOTES.md. Not browser-verified.

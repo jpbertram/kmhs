@@ -1,0 +1,11 @@
+{
+  "name": "b24-crew-stations-build",
+  "private": true,
+  "description": "Post-processing for the crew-compartment GLBs (trim, bake for three r128, quantize)",
+  "type": "module",
+  "dependencies": {
+    "@gltf-transform/core": "4.5.1",
+    "@gltf-transform/extensions": "4.5.1",
+    "@gltf-transform/functions": "4.5.1"
+  }
+}

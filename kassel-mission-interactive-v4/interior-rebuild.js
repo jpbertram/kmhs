@@ -434,4 +434,32 @@
   var defs={};Object.keys(seats).forEach(function(k){var p=seats[k],l=looks[k];defs[k]={offset:{x:p[0],y:p[1],z:p[2]},look:{x:l[0],y:l[1],z:l[2]}};});
   return {group:root,seats:defs};
  }};
+ /* Reference-led compartment models (crew-compartments.js) replace the
+    procedural rooms for the flight deck, radio, nose and waist stations.
+    The procedural room is still built, hidden, and shown again if a model
+    cannot load, so the station never opens onto an empty fuselage. */
+ var proceduralBuild=global.KasselInterior.build;
+ global.KasselInterior.build=function(T,station){
+  var built=proceduralBuild(T,station),cc=global.KasselCrewCompartments;
+  if(!(cc&&cc.available(T)&&cc.covers(station)))return built;
+  var root=built.group,defs=built.seats,cs=cc.seats(),parts=cc.parts(station).join('|'),previous={};
+  var procedural=root.children.filter(function(o){return !o.isLight&&o.visible;});
+  procedural.forEach(function(o){o.visible=false;});
+  // Every station that shares these compartments takes the model's eye point.
+  Object.keys(cs).forEach(function(k){
+   if(!defs[k]||!cc.covers(k)||cc.parts(k).join('|')!==parts)return;
+   previous[k]={offset:defs[k].offset,look:defs[k].look};
+   var p=cs[k].pos,l=cs[k].look;defs[k].offset={x:p[0],y:p[1],z:p[2]};defs[k].look={x:l[0],y:l[1],z:l[2]};
+  });
+  root.userData.crewCompartments=cc.parts(station);
+  var cal=root.userData.eyeCalibration;
+  if(cal&&cc.floorMetres[station]!=null){cal.waistFloorTop=cc.toUnits([0,cc.floorMetres[station],0])[1];
+   cal.geometryStatus='Waist compartment model floor (crew-compartments.js); estimated, not factory schematic exact';}
+  cc.attach(T,root,station,function(){
+   procedural.forEach(function(o){o.visible=true;});
+   Object.keys(previous).forEach(function(k){defs[k].offset=previous[k].offset;defs[k].look=previous[k].look;});
+   delete root.userData.crewCompartments;
+  });
+  return built;
+ };
 })(window);

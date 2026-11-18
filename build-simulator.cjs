@@ -23,6 +23,9 @@ const textures=[
   'cabin-enamel-tone.jpg','cabin-enamel-roughness.jpg','cabin-enamel-normal.jpg',
   'cabin-cloth-tone.jpg','cabin-cloth-roughness.jpg','cabin-cloth-normal.jpg'
 ];
+// Crew-compartment models loaded by crew-compartments.js from the page's folder.
+const compartments=['b24-flight-deck.glb','b24-aft-deck.glb','b24-top-turret.glb','b24-nose-compartment.glb','b24-waist.glb','b24-ball-turret.glb','b24-tail-turret.glb'];
+for(const name of compartments)fs.copyFileSync(path.join(project,name),path.join(output,name));
 fs.mkdirSync(path.join(output,'textures'));
 for(const name of textures)fs.copyFileSync(path.join(project,'textures',name),path.join(output,'textures',name));
 const config={esriApiKey:process.env.KM_ESRI_BROWSER_KEY?.trim()||''};

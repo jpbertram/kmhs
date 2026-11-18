@@ -1,4 +1,5 @@
 127.0.0.1
+cdn.jsdelivr.net
 cdn.prod.website-files.com
 cdnjs.cloudflare.com
 earth-info.nga.mil

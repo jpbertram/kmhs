@@ -2,6 +2,7 @@
   "name": "kassel-mission-simulator",
   "compatibility_date": "2026-11-18",
   "workers_dev": true,
+  "previews": {},
   "assets": {
     "directory": "./dist"
   }

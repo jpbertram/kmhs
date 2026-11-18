@@ -8433,6 +8433,8 @@ V2.attachInterior=function(planeOverride){
   V2._intActive=holder;
 };
 V2.disposeCabin=function(obj){
+  /* compartment models share geometry with their cached templates */
+  obj.children.filter(function(ch){return ch.userData.sharedCompartment;}).forEach(function(ch){obj.remove(ch);});
   var disposed=new Set();
   obj.traverse(function(o){
     if(o.geometry)o.geometry.dispose();
