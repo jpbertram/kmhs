@@ -95,6 +95,22 @@
    strap([-.17,-.13,.13],[.17,-.13,.13],.04);
    add(new T.BoxGeometry(.075,.075,.023),steel,[0,-.13,.148]);
    g.add(loft(T,[[-.125,.012,.012,.20],[-.105,.105,.061,.20],[-.07,.126,.068,.20],[.045,.126,.068,.20],[.075,.105,.061,.20],[.085,.012,.012,.20]],'y',cloth,28)); // rounded equipment pack; variant not asserted
+   // Layer garment details underneath the harness. The boot sole stays
+   // at the existing contact datum used by the terrain sampler.
+   [-1,1].forEach(function(side){
+    var x=side*.14;
+    var sole=loft(T,[[-1.152,.052,.092,.044],[-1.143,.060,.115,.057],[-1.132,.059,.113,.057]],'y',leather,32);
+    sole.position.x=x;g.add(sole);
+    for(var row=0;row<3;row++){
+     var lace=add(new T.BoxGeometry(.064,.007,.007),cloth,[x,-1.067+row*.026,.077-row*.005]);
+     lace.rotation.z=side*.09;
+    }
+    var pocket=add(new T.BoxGeometry(.082,.079,.012),cloth,[side*.142,.120,.111]);
+    pocket.rotation.y=side*.43;
+    var flap=add(new T.BoxGeometry(.087,.027,.015),leather,[side*.142,.151,.116]);
+    flap.rotation.y=pocket.rotation.y;
+    add(new T.SphereGeometry(.006,10,8),steel,[side*.142,.145,.129]);
+   });
    add(new T.BoxGeometry(.028,.43,.012),leather,[0,.14,.139]); // jacket closure
    g.userData.anatomyStatus='Generic anatomical head and posed clothed body; not a portrait or verified equipment issue';
    return batchStatic(T,linearize(g));

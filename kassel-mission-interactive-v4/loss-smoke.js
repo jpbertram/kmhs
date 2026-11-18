@@ -16,11 +16,13 @@
         Plume rise/spread remain an illustrative effect, not CFD. */
      var rise=age*1.1,spread=.25+age*.16;
      out.push({x:v.sitePos.x+jitter(v.seed,tick,0)*spread,
-      y:v.sitePos.y+1.5+rise,z:v.sitePos.z+jitter(v.seed,tick,2)*spread});
+      y:v.sitePos.y+1.5+rise,z:v.sitePos.z+jitter(v.seed,tick,2)*spread,
+      size:.65+age*.19,opacity:.72*Math.pow(1-age/lifetime,1.4)});
      continue;
     }
     var p=trajectory.sample(v,u).position,width=.12+age*.035;
-    out.push({x:p.x+jitter(v.seed,tick,0)*width,y:p.y+.5+age*.10+jitter(v.seed,tick,1)*width,z:p.z+jitter(v.seed,tick,2)*width});
+    out.push({x:p.x+jitter(v.seed,tick,0)*width,y:p.y+.5+age*.10+jitter(v.seed,tick,1)*width,z:p.z+jitter(v.seed,tick,2)*width,
+      size:.42+age*.10,opacity:Math.pow(1-age/lifetime,1.6)});
    }
   }
   return out;

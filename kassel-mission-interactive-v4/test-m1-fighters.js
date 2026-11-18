@@ -17,3 +17,8 @@ for(let seed=1;seed<=20;seed++){
 }
 console.log(`${backwards||stops||earlyEscorts?'FAIL':'PASS'} M1 moving-anchor fighters: runs=20 samples=${samples} backwards=${backwards} visibleStops=${stops} earlyEscorts=${earlyEscorts} failures=${JSON.stringify(failures)}; bounds/forces not covered`);
 if(backwards||stops||earlyEscorts)process.exitCode=1;
+r.frame(304);
+if(r.ctx.KM._escorts.some(escort=>escort.visible)){
+ console.error('FAIL post-return escort state: an escort remains tethered to the landed formation');
+ process.exitCode=1;
+}else console.log('PASS post-return escort state: completed passes are no longer tethered to the formation');

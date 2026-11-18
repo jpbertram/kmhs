@@ -77,7 +77,7 @@
   seats:function(){var out={};Object.keys(STATIONS).forEach(function(k){out[k]={pos:toUnits(STATIONS[k].eye),look:dirUnits(STATIONS[k].look)};});return out;},
   /* Adds shared clones of the station's compartments to parent once loaded.
      Geometry and materials stay shared with the cached templates, so callers
-     must not dispose them (V2.detachInterior skips sharedCompartment). */
+     must not dispose them (V2.disposeCabin skips sharedCompartment). */
   attach:function(T,parent,station,onFail){
    var parts=STATIONS[station].parts;status('Loading B-24 crew station…');
    Promise.all(parts.map(function(p){return load(T,p);})).then(function(tpls){

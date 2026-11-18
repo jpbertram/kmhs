@@ -9,7 +9,7 @@
    return ch.plane===data&&ch.sp&&ch.sp.visible!==false&&
     (!state._crewLossHandoff||(member&&ch.member&&ch.member.n===member.n));
   });
-  if(chute&&(state._crewLossHandoff||!plane.visible))return {position:chute.sp.position,radius:5,kind:'airman',member:member};
+  if(chute&&(state._crewLossHandoff||!plane.visible))return {position:chute.sp.position,radius:chute.rootScale?chute.rootScale*15:5,kind:'airman',member:member};
   if(!plane.visible&&plane.userData.v2&&plane.userData.v2.sitePos)return {position:plane.userData.v2.sitePos,radius:18,kind:'impact',member:member};
   return {position:plane.position,radius:null,kind:'aircraft',member:member};
  }

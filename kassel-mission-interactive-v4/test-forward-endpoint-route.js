@@ -11,3 +11,9 @@ for(let i=0;i<360;i++){
  }
 }
 console.log(`PASS forward endpoint geometry: ${cases} samples, 360 endpoint bearings, exact endpoints, forward launch and tangent-aligned motion; ESTIMATED routes, not aerodynamics`);
+const ridgeRoute=route.build({x:0,y:120,z:0},{x:1,y:0,z:0},{x:5000,y:5,z:0},{x:1,y:1,z:1},2500);
+ridgeRoute.terrainHeight=x=>5+130*Math.max(0,1-((x-3300)/650)**2)**2;
+const overRidge=route.sample(ridgeRoute,.66);
+assert(overRidge.position.y>=ridgeRoute.terrainHeight(overRidge.position.x));
+assert.equal(route.sample(ridgeRoute,1).position.y,5);
+console.log('PASS endpoint path altitude clears a ridge and preserves terminal elevation');

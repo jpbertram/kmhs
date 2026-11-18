@@ -12,7 +12,9 @@
       var explicit=waist.find(function(m){return side.test(m.r||'');});
       if(explicit)return {member:explicit,uncertain:false};
       var unspecified=waist.filter(function(m){return !other.test(m.r||'')&&!side.test(m.r||'');});
-      return {member:unspecified[station==='waistR'?1:0]||null,uncertain:unspecified.length>0};
+      var oppositeAssigned=waist.some(function(m){return other.test(m.r||'');});
+      var pick=unspecified[station==='waistR'&&!oppositeAssigned?1:0]||null;
+      return {member:pick,uncertain:!!pick};
     }
     var role=roles[station];
     var matches=role?list.filter(function(m){return role.test(m.r||'');}):[];

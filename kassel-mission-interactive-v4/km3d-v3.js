@@ -3693,7 +3693,7 @@ function loadImg(url){
 
 /* Fetch a rectangle of slippy tiles into one canvas.
    Returns {canvas,ctx,x0,y0,cols,rows,zoom,pxPerTile} */
-function fetchTileRect(zoom,urlFn,onTile){
+function fetchTileRect(zoom,urlFn,onTile,atlasLayer){
   var lonMin=GEO.xToLon(-TER.W/2),lonMax=GEO.xToLon(TER.W/2);
   var _laA=GEO.zToLat(TER.D/2),_laB=GEO.zToLat(-TER.D/2);
   var latMax=Math.max(_laA,_laB),latMin=Math.min(_laA,_laB);
@@ -3703,20 +3703,25 @@ function fetchTileRect(zoom,urlFn,onTile){
   var c=document.createElement('canvas');
   c.width=cols*256;c.height=rows*256;
   var ctx=c.getContext('2d');
-  var jobs=[];
-  for(var ty=y0;ty<=y1;ty++){
-    for(var tx=x0;tx<=x1;tx++){
+  var rect={canvas:c,ctx:ctx,x0:x0,y0:y0,cols:cols,rows:rows,zoom:zoom};
+  function loadTiles(){
+    var jobs=[];
+    for(var ty=y0;ty<=y1;ty++)for(var tx=x0;tx<=x1;tx++){
       (function(tx,ty){
         jobs.push(loadImg(urlFn(zoom,tx,ty)).then(function(im){
           ctx.drawImage(im,(tx-x0)*256,(ty-y0)*256);
           if(onTile)onTile();
-        }).catch(function(){/* hole tolerated */}));
+        }));
       })(tx,ty);
     }
+    return Promise.all(jobs).then(function(){return rect;});
   }
-  return Promise.all(jobs).then(function(){
-    return {canvas:c,ctx:ctx,x0:x0,y0:y0,cols:cols,rows:rows,zoom:zoom};
-  });
+  if(!atlasLayer)return loadTiles();
+  var ext='.png';
+  return loadImg('textures/'+atlasLayer+'-'+zoom+'-'+x0+'-'+y0+ext).then(function(im){
+    if(im.width!==c.width||im.height!==c.height)return loadTiles();
+    ctx.drawImage(im,0,0);return rect;
+  },loadTiles);
 }
 
 /* scene XZ → pixel coords inside a tile-rect canvas */
@@ -3732,7 +3737,7 @@ V2.loadDEM=function(){
   if(V2._demPromise)return V2._demPromise;
   V2._demPromise=fetchTileRect(7,function(z,x,y){
     return 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/'+z+'/'+x+'/'+y+'.png';
-  }).then(function(rect){
+  },null,'elevation').then(function(rect){
     rect.data=rect.ctx.getImageData(0,0,rect.canvas.width,rect.canvas.height).data;
     V2.dem=rect;V2.demReady=true;
     return rect;
@@ -3757,29 +3762,19 @@ V2.elevAt=function(x,z){
 
 /* ───────────────────────── IMAGERY ───────────────────────── */
 V2.loadImagery=function(){
+  var settings=window.KMSimulatorConfig||{};
+  if(!settings.esriApiKey)return Promise.resolve(null);
   if(V2._texPromise)return V2._texPromise;
-  V2._texPromise=fetchTileRect(8,function(z,x,y){
-    return 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/'+z+'/'+y+'/'+x;
+  V2._texPromise=fetchTileRect(7,function(z,x,y){
+    return 'https://ibasemaps-api.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/'+
+      z+'/'+y+'/'+x+'?token='+encodeURIComponent(settings.esriApiKey);
   }).then(function(rect){
-    /* Color-grade modern daylight imagery into the site's dark-dawn
-       palette: darken, desaturate, cool the shadows. */
-    var c=rect.canvas,ctx=rect.ctx;
+    // Preserve the source land-cover colors. The scene sun and atmosphere
+    // already supply the lighting for the current mission time.
+    var c=rect.canvas;
     var g=document.createElement('canvas');g.width=c.width;g.height=c.height;
     var gc=g.getContext('2d');
-    gc.filter='brightness(0.58) saturate(0.78) contrast(1.06)';
-    gc.drawImage(c,0,0);
-    /* cool blue multiply pass */
-    gc.filter='none';
-    gc.globalCompositeOperation='multiply';
-    gc.fillStyle='#aab6cc';gc.fillRect(0,0,g.width,g.height);
-    /* gentle warm light from the east (sun side, +x) */
-    gc.globalCompositeOperation='overlay';
-    var gr=gc.createLinearGradient(0,0,g.width,0);
-    gr.addColorStop(0,'rgba(20,28,48,0.55)');
-    gr.addColorStop(0.62,'rgba(70,66,58,0.18)');
-    gr.addColorStop(1,'rgba(255,178,102,0.20)');
-    gc.fillStyle=gr;gc.fillRect(0,0,g.width,g.height);
-    gc.globalCompositeOperation='source-over';
+    gc.filter='saturate(0.88)';gc.drawImage(c,0,0);
     rect.graded=g;
     V2.imagery=rect;V2.texReady=true;
     return rect;
@@ -3799,8 +3794,10 @@ V2.buildNormalMap=function(){
     ix=Math.max(0,Math.min(w-1,ix));iy=Math.max(0,Math.min(h-1,iy));
     var i=(iy*w+ix)*4;return (src[i]*256+src[i+1]+src[i+2]/256)-32768;
   }
-  var s=0.012; /* normal strength */
+  var equatorialSpacing=40075016.686/(256*Math.pow(2,d.zoom));
   for(var y=0;y<h;y++){
+    var latitude=tile2lat(d.y0+(y+.5)/256,d.zoom);
+    var s=1/(2*equatorialSpacing*Math.cos(latitude*Math.PI/180));
     for(var x=0;x<w;x++){
       var dx=(hgt(x+1,y)-hgt(x-1,y))*s;
       var dy=(hgt(x,y+1)-hgt(x,y-1))*s;
@@ -3960,6 +3957,7 @@ V2.buildClouds=function(scene){
       var s=sMin+Math.random()*sVar;
       sp.scale.set(s*2.2,s,1);
       sp.userData.drift=0.4+Math.random()*0.8;
+      sp.userData.baseOpacity=m.opacity;
       group.add(sp);puffs.push(sp);
     }
   }
@@ -3976,10 +3974,22 @@ V2.buildClouds=function(scene){
 };
 
 V2.driftClouds=function(dt){
+  var route=KM._missionT||0;
+  var fadeIn=Math.max(0,Math.min(1,(route-.61)/.04));
+  var fadeOut=Math.max(0,Math.min(1,(.96-route)/.04));
+  var action=fadeIn*fadeOut;
+  var anchor=KM._anchor&&KM._anchor.pos;
   (V2._cloudGroups||[]).forEach(function(cg){
+    var eventWeather=cg.group.parent===KM._s&&anchor&&action;
     cg.puffs.forEach(function(sp){
       sp.position.x-=sp.userData.drift*dt*2.2; /* wind from the east */
       if(sp.position.x<-TER.W*0.55)sp.position.x=TER.W*0.55;
+      var shade=0;
+      if(eventWeather){
+        var distance=Math.hypot(sp.position.x-anchor.x,sp.position.z-anchor.z);
+        shade=eventWeather*(.78+.22*(1-Math.min(1,distance/(180+sp.scale.x*.55))));
+      }
+      sp.material.opacity=sp.userData.baseOpacity*(1-.90*shade);
     });
   });
 };
@@ -4008,6 +4018,20 @@ V2.FOG_COLOR=0x101826;
 /* Build a terrain mesh for any scene. Displaces + textures itself
    when DEM/imagery promises resolve; falls back to stylized
    procedural ground if the network is unavailable. */
+function terrainSurfaceHeight(geo,x,z){
+  var grid=geo.parameters;
+  var col=(x/grid.width+.5)*grid.widthSegments;
+  var row=(z/grid.height+.5)*grid.heightSegments;
+  if(col<0||row<0||col>grid.widthSegments||row>grid.heightSegments)return undefined;
+  var column=Math.min(grid.widthSegments-1,Math.floor(col));
+  var line=Math.min(grid.heightSegments-1,Math.floor(row));
+  var u=col-column,v=row-line,stride=grid.widthSegments+1;
+  var i=line*stride+column,position=geo.attributes.position;
+  var b=position.getY(i+stride),d=position.getY(i+1);
+  if(u+v<=1)return (1-u-v)*position.getY(i)+v*b+u*d;
+  return (1-u)*b+(1-v)*d+(u+v-1)*position.getY(i+stride+1);
+}
+
 V2.buildTerrainMesh=function(scene){
   var geo=new THREE.PlaneGeometry(TER.W,TER.D,TER.SEGX,TER.SEGZ);
   geo.rotateX(-Math.PI/2); /* XZ plane, +y up; +z south→north handled by mapping */
@@ -4028,6 +4052,12 @@ V2.buildTerrainMesh=function(scene){
      the cliff. */
   var WATER_Y=-0.3;
 
+  function recordGround(){
+    if(scene!==KM._s)return;
+    V2.groundAt=function(x,z){return terrainSurfaceHeight(geo,x,z);};
+    V2.groundRevision=(V2.groundRevision||0)+1;
+  }
+
   function displace(){
     var pos=geo.attributes.position;
     for(var i=0;i<pos.count;i++){
@@ -4042,11 +4072,10 @@ V2.buildTerrainMesh=function(scene){
     }
     pos.needsUpdate=true;
     geo.computeVertexNormals();
+    recordGround();
   }
 
-  function texture(){
-    var img=V2.imagery;if(!img)return;
-    var tex=new THREE.CanvasTexture(img.graded);
+  function applyTerrainMap(img,tex){
     tex.encoding=THREE.sRGBEncoding;
     if(KM._ren)tex.anisotropy=KM._ren.capabilities.getMaxAnisotropy();
     tex.wrapS=tex.wrapT=THREE.ClampToEdgeWrapping;
@@ -4054,10 +4083,25 @@ V2.buildTerrainMesh=function(scene){
     var pos=geo.attributes.position,uv=geo.attributes.uv;
     for(var i=0;i<pos.count;i++){
       var p=sceneToRectPx(img,pos.getX(i),pos.getZ(i));
-      uv.setXY(i,p[0]/img.canvas.width,1-p[1]/img.canvas.height);
+      uv.setXY(i,p[0]/(img.cols*256),1-p[1]/(img.rows*256));
     }
     uv.needsUpdate=true;
     mat.map=tex;mat.color.set(0xffffff);
+    var container=scene===KM._s?KM._cont:document.getElementById('route-wrap');
+    if(container&&!container.querySelector('.km-imagery-credit')){
+      var credit=document.createElement('a');
+      credit.className='km-imagery-credit';
+      credit.href='https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9';
+      credit.textContent='Powered by Esri · Imagery © Esri, Vantor, Earthstar Geographics, and the GIS User Community';
+      credit.target='_blank';credit.rel='noopener';
+      container.appendChild(credit);
+    }
+    mat.needsUpdate=true;
+  }
+
+  function texture(){
+    var img=V2.imagery;if(!img)return;
+    applyTerrainMap(img,new THREE.CanvasTexture(img.graded));
     /* SATELLITE WATER MASK: the DEM can't tell a polder from a lake
        (both below sea level). The imagery can — only pixels that LOOK
        like water near sea level become sea. Holland stays dry. */
@@ -4121,6 +4165,7 @@ V2.buildTerrainMesh=function(scene){
       }
       pos.needsUpdate=true;
       geo.computeVertexNormals();
+      recordGround();
       /* per-pixel ROUGHNESS map: water glossy, land matte — the sheen
          lives on the real map, no overlay plane, no jagged coastline */
       var gctx=img.graded.getContext('2d');
@@ -4221,11 +4266,17 @@ V2.buildTerrainMesh=function(scene){
     }
     pos.needsUpdate=true;geo.computeVertexNormals();
     mat.color.set(0x2c3a30);
+    recordGround();
   }
 
-  V2.loadDEM().then(function(){displace();return V2.loadImagery();})
-    .then(function(){texture();})
-    .catch(function(err){console.warn('KM v2: tile fetch failed, using fallback terrain',err);fallback();});
+  V2.loadDEM().then(function(){displace();
+    return V2.loadImagery().then(function(imagery){if(imagery)texture();}).catch(function(){
+      console.warn('KM v2: imagery unavailable, retaining elevation geometry');
+    });
+  }).catch(function(err){
+    console.warn('KM v2: elevation unavailable, using fallback terrain',err);
+    fallback();
+  });
 
   return mesh;
 };
@@ -4468,7 +4519,7 @@ KM._build3DTerrain=function(){
   }
   KM._ren=renderer;
   renderer.setSize(w,h);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.5));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,w<600?1:1.5));
   renderer.outputEncoding=THREE.sRGBEncoding;
   renderer.toneMapping=THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure=1.08;
@@ -5302,9 +5353,18 @@ KM._buildFormation=function(){
     transparent:true,opacity:0.5,depthWrite:false}));
   KM._smoke={geo:smoke.geo,pos:smoke.pos,alpha:new Float32Array(2000),
     life:new Float32Array(2000),count:2000,nextIdx:0};
-  var lossSmoke=pool(1100,new THREE.PointsMaterial({map:soft,color:0x35373a,size:1.2,
-    transparent:true,opacity:.40,depthWrite:false}));
-  KM._lossSmoke={geo:lossSmoke.geo,pos:lossSmoke.pos,count:1100,nextIdx:0};
+  var lossMaterial=new THREE.PointsMaterial({map:soft,color:0x35373a,size:1.2,
+    transparent:true,opacity:.40,depthWrite:false});
+  lossMaterial.onBeforeCompile=function(shader){
+    shader.vertexShader='attribute vec2 plume; varying float plumeOpacity;\n'+shader.vertexShader
+      .replace('gl_PointSize = size;', 'gl_PointSize = size * plume.x; plumeOpacity = plume.y;');
+    shader.fragmentShader='varying float plumeOpacity;\n'+shader.fragmentShader
+      .replace('vec4 diffuseColor = vec4( diffuse, opacity );','vec4 diffuseColor = vec4( diffuse, opacity * plumeOpacity );');
+  };
+  var lossSmoke=pool(1100,lossMaterial);
+  var plume=new Float32Array(2200);
+  lossSmoke.geo.setAttribute('plume',new THREE.BufferAttribute(plume,2));
+  KM._lossSmoke={geo:lossSmoke.geo,pos:lossSmoke.pos,plume:plume,count:1100,nextIdx:0};
   var fire=pool(500,new THREE.PointsMaterial({map:soft,color:0xff7a33,size:5,
     transparent:true,opacity:0.65,depthWrite:false,blending:THREE.AdditiveBlending}));
   KM._fire={geo:fire.geo,pos:fire.pos,count:500,nextIdx:0};
@@ -5789,8 +5849,11 @@ V2.prepareTemplate=function(gltf,key){
   V2._pendingPlanes.forEach(function(p){
     if(p.key!==key||p.done)return;
     p.done=true;
+    var focused=KM._camState&&KM._camState._intFor===p.group;
+    if(focused)V2.detachInterior();
     for(var i=p.group.children.length-1;i>=0;i--)p.group.remove(p.group.children[i]);
     p.group.add(holder.clone());
+    if(focused)V2.attachInterior(p.group);
   });
   console.log('KM v2: model ready —',key);
 };
@@ -6236,48 +6299,74 @@ function updateTracers(dt){
 
 /* ---------- the bomb drop — visible, falling, impacting ---------- */
 var bombs=[];
-function spawnBombs(scene){
-  var all=(KM._fp||[]).concat(KM._b24?[KM._b24]:[]);
-  var droppers=all.filter(function(p){return p.visible;}).slice(0,18);
-  droppers.forEach(function(p,pi){
-    for(var i=0;i<4;i++){
-      var b=new THREE.Mesh(
-        new THREE.CylinderGeometry(0.55,0.28,3.6,8),
-        new THREE.MeshStandardMaterial({color:0x2a2d26,roughness:0.7,metalness:0.4}));
-      b.rotation.x=Math.PI/2;
-      b.position.copy(p.position);
-      b.position.y-=2.5;
-      b.position.x+=(Math.random()-.5)*3;
-      b.position.z+=(Math.random()-.5)*3;
-      scene.add(b);
-      bombs.push({mesh:b,scene:scene,vy:-10,vx:KM._anchor.dir.x*7,vz:KM._anchor.dir.z*7,
-        delay:pi*0.12+i*0.28});
+var bombVisual;
+function prepareBombVisual(){
+  if(!bombVisual){
+    var outline=[[0,-1.15],[.21,-.97],[.32,-.60],[.32,.55],[.17,.85],[.14,1.1]];
+    var tailPoints=[];
+    for(var fin=0;fin<4;fin++){
+      var angle=fin*Math.PI/2,x=Math.cos(angle),z=Math.sin(angle);
+      var a=[.22*x,.59,.22*z],b=[.43*x,1.04,.43*z],c=[.43*x,1.19,.43*z],d=[.13*x,1.19,.13*z];
+      tailPoints.push(...a,...b,...c,...a,...c,...d);
+      var next=angle+Math.PI/2;
+      var outer=[.43*Math.cos(next),1.19,.43*Math.sin(next)];
+      var inner=[outer[0],1.03,outer[2]];
+      tailPoints.push(...b,...c,...outer,...b,...outer,...inner);
     }
-  });
+    var tail=new THREE.BufferGeometry();
+    tail.setAttribute('position',new THREE.Float32BufferAttribute(tailPoints,3));
+    tail.computeVertexNormals();
+    bombVisual={
+      tail:tail,
+      geometry:new THREE.LatheGeometry(outline.map(function(p){return new THREE.Vector2(p[0],p[1]);}),16),
+      material:new THREE.MeshStandardMaterial({color:0x474b39,roughness:.84,metalness:.22,side:THREE.DoubleSide}),
+      nose:new THREE.Vector3(0,-1,0),velocity:new THREE.Vector3()
+    };
+  }
 }
-function updateBombs(dt){
+function queueBombs(scene,plane,index,release,samplePosition){
+  prepareBombVisual();
+  var scale=plane.userData.mapGeometryScale||plane.scale.x;
+  for(var i=0;i<4;i++){
+    var born=release+index*.12+i*.28;
+    var route=KMMissionTimeline.routeAt(born);
+    var launch=new THREE.Vector3();
+    samplePosition(launch,route);
+    launch.y-=2.5*scale;
+    var track=KM._full;
+    var direction=track?track.getTangentAt(Math.min(1,fullArc(route)/(track.__len||track.getLength()))):KM._anchor.dir;
+    var mesh=new THREE.Mesh(bombVisual.geometry,bombVisual.material);
+    mesh.name='mission-bomb';
+    mesh.add(new THREE.Mesh(bombVisual.tail,bombVisual.material));
+    mesh.visible=false;
+    scene.add(mesh);
+    bombs.push({mesh:mesh,scene:scene,born:born,launch:launch,scale:scale,vx:direction.x*7,vz:direction.z*7});
+  }
+}
+function updateBombs(seconds,camera,showImpacts){
+  var canvas=KM._ren.domElement;
+  var pixelSpan=2*Math.tan(camera.fov*Math.PI/360)/Math.max(1,canvas.clientHeight);
   for(var i=bombs.length-1;i>=0;i--){
-    var b=bombs[i];
-    if(b.delay>0){b.delay-=dt;continue;}
-    b.vy-=dt*30;                 /* gravity (faster so it strikes while the formation is still over the target) */
-    b.mesh.position.x+=b.vx*dt;
-    b.mesh.position.y+=b.vy*dt;
-    b.mesh.position.z+=b.vz*dt;
-    /* nose over with the velocity vector */
-    b.mesh.rotation.z=Math.atan2(-b.vy,Math.sqrt(b.vx*b.vx+b.vz*b.vz)+0.001)-Math.PI/2;
-    var gy=2;
-    try{gy=Math.max(1.5,(V2.demReady?V2.elevAt(b.mesh.position.x,b.mesh.position.z):20)*ELEV_SCALE);}catch(e2){}
-    if(b.mesh.position.y<=gy){
-      var bxp=b.mesh.position.x, bzp=b.mesh.position.z;
-      killFlash(b.scene,new THREE.Vector3(bxp,gy+1,bzp));
-      killFlash(b.scene,new THREE.Vector3(bxp+4,gy+2,bzp-3));
-      /* a rising smoke column so the strike on Goettingen is unmistakable */
-      for(var sC=0;sC<4;sC++){
-        emitPool(KM._smoke,bxp+(Math.random()-.5)*6,gy+3+sC*4,bzp+(Math.random()-.5)*6);
+    var b=bombs[i],age=seconds-b.born;
+    if(age<0)continue;
+    var pos=b.mesh.position;
+    // Use the playback clock so the same drop is visible after a seek.
+    pos.set(b.launch.x+b.vx*age,b.launch.y-10*age-15*age*age,b.launch.z+b.vz*age);
+    var gy=(V2.groundAt&&V2.groundAt(pos.x,pos.z))??2;
+    if(pos.y<=gy){
+      if(showImpacts){
+        killFlash(b.scene,new THREE.Vector3(pos.x,gy+.08,pos.z),.35);
+        for(var puff=0;puff<4;puff++)emitPool(KM._smoke,pos.x,gy+.18+puff*.25,pos.z);
       }
       b.scene.remove(b.mesh);
       bombs.splice(i,1);
+      continue;
     }
+    b.mesh.visible=true;
+    // A minimum screen size keeps a distant payload legible. It affects
+    // the display mesh only, never the sampled release or impact position.
+    b.mesh.scale.setScalar(Math.max(b.scale,pixelSpan*camera.position.distanceTo(pos)*2));
+    b.mesh.quaternion.setFromUnitVectors(bombVisual.nose,bombVisual.velocity.set(b.vx,-10-30*age,b.vz).normalize());
   }
 }
 function clearBombs(){
@@ -6313,9 +6402,12 @@ function chuteTemplate(){
   V2._chuteTpl=KasselParachuteGeometry.build(THREE);
   return V2._chuteTpl;
 }
-function spawnChute(scene,pos,member,planeData,index,born,momentum,openingDelay){
+function spawnChute(scene,pos,member,planeData,index,born,momentum,openingDelay,metresPerUnit){
   var g=chuteTemplate().clone();
-  g.scale.setScalar(0.2); /* canopy/airman proportionate to a 33-unit B-24 */
+  // Approximate 24-ft canopy diameter on the same horizontal map scale
+  // used for aircraft. Template diameter is 4.8 units.
+  var rootScale=24*.3048/(4.8*metresPerUnit);
+  g.scale.setScalar(rootScale);
   /* clone the canopy material so each chute can fade independently */
   g.traverse(function(o){if(o.material)o.material=o.material.clone();});
   g.position.copy(pos);
@@ -6330,8 +6422,8 @@ function spawnChute(scene,pos,member,planeData,index,born,momentum,openingDelay)
   var gy=2;
   try{gy=Math.max(1.5,(V2.demReady?V2.elevAt(g.position.x,g.position.z):20)*ELEV_SCALE)+.03;}catch(e2){}
   V2._chutes.push({sp:g,scene:scene,member:member||null,plane:planeData||null,
-    rig:g.getObjectByName('parachute-canopy-rig'),feetY:feetY,rootScale:.2,
-    launch:g.position.clone(),momentum:momentum||null,openingDelay:openingDelay||0,born:born,vy:-(2.2+(hs%70)/100),sway:(hs%6283)/1000,ground:gy-.2*feetY,landT:0});
+    rig:g.getObjectByName('parachute-canopy-rig'),feetY:feetY,rootScale:rootScale,
+    launch:g.position.clone(),momentum:momentum||null,openingDelay:openingDelay||0,born:born,vy:-(2.2+(hs%70)/100),sway:(hs%6283)/1000,ground:gy-rootScale*feetY,landT:0});
 }
 function articulateChute(ch,age,landedSeconds){
   ch.sp.scale.setScalar(ch.rootScale);
@@ -6341,16 +6433,18 @@ function articulateChute(ch,age,landedSeconds){
   if(landedSeconds>0){ch.sp.rotation.x=0;ch.sp.rotation.z=0;}
 }
 function chuteTerrainHeight(x,z){
+  var surface=V2.groundAt&&V2.groundAt(x,z);
+  if(surface!==undefined)return surface;
   return Math.max(1.5,(V2.demReady?V2.elevAt(x,z):20)*ELEV_SCALE)+.03;
 }
 function updateChutes(dt,elapsed){
   for(var i=V2._chutes.length-1;i>=0;i--){
     var ch=V2._chutes[i];
     if(ch.born!==undefined){
-      var age=KMMissionTimeline.ageSinceBattleCue(KM._missionT,ch.born);
-      if(!ch.contact||ch.contactDEM!==!!V2.demReady){
+      var age=Math.max(0,(KM._playbackSeconds??KMMissionTimeline.secondsAt(KM._missionT))-KMMissionTimeline.playbackAtBattleCue(ch.born));
+      if(!ch.contact||ch.contactDEM!==!!V2.demReady||ch.groundRevision!==V2.groundRevision){
         ch.contact=KasselParachuteContact.solve(ch.launch,-ch.vy,ch.sway,ch.rootScale*ch.feetY,chuteTerrainHeight,ch.momentum);
-        ch.contactDEM=!!V2.demReady;
+        ch.contactDEM=!!V2.demReady;ch.groundRevision=V2.groundRevision;
       }
       var pos=age>=ch.contact.time?ch.contact.position:KasselParachuteContact.trajectory(ch.launch,-ch.vy,ch.sway,age,ch.momentum);
       ch.sp.position.set(pos.x,pos.y,pos.z);
@@ -6381,32 +6475,36 @@ function updateChutes(dt,elapsed){
   }
 }
 function clearChutes(){
-  V2._chutes.forEach(function(ch){ch.scene.remove(ch.sp);});
+  V2._chutes.forEach(function(ch){
+    ch.scene.remove(ch.sp);
+    ch.sp.traverse(function(o){if(o.material)o.material.dispose();});
+  });
   V2._chutes.length=0;
 }
 
 /* hit flash when a ship takes its fatal damage */
-function killFlash(scene,pos){
+function killFlash(scene,pos,size){
   var sp=new THREE.Sprite(new THREE.SpriteMaterial({
     map:V2.softTex(),color:0xffb144,transparent:true,opacity:0.95,
     depthWrite:false,blending:THREE.AdditiveBlending}));
-  sp.position.copy(pos);sp.scale.set(4,4,1);
+  var baseSize=size||4;
+  sp.position.copy(pos);sp.scale.set(baseSize,baseSize,1);
   scene.add(sp);
   V2._flashes=V2._flashes||[];
-  V2._flashes.push({sp:sp,scene:scene,t:0});
+  V2._flashes.push({sp:sp,scene:scene,t:0,baseSize:baseSize});
 }
 function updateFlashes(dt){
   var fl=V2._flashes||[];
   for(var i=fl.length-1;i>=0;i--){
     var f=fl[i];f.t+=dt;
-    var s=4+f.t*24;
+    var s=f.baseSize*(1+f.t*6);
     f.sp.scale.set(s,s,1);
     f.sp.material.opacity=Math.max(0,0.95-f.t*2.4);
-    if(f.t>0.55){f.scene.remove(f.sp);fl.splice(i,1);}
+    if(f.t>0.55){f.scene.remove(f.sp);f.sp.material.dispose();fl.splice(i,1);}
   }
 }
 function clearFlashes(){
-  (V2._flashes||[]).forEach(function(f){f.scene.remove(f.sp);});
+  (V2._flashes||[]).forEach(function(f){f.scene.remove(f.sp);f.sp.material.dispose();});
   V2._flashes=[];
 }
 
@@ -6414,8 +6512,8 @@ function clearFlashes(){
    and soot, and substantial fragments that retain forward momentum.
    It is still performant, but no longer reads as one cheap sprite. */
 V2._devastation=[];
-function spawnDevastation(scene,pos,profile,seed,forward){
-  var grp=new THREE.Group();grp.position.copy(pos);scene.add(grp);
+function spawnDevastation(scene,pos,profile,seed,forward,modelScale){
+  var grp=new THREE.Group();grp.position.copy(pos);grp.scale.setScalar(modelScale);scene.add(grp);
   var soft=V2.softTex(),items=[];
   function rnd(n){return ((hash(String(seed)+':'+n)%10000)/10000);}
   for(var i=0;i<8;i++){
@@ -6431,6 +6529,34 @@ function spawnDevastation(scene,pos,profile,seed,forward){
   }
   var drab=new THREE.MeshStandardMaterial({color:0x343b24,metalness:0.35,roughness:0.72});
   var metal=new THREE.MeshStandardMaterial({color:0x62676c,metalness:0.8,roughness:0.38});
+  // Major pieces are visual proxies for the recorded kind of separation.
+  var motion=profile.motion;
+  if(motion==='breakup'||motion==='rammed_tail'||motion==='wingless_roll'){
+    var fwd=forward||new THREE.Vector3(1,0,0);
+    var sideAxis=new THREE.Vector3(-fwd.z,0,fwd.x);
+    var separation=motion==='wingless_roll'?[-1,1]:[0];
+    separation.forEach(function(side){
+      var piece=new THREE.Group();
+      piece.rotation.y=-Math.atan2(fwd.z,fwd.x);
+      var section=new THREE.Mesh(side?new THREE.BoxGeometry(4,.28,11):
+        new THREE.CylinderGeometry(.52,1.03,6.8,14),drab);
+      if(side)section.position.z=side*5;
+      else section.rotation.z=Math.PI/2;
+      piece.add(section);
+      if(!side){
+        var tailplane=new THREE.Mesh(new THREE.BoxGeometry(1.85,.16,6),drab);
+        tailplane.position.x=-2.2;piece.add(tailplane);
+        [-2.7,2.7].forEach(function(z){
+          var fin=new THREE.Mesh(new THREE.SphereGeometry(1,12,8),drab);
+          fin.scale.set(.9,1.05,.09);fin.position.set(-2.3,.61,z);piece.add(fin);
+        });
+        piece.position.set(-fwd.x*7,0,-fwd.z*7);
+      }
+      grp.add(piece);
+      items.push({o:piece,kind:'debris',v:fwd.clone().multiplyScalar(side?9:4).addScaledVector(sideAxis,side*11),
+        spin:new THREE.Vector3(side*.85,.35,side?-.48:.74)});
+    });
+  }
   for(var d=0;d<12;d++){
     var large=d<4;
     var shard=new THREE.Mesh(new THREE.BoxGeometry(
@@ -6459,16 +6585,25 @@ function updateDevastation(dt){
         it.o.material.opacity=Math.max(0,(it.hot?0.95:0.72)-e.t*(it.hot?0.85:0.22));
       }
     });
-    if(e.t>3.4){e.scene.remove(e.group);V2._devastation.splice(i,1);}
+    if(e.t>3.4){disposeDevastation(e);V2._devastation.splice(i,1);}
   }
 }
+function disposeDevastation(effect){
+  effect.scene.remove(effect.group);
+  var materials=new Set();
+  effect.group.traverse(function(o){
+    if(o.isMesh)o.geometry.dispose();
+    if(o.material)materials.add(o.material);
+  });
+  materials.forEach(function(m){m.dispose();});
+}
 function clearDevastation(){
-  V2._devastation.forEach(function(e){e.scene.remove(e.group);});
+  V2._devastation.forEach(disposeDevastation);
   V2._devastation.length=0;
 }
 
 /* ---------- plane placement per frame ---------- */
-function placePlane(p,battleT,elapsed,scene,dt){
+function placePlane(p,battleT,elapsed,scene,dt,bombRelease,bombIndex){
   /* Losses must continue after the attack clock caps at 420 seconds. */
   battleT=KMMissionTimeline.battleCueAtPlayback(KM._playbackSeconds||0);
   var v=p.userData.v2,a=KM._anchor;
@@ -6538,7 +6673,7 @@ function placePlane(p,battleT,elapsed,scene,dt){
     out.set(state.positionM[0]/_mx,state.positionM[1]/_my,state.positionM[2]/_mz);
     var velocity=new THREE.Vector3(state.velocityMps[0]/_mx,state.velocityMps[1]/_my,state.velocityMps[2]/_mz);
     if(sampleLanding>0){
-      var ground=Math.max(.6,V2.demReady?V2.elevAt(out.x,out.z)*ELEV_SCALE:.6);
+      var ground=(V2.groundAt&&V2.groundAt(out.x,out.z))??Math.max(.6,V2.demReady?V2.elevAt(out.x,out.z)*ELEV_SCALE:.6);
       var support=KasselAircraftMapScale.supportDepth(p),targetY=ground+support;
       var eps=.000001,arcDelta=(fullArc(sampleMission+eps)-fullArc(sampleMission-eps))*_mx;
       var landSlope=arcDelta>1e-9?(landingEnvelope(sampleMission+eps)-landingEnvelope(sampleMission-eps))/arcDelta:0;
@@ -6551,6 +6686,7 @@ function placePlane(p,battleT,elapsed,scene,dt){
     p.userData._formationBank=state.coordinatedBankRad*(1-sampleLanding);
   }
   var beh=v.beh,ft=v.ft;
+  if(bombRelease!==undefined)queueBombs(scene,p,bombIndex,bombRelease,formPos);
   var active=ft!=null&&battleT>=ft&&beh!=='stay';
   if(!active){
     p.visible=true;p.userData.alive=true;
@@ -6585,8 +6721,8 @@ function placePlane(p,battleT,elapsed,scene,dt){
       v.startPos=new THREE.Vector3();formPos(v.startPos,lossMission);
       /* A timeline scrub reconstructs state; it must not create a fatal
          hit flash and freeze that giant sprite over the aircraft. */
-      if(KM._playing&&(battleT-ft)<2.5)killFlash(scene,v.startPos);
-      v.chutesOut=0;
+      if(KM._playing&&(battleT-ft)<2.5)killFlash(scene,v.startPos,4*(p.userData.mapGeometryScale||p.scale.x));
+      v.chutesOut=0;v.bailoutSchedule=null;
       /* carry the formation's momentum into the fall — the ship keeps
          flying forward as it noses over, curving toward where it fell */
       v.fwd=KM._anchor.dir.clone();
@@ -6596,6 +6732,7 @@ function placePlane(p,battleT,elapsed,scene,dt){
         v.fwd.y=0;v.fwd.normalize();
       }
       var s0=v.sitePos||v.startPos.clone().setY(2);
+      if(v.sitePos&&V2.groundAt)s0.y=V2.groundAt(s0.x,s0.z)??s0.y;
       /* Match the per-aircraft authored formation velocity in the SAME
          legacy cue units as u=(battleT-ft)/dur. Do not derive momentum
          from crash-site distance or instantly prescribe a descent pitch.
@@ -6609,6 +6746,26 @@ function placePlane(p,battleT,elapsed,scene,dt){
           y:7010/115,z:111195*(GEO.zToLat(0)-GEO.zToLat(1))};
         v.forwardRoute=KasselForwardEndpointRoute.build(v.startPos,entryVelocity,v.sitePos,metricScale,2500);
         v.forwardRoute.initialBank=p.userData._formationBank||0;
+        v.forwardRoute.terrainHeight=V2.groundAt;
+        if(v.pilot==='Miner'){
+          v.profile=V2.LOSS_PROFILES.Miner;
+          // The interview gives an approximate altitude at the decision
+          // to leave. It gives event order, not elapsed seconds.
+          var recalledAltitude=10000*.3048/metricScale.y;
+          if(v.startPos.y>recalledAltitude&&s0.y<recalledAltitude){
+            var high=0,low=1;
+            for(var step=0;step<24;step++){
+              var middle=(high+low)/2;
+              if(KasselForwardEndpointRoute.sample(v.forwardRoute,middle).position.y>recalledAltitude)high=middle;
+              else low=middle;
+            }
+            var phase=(high+low)/2,remaining=1-phase;
+            v.profile=Object.assign({},v.profile,{
+              spinStart:phase+Math.min(.01,remaining*.25),
+              pilotExitPhase:phase+Math.min(.025,remaining*.50)
+            });
+          }
+        }
         v.dur=v.forwardRoute.length/Math.max(.001,Math.hypot(entryVelocity.x*metricScale.x,entryVelocity.z*metricScale.z));
         KM._playbackEndSeconds=Math.max(KM._playbackEndSeconds||300,KMMissionTimeline.playbackAtBattleCue(ft+v.dur)+2);
         v.routeClassification='ESTIMATED';
@@ -6628,19 +6785,20 @@ function placePlane(p,battleT,elapsed,scene,dt){
     var u=(battleT-ft)/v.dur;
     if(v.profile&&v.profile.event!=null&&!v.devastated&&u>=v.profile.event){
       v.devastated=true;
-      if(KM._playing)spawnDevastation(scene,p.position,v.profile,v.seed,v.fwd);
+      if(KM._playing)spawnDevastation(scene,KasselLossTrajectory.sample(v,v.profile.event).position,
+        v.profile,v.seed,v.fwd,p.userData.mapGeometryScale||p.scale.x);
     }
     /* the POW survivors bail out on the way down */
     var pd2=p.userData.planeData;
     var bailout=v.bailoutCrew||[];
     var nCh=bailout.length;
     if(nCh>0&&v.chutesOut<nCh&&u>=0.08){
+      if(!v.bailoutSchedule)v.bailoutSchedule=bailout.map(function(member,index){
+        var pilot=v.pilot==='Miner'&&/^(pilot|command pilot)$/i.test(member.r||'');
+        return {index:index,phase:pilot?v.profile.pilotExitPhase:0.08+0.34*index/Math.max(1,nCh-1),pilot:pilot};
+      }).sort(function(a,b){return a.phase-b.phase;});
       while(v.chutesOut<nCh){
-        var ci=v.chutesOut,bu=0.08+0.34*ci/Math.max(1,nCh-1);
-        /* Miner explicitly recalled the spin beginning after he left
-           the controls but before he exited. Exact elapsed timing is
-           unknown; preserve that ordering, not a fabricated early exit. */
-        if(v.pilot==='Miner'&&/^(pilot|command pilot)$/i.test(bailout[ci].r||''))bu=v.profile.pilotExitPhase;
+        var event=v.bailoutSchedule[v.chutesOut],ci=event.index,bu=event.phase;
         if(u<bu)break;
         var launchPose=KasselLossTrajectory.sample(v,bu).position;
         var launch=new THREE.Vector3(launchPose.x,launchPose.y,launchPose.z);
@@ -6650,8 +6808,8 @@ function placePlane(p,battleT,elapsed,scene,dt){
         var momentum=tb>ta?{x:(pb.x-pa.x)/(tb-ta),z:(pb.z-pa.z)/(tb-ta)}:null;
         /* His account establishes delayed deployment, not a measured
            duration. 0.65 playback seconds is presentation-only. */
-        var openingDelay=v.pilot==='Miner'&&/^(pilot|command pilot)$/i.test(bailout[ci].r||'')?.65:0;
-        spawnChute(scene,launch,bailout[ci],pd2,ci,ft+bu*v.dur,momentum,openingDelay);
+        var openingDelay=event.pilot?.65:0;
+        spawnChute(scene,launch,bailout[ci],pd2,ci,ft+bu*v.dur,momentum,openingDelay,mapMetres);
         v.chutesOut++;
       }
     }
@@ -6669,6 +6827,7 @@ function placePlane(p,battleT,elapsed,scene,dt){
     /* Include the lateral escape and authored spiral in the tangent;
        the old heading differentiated only the underlying Bezier. */
     KasselFlightAttitude.apply(THREE,p,lossPose.tangent,lossPose.bank);
+    KasselAircraftMapScale.clearTerrain(THREE,p,V2.groundAt);
     /* burning trail */
     if(KM._playing&&(V2._frame&1)===0){
       if((V2._frame&3)===0)emitPool(KM._fire,x,y,z);
@@ -6680,6 +6839,9 @@ function placePlane(p,battleT,elapsed,scene,dt){
       var exitMission=BATTLE_START+ft/BATTLE_SPAN*BATTLE_FRAC;
       v.startPos=new THREE.Vector3();formPos(v.startPos,exitMission);
       var tgt=v.sitePos?v.sitePos.clone():v.startPos.clone();
+      var destinationGround=V2.groundAt&&V2.groundAt(tgt.x,tgt.z);
+      var support=KasselAircraftMapScale.supportDepth(p);
+      if(destinationGround!==undefined)tgt.y=destinationGround+support;
       var exitStep=.001,exitMissionStep=exitStep*BATTLE_FRAC/BATTLE_SPAN;
       var exitPrior=new THREE.Vector3(),exitNext=new THREE.Vector3();
       formPos(exitPrior,exitMission-exitMissionStep);formPos(exitNext,exitMission+exitMissionStep);
@@ -6688,6 +6850,9 @@ function placePlane(p,battleT,elapsed,scene,dt){
         z:111195*(GEO.zToLat(0)-GEO.zToLat(1))};
       v.departureRoute=KasselForwardEndpointRoute.build(v.startPos,exitVelocity,tgt,exitScale,2500);
       v.departureRoute.initialBank=p.userData._formationBank||0;
+      if(V2.groundAt)v.departureRoute.terrainHeight=function(x,z){
+        var ground=V2.groundAt(x,z);return ground===undefined?undefined:ground+support;
+      };
       v.exitDuration=v.departureRoute.length/Math.max(.001,Math.hypot(exitVelocity.x*exitScale.x,exitVelocity.z*exitScale.z));
       KM._playbackEndSeconds=Math.max(KM._playbackEndSeconds||300,KMMissionTimeline.playbackAtBattleCue(ft+v.exitDuration+9)+2);
       v.routeClassification='ESTIMATED';
@@ -6717,6 +6882,7 @@ function placePlane(p,battleT,elapsed,scene,dt){
     var departurePose=KasselForwardEndpointRoute.sample(v.departureRoute,prog);
     p.position.set(departurePose.position.x,departurePose.position.y,departurePose.position.z);
     KasselFlightAttitude.apply(THREE,p,departurePose.tangent,departurePose.bank);
+    KasselAircraftMapScale.clearTerrain(THREE,p,V2.groundAt);
     if(KM._playing&&(V2._frame&3)===0)emitPool(KM._smoke,p.position.x-2,p.position.y,p.position.z);
   }
 }
@@ -6750,7 +6916,7 @@ function updateFighters(battleT,dt,elapsed,scene){
   var bombers=(KM._fp||[]).concat(KM._b24?[KM._b24]:[]).filter(function(b){return b.visible&&b.userData.alive;});
   (KM._fighterWaves||[]).forEach(function(w,wi){
     var t0=waveTime(w,wi);
-    var waveDur=w.duration||54;
+    var waveDur=w.duration||90;
     var act=battleT>=t0&&battleT<t0+waveDur;
     (w.models||[]).forEach(function(f,fi){
       if(!act){f.visible=false;return;}
@@ -6772,6 +6938,7 @@ function updateFighters(battleT,dt,elapsed,scene){
       var alongPath=fighterPassCoordinate(ph,[-68,38,50,80]);
       var lateralPath=fighterPassCoordinate(ph,[0,0,12,22]);
       var verticalPath=fighterPassCoordinate(ph,[1.2,-.8,-4.8,-6.8]);
+      var passScale=.30; // Presentation scale for the compressed battle clock.
       var along=alongPath.value+u.stag;
       var lat=u.lat+side*lateralPath.value;
       var vert=verticalPath.value+u.alt;
@@ -6782,9 +6949,9 @@ function updateFighters(battleT,dt,elapsed,scene){
       var lateralPhase=ph*waveDur*1.15+fi*0.35;
       var verticalPhase=ph*waveDur*2+fi*0.31;
       lat+=Math.sin(lateralPhase)*0.28*envelope;
-      var px=a.pos.x+a.dir.x*along+across.x*lat;
-      var pz=a.pos.z+a.dir.z*along+across.z*lat;
-      var py=a.pos.y+vert+Math.sin(verticalPhase)*0.18*envelope;
+      var px=a.pos.x+passScale*(a.dir.x*along+across.x*lat);
+      var pz=a.pos.z+passScale*(a.dir.z*along+across.z*lat);
+      var py=a.pos.y+passScale*(vert+Math.sin(verticalPhase)*0.18*envelope);
       var want=new THREE.Vector3(px,py,pz);
       f.position.copy(want);
       /* Analytic pass tangent: seeking and pausing never uses the
@@ -6835,7 +7002,9 @@ function updateEscorts(battleT,missionT,dt,elapsed){
          not an orbit around the bombers. */
       var arrival=300+(i>>1)*7+(i%2)*1.5;
       var iu=(battleT-arrival)/48;
-      if(iu>=0){
+      // Leave view after continuing beyond the pass. Otherwise the
+      // circuit stays attached to the returning formation and descends with it.
+      if(iu>=0&&iu<1.5){
         // Continue the pass after its attack segment; never clamp the
         // longitudinal motion or teleport into a fabricated cover slot.
         var bend=Math.min(1,iu);
@@ -6899,12 +7068,23 @@ function crewHandoffLens(elapsed,startFov){
     if(c._v2c)return;
     c._v2c=true;
     c.crewYaw=0;c.crewPitch=0;
-    c.fTheta=0.6;c.fPhi=1.25;c.fR=42;       /* follow — tighter still (formation is small now) */
-    c.cTheta=0;c.cPhi=1.15;c.cR=46;c._chaseInit=false;
-    c.tdX=-12;c.tdZ=4;c.tdH=210;            /* strategic top-down — much closer */
-    c.radius=150;c.radTarget=150;           /* orbit — close enough to actually read the formation */
-    c._autoR=true;                          /* auto-widen for the battle, until the user zooms manually */
-    if(c.target&&KM._anchor)c.target.copy(KM._anchor.pos);  /* snap to the formation immediately — no slow drift-in on load */
+    c.fTheta=0.6;c.fPhi=1.25;c.fR=.85;
+    c.cTheta=0;c.cPhi=1.15;c.cR=.32;c._chaseInit=false;
+    c.tdX=0;c.tdZ=0;c.tdH=3.7;
+    c.radius=5;c.radTarget=5;
+    c._autoR=true;
+    if(c.target&&KM._anchor)c.target.copy(KM._anchor.pos);
+  }
+  function formationFocus(anchor){
+    var ships=(KM._fp||[]).concat(KM._b24?[KM._b24]:[]);
+    var active=ships.filter(function(ship){return ship.visible&&ship.userData.alive!==false;});
+    var centre=new THREE.Vector3();
+    if(!active.length)return {centre:anchor.pos,radius:1};
+    active.forEach(function(ship){centre.add(ship.position);});
+    centre.multiplyScalar(1/active.length);
+    var radius=.1;
+    active.forEach(function(ship){radius=Math.max(radius,ship.position.distanceTo(centre));});
+    return {centre:centre,radius:radius};
   }
   function v2Camera(camera,dt,t){
     var c=cs();if(!c||!camera)return;
@@ -6916,10 +7096,10 @@ function crewHandoffLens(elapsed,startFov){
            cleanup; chase's existing interpolation supplies the pull-out. */
         var selected=c.selectedPlane,station=c.crewPos,startFov=camera.fov;
         KM.setView('chase');c.selectedPlane=selected;c._followPlane=selected;c.crewPos=station;c._crewLossHandoff=true;c._handoffElapsed=0;
-        c._handoffStartFov=startFov;camera.fov=startFov;camera.updateProjectionMatrix();
+        c._pulloutOffset=null;c._handoffStartFov=startFov;camera.fov=startFov;camera.updateProjectionMatrix();
       }
     }
-    var shake=(c.shakeIntensity||0)*0.5;
+    var shake=window.KMSimulatorConfig?.cameraShake?(c.shakeIntensity||0)*0.5:0;
     var a=KM._anchor;
     camera.up.set(0,1,0);
     /* crew mode needs a tight near-plane to sit inside the airframe */
@@ -6928,47 +7108,38 @@ function crewHandoffLens(elapsed,startFov){
     var viewScale=viewPlane&&viewPlane.userData.mapGeometryScale?viewPlane.userData.mapGeometryScale/.09:1;
     var wantNear=(c.mode==='crew'?0.01:handoffLens?handoffLens.near:1)*viewScale;
     var wantFov=handoffLens?handoffLens.fov:camera.fov;
-    if(camera.near!==wantNear||camera.fov!==wantFov){camera.near=wantNear;camera.fov=wantFov;camera.updateProjectionMatrix();}
+    if(c.mode!=='chase'&&(camera.near!==wantNear||camera.fov!==wantFov)){camera.near=wantNear;camera.fov=wantFov;camera.updateProjectionMatrix();}
 
     if(c.mode==='orbit'){
-      /* the fighter passes and the escort sweep range hundreds of units
-         out from the bomber box — the tight close-in framing (right for
-         every other phase) hides the whole fight if it never opens up.
-         Auto-widen for the battle window, ease back once it's over. A
-         user who zooms in by hand (very natural, since the close-in
-         default is what they want everywhere else) used to PERMANENTLY
-         kill this widening for the rest of the session — meaning the
-         one moment it mattered most, the fighters/escorts were never
-         visible at all. Now manual zoom is still respected as a base,
-         but the battle window applies a FLOOR on top of it so the fight
-         is never hidden, and the floor releases back to the user's own
-         choice once the battle's over. */
-      var inBattle=KM._missionT>=(BATTLE_START-0.01)&&KM._missionT<RETURN_START&&KM._battleT>0&&KM._battleT<385;
-      if(c._autoR!==false){
-        c.radTarget=inBattle?300:150;
-      }else{
-        var userR=c._userR!=null?c._userR:c.radTarget;
-        c.radTarget=inBattle?Math.max(userR,300):userR;
-      }
-      c.radius+=(c.radTarget-c.radius)*Math.min(1,dt*8);
-      if(!c.dragging)c.theta+=0.0008;
+      var formation=formationFocus(a);
+      var halfV=camera.fov*Math.PI/360;
+      var halfH=Math.atan(Math.tan(halfV)*camera.aspect);
+      var fit=Math.max(.45,1.02*formation.radius/Math.sin(Math.min(halfV,halfH)));
+      c.target.copy(formation.centre);
+      c.radTarget=c._autoR===false?c._userR:fit;
+      c.radius+=(c.radTarget-c.radius)*(1-Math.exp(-dt*12));
       camera.position.set(
         c.target.x+c.radius*Math.sin(c.phi)*Math.cos(c.theta),
         c.target.y+c.radius*Math.cos(c.phi),
         c.target.z+c.radius*Math.sin(c.phi)*Math.sin(c.theta));
       camera.lookAt(c.target);
     }else if(c.mode==='topdown'){
-      camera.position.set(a.pos.x+c.tdX,c.tdH,a.pos.z+c.tdZ);
-      camera.lookAt(a.pos.x+c.tdX,0,a.pos.z+c.tdZ-1);
+      var formationMap=formationFocus(a);
+      var center=formationMap.centre;
+      camera.up.set(0,0,-1);
+      camera.position.set(center.x+c.tdX,center.y+c.tdH,center.z+c.tdZ);
+      camera.lookAt(center.x+c.tdX,center.y,center.z+c.tdZ);
     }else if(c.mode==='flythrough'){
-      /* orbit the moving formation */
-      var want=new THREE.Vector3(
-        a.pos.x+c.fR*Math.sin(c.fPhi)*Math.cos(c.fTheta+a.heading),
-        a.pos.y+c.fR*Math.cos(c.fPhi),
-        a.pos.z+c.fR*Math.sin(c.fPhi)*Math.sin(c.fTheta+a.heading));
-      if(camera.position.distanceTo(want)>500)camera.position.copy(want);
-      else camera.position.lerp(want,Math.min(1,dt*3.5));
-      camera.lookAt(a.pos.x,a.pos.y-2,a.pos.z);
+      // A moving target can translate more than an aircraft length in a
+      // frame. Keep the camera offset in its moving reference frame.
+      var reference=anyShip();
+      var target=reference?reference.position:a.pos;
+      var heading=reference?(reference.userData._lh??a.heading):a.heading;
+      camera.position.set(
+        target.x+c.fR*Math.sin(c.fPhi)*Math.cos(c.fTheta+heading),
+        target.y+c.fR*Math.cos(c.fPhi),
+        target.z+c.fR*Math.sin(c.fPhi)*Math.sin(c.fTheta+heading));
+      camera.lookAt(target);
     }else if(c.mode==='crew'){
       var plane=c.selectedPlane;
       if(!plane||!plane.visible)plane=anyShip()||plane;
@@ -6976,9 +7147,8 @@ function crewHandoffLens(elapsed,startFov){
       /* if the view handed off to another ship, move the interior
          enclosure into THAT ship (otherwise you sit inside the raw
          exterior model of the new aircraft) */
-      if(plane&&c._intFor!==plane){
-        c._intFor=plane;
-        if(V2.attachInterior)try{V2.attachInterior(plane);}catch(eI){}
+      if(plane&&c._intFor!==plane&&V2.attachInterior(plane)===false){
+        KM.setView('orbit');return;
       }
       var crewDef=KM._crewPositions?KM._crewPositions[c.crewPos]:null;
       /* when the modeled cockpit is active, sit in ITS seats */
@@ -7014,12 +7184,16 @@ function crewHandoffLens(elapsed,startFov){
       if(pl){
         var lossFocus=KasselCrewLossFocus.select(pl,c,V2.CREW_LISTS||{},V2._chutes||[],window.KMCrewStations&&KMCrewStations.resolve);
         var focus=lossFocus.position,focusRadius=lossFocus.radius;
+        var chaseNear=lossFocus.kind==='airman'&&focusRadius?Math.min(wantNear,focusRadius*.12):wantNear;
+        if(camera.near!==chaseNear||camera.fov!==wantFov){
+          camera.near=chaseNear;camera.fov=wantFov;camera.updateProjectionMatrix();
+        }
         c._lossFocusKind=lossFocus.kind;
         if(!c._chaseInit){
           c._chaseInit=true;
           c.cTheta=Math.PI;     /* start astern */
           c.cPhi=1.18;
-          c.cR=40*(pl.scale.x||1)/0.6;
+          c.cR=115*(pl.userData.mapGeometryScale||pl.scale.x||.0025);
         }
         /* Bank/pitch can change Euler yaw without changing heading.
            Derive heading from the normalized model's actual +X nose. */
@@ -7031,8 +7205,15 @@ function crewHandoffLens(elapsed,startFov){
           focus.y+(focusRadius||c.cR)*Math.cos(c.cPhi),
           focus.z+(focusRadius||c.cR)*Math.sin(c.cPhi)*Math.sin(c.cTheta-hd));
         var pullingOut=c._crewLossHandoff&&(c._handoffElapsed||0)<1.5;
-        if(camera.position.distanceTo(want2)>500)camera.position.copy(want2);
-        else camera.position.lerp(want2,1-Math.exp(-dt*(pullingOut?1.6:4.5)));
+        if(pullingOut){
+          var localOffset=want2.clone().sub(focus);
+          if(!c._pulloutOffset)c._pulloutOffset=camera.position.clone().sub(focus);
+          c._pulloutOffset.lerp(localOffset,1-Math.exp(-dt*3.4));
+          camera.position.copy(focus).add(c._pulloutOffset);
+        }else{
+          camera.position.copy(want2);
+          c._pulloutOffset=null;
+        }
         if(pullingOut){
           var previousLook=camera.quaternion.clone();camera.lookAt(focus);
           var chaseLook=camera.quaternion.clone();camera.quaternion.copy(previousLook).slerp(chaseLook,1-Math.exp(-dt*2.5));
@@ -7080,15 +7261,15 @@ function crewHandoffLens(elapsed,startFov){
       var c=cs();if(!c)return;ensure(c);
       var f=Math.exp(delta*0.0021);   /* snappy multiplicative zoom */
       if(c.mode==='orbit'){
-        c.radTarget=Math.max(60,Math.min(2400,(c.radTarget||c.radius)*f));
+        c.radTarget=Math.max(.45,Math.min(2400,(c.radTarget||c.radius)*f));
         c._autoR=false;c._userR=c.radTarget;     /* remember the user's own choice so the battle floor can release back to it afterward */
       }
-      else if(c.mode==='flythrough'){c.fR=Math.max(30,Math.min(700,c.fR*f));}
+      else if(c.mode==='flythrough'){c.fR=Math.max(.25,Math.min(700,c.fR*f));}
       else if(c.mode==='chase'){
         var selected=c.selectedPlane||KM._b24,zoomScale=selected&&selected.userData.mapGeometryScale?selected.userData.mapGeometryScale/.09:1;
         c.cR=Math.max(4*zoomScale,Math.min(420*zoomScale,c.cR*f));
       }
-      else if(c.mode==='topdown'){c.tdH=Math.max(150,Math.min(2600,c.tdH*f));}
+      else if(c.mode==='topdown'){c.tdH=Math.max(.65,Math.min(2600,c.tdH*f));}
       else if(c.mode==='crew'&&KM._cam){
         KM._cam.fov=Math.max(30,Math.min(80,KM._cam.fov*Math.exp(delta*0.0011)));
         KM._cam.updateProjectionMatrix();
@@ -7132,7 +7313,12 @@ function crewHandoffLens(elapsed,startFov){
       drag={x:e.touches[0].clientX,y:e.touches[0].clientY};
       e.preventDefault();
     },{passive:false});
-    canvas.addEventListener('touchend',function(){
+    canvas.addEventListener('touchend',function(e){
+      var remaining=e.touches[0];
+      drag=remaining?{x:remaining.clientX,y:remaining.clientY}:null;
+      pinch=0;var c=cs();if(c)c.dragging=!!remaining;
+    });
+    canvas.addEventListener('touchcancel',function(){
       drag=null;pinch=0;var c=cs();if(c)c.dragging=false;
     });
   };
@@ -7149,6 +7335,7 @@ function applyBattleState(scene,battleT){
   V2._bombed=false;
   /* no ghost smoke surviving a scrub or restart */
   flushPool(KM._smoke);flushPool(KM._fire);flushPool(KM._lossSmoke);
+  V2._lastLossSmokeTime=undefined;
   var all=(KM._fp||[]).concat(KM._b24?[KM._b24]:[]);
   all.forEach(function(p){
     if(!p.userData.v2)initPlaneBattle(p,scene);
@@ -7171,10 +7358,15 @@ KM.scrubTimeline=function(e){
   var bar=document.getElementById('cp-tl-bar');
   if(!bar)return;
   var rect=bar.getBoundingClientRect();
-  var pct=KMMissionTimeline.routeAt(Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width))*300);
+  if(!rect.width)return;
+  seekMission(KMMissionTimeline.seekSeconds((e.clientX-rect.left)/rect.width,KM._playbackEndSeconds||300));
+};
+function seekMission(seconds){
+  KM._seekToEnd=seconds>=(KM._playbackEndSeconds||300)-1e-7;
+  var pct=KMMissionTimeline.routeAt(seconds);
   KM._missionT=pct;
-  KM._playbackSeconds=KMMissionTimeline.secondsAt(pct);
-  KM._holdT=0;
+  KM._playbackSeconds=seconds;
+  KM._holdT=Math.max(0,Math.min(3,(seconds-300)/2.5));
   KM._simSeconds=KM._playbackSeconds;
   if(pct<BATTLE_START){
     KM._battleT=0;
@@ -7256,7 +7448,7 @@ function getPhase(t){
 function updateHUD(phase,mT,battleT){
   var phEl=document.getElementById('cp-phase');
   if(phEl){
-    var label=phase.name;
+    var label=KM._playbackSeconds>300?'Remaining flights · time-lapse':phase.name;
     if(mT<RETURN_START&&battleT>0){
       var ev=null;
       (V2.EVENTS||[]).forEach(function(b){if(battleT>=b.t)ev=b;});
@@ -7272,19 +7464,25 @@ function updateHUD(phase,mT,battleT){
   var clockEl=document.getElementById('cp-clock');
   if(clockEl)clockEl.textContent=missionClock(mT);
   var fill=document.getElementById('cp-tl-fill');
-  var seconds=KMMissionTimeline.secondsAt(mT);
-  if(fill)fill.style.width=(seconds/3)+'%';
+  var end=KM._playbackEndSeconds||300;
+  var seconds=KM._playbackSeconds??KMMissionTimeline.secondsAt(mT);
+  if(fill)fill.style.width=(100*KMMissionTimeline.seekFraction(seconds,end))+'%';
+  var extended=end>300;
+  if(V2._extendedTimeline!==extended){
+    V2._extendedTimeline=extended;
+    if(V2.fixTimeline)V2.fixTimeline();
+  }
   var rail=document.getElementById('cp-tl-bar');
   if(rail){
     rail.setAttribute('role','slider');rail.setAttribute('tabindex','0');rail.setAttribute('aria-label','Mission timeline');
-    rail.setAttribute('aria-valuemin','0');rail.setAttribute('aria-valuemax','300');rail.setAttribute('aria-valuenow',Math.round(seconds));
-    rail.setAttribute('aria-valuetext',missionClock(mT)+' · '+Math.round(seconds)+' seconds of five minutes');
+    rail.setAttribute('aria-valuemin','0');rail.setAttribute('aria-valuemax',String(Math.round(end)));rail.setAttribute('aria-valuenow',Math.round(seconds));
+    rail.setAttribute('aria-valuetext',missionClock(mT)+' · '+Math.round(seconds)+' of '+Math.round(end)+' playback seconds');
     if(!rail._kmKeys){rail._kmKeys=true;rail.addEventListener('keydown',function(e){
-      var s=KMMissionTimeline.secondsAt(KM._missionT);
-      if(e.key==='Home')s=0;else if(e.key==='End')s=300;
+      var s=KM._playbackSeconds??KMMissionTimeline.secondsAt(KM._missionT);
+      if(e.key==='Home')s=0;else if(e.key==='End')s=KM._playbackEndSeconds||300;
       else if(e.key==='ArrowRight')s+=5;else if(e.key==='ArrowLeft')s-=5;else return;
-      e.preventDefault();var r=rail.getBoundingClientRect();
-      KM.scrubTimeline({clientX:r.left+Math.max(0,Math.min(300,s))/300*r.width});
+      e.preventDefault();
+      seekMission(Math.max(0,Math.min(KM._playbackEndSeconds||300,s)));
     });}
   }
   var marks=document.querySelectorAll('.cp-tl-mark');
@@ -7310,30 +7508,37 @@ KM._buildAnimation=function(){
   if(KM._animRunning)return;KM._animRunning=true;
   if(KM._setupInput)KM._setupInput();
   initTracers(scene);
+  var release=KMMissionTimeline.secondsAt(BOMBS_AWAY);
   var all=(KM._fp||[]).concat(KM._b24?[KM._b24]:[]);
   all.forEach(function(p){initPlaneBattle(p,scene);});
   V2._frame=0;
   var elapsed=0,lastTime=performance.now(),holdT=0;
+  var frameInterval=1000/30,nextRender=lastTime+frameInterval;
+  document.addEventListener('visibilitychange',function(){
+    lastTime=performance.now();nextRender=lastTime+frameInterval;
+  });
 
   function animate(){
     requestAnimationFrame(animate);
     var now=performance.now();
-    /* Leave headroom for controls and browser compositing on the heavy
-       historical formation. Prop motion still updates at 30 fps. */
-    if(now-lastTime<1000/30)return;
-    var dt=Math.min((now-lastTime)/1000,0.05);
+    // Keep a stable deadline. Resetting it to each delivered frame
+    // can skip an extra refresh and alternate between uneven intervals.
+    if(document.hidden||now+1<nextRender)return;
+    nextRender+=frameInterval*Math.max(1,Math.floor((now-nextRender)/frameInterval)+1);
+    var wallDelta=(now-lastTime)/1000;
     lastTime=now;
+    var dt=Math.min(wallDelta,0.05);
     /* sim clock: choreography freezes dead when paused — the camera
        still answers the mouse, but the WAR stops */
     var sdt=KM._playing?dt:0;
     elapsed+=sdt;
-    KM._simSeconds=(KM._simSeconds||0)+sdt*KM._speed;
     V2._frame++;
     try{
       if(KM._playing){
         if((KM._playbackSeconds||0)<(KM._playbackEndSeconds||300)){
           if(KM._playbackSeconds===undefined)KM._playbackSeconds=KMMissionTimeline.secondsAt(KM._missionT);
-          KM._playbackSeconds=Math.min(KM._playbackEndSeconds||300,KM._playbackSeconds+dt*KM._speed);
+          KM._playbackSeconds=KMMissionTimeline.advancePlayback(KM._playbackSeconds,wallDelta*KM._speed,KM._playbackEndSeconds||300);
+          KM._simSeconds=KM._playbackSeconds;
           KM._missionT=KMMissionTimeline.routeAt(KM._playbackSeconds);
           KM._battleT=KMMissionTimeline.battleAt(KM._missionT);
           if(KM._playbackSeconds>=300)KM._holdT=Math.min(3,(KM._playbackSeconds-300)/2.5);
@@ -7344,30 +7549,30 @@ KM._buildAnimation=function(){
       }
       updateAnchor(KM._missionT,KM._battleT,dt*KM._speed);
       elapsed=KMMissionTimeline.secondsAt(KM._missionT);
-      var mapView=KM._camState&&(KM._camState.mode==='orbit'||KM._camState.mode==='topdown');
+      var mapView=KM._camState&&(KM._camState.mode==='topdown'&&KM._camState.tdH>=45||KM._camState.mode==='orbit'&&KM._camState.radius>=45);
       scene.children.forEach(function(o){if(o.userData.geoMarker)o.visible=!!mapView;});
       (V2._crashGroups||[]).forEach(function(cg){if(cg.scene===scene){cg.group.visible=!!mapView;cg.labels.visible=!!mapView;}});
       var battleT=KM._battleT;
 
-      /* bombs away near Göttingen — you SEE them fall and strike */
-      if(KM._missionT>=BOMBS_AWAY&&KM._missionT<BATTLE_START&&!V2._bombed){
-        V2._bombed=true;
-        spawnBombs(scene);
+      var playback=KM._playbackSeconds||0;
+      var prepareDrops=playback>=release&&playback<release+9&&!V2._bombed;
+      all.forEach(function(p,index){
+        placePlane(p,battleT,elapsed,scene,dt,prepareDrops&&index<18?release:undefined,index);
+      });
+      if(prepareDrops)V2._bombed=true;
+      if(playback<release&&V2._bombed){clearBombs();V2._bombed=false;}
+      if(bombs.length)updateBombs(playback,camera,KM._playing&&!prepareDrops);
+      // A seek beyond the attack can construct previously unvisited routes.
+      // Keep End anchored to the end if that construction extends the track.
+      if(!KM._playing&&KM._seekToEnd&&KM._playbackSeconds<KM._playbackEndSeconds-1e-7){
+        seekMission(KM._playbackEndSeconds);
+        return;
       }
-      if(KM._missionT<BOMBS_AWAY)V2._bombed=false;
-      updateBombs(sdt*KM._speed);
-
-      /* orbit camera tracks the formation so the action stays framed */
-      if(KM._camState&&KM._camState.mode==='orbit'&&!KM._camState.dragging){
-        KM._camState.target.lerp(KM._anchor.pos,Math.min(1,dt*0.8));
-      }
-
-      /* planes */
-      all.forEach(function(p){placePlane(p,battleT,elapsed,scene,dt);});
       /* Reconstruct loss trails from documentary time even while paused
          or after a seek. Other smoke effects keep their separate pool. */
-      if(KM._lossSmoke){
-        var smokeTime=KMMissionTimeline.secondsAt(KM._missionT);
+      var smokeTime=KM._playbackSeconds??KMMissionTimeline.secondsAt(KM._missionT);
+      if(KM._lossSmoke&&(V2._lastLossSmokeTime!==smokeTime||V2._lastLossSmokeGround!==V2.groundRevision)){
+        V2._lastLossSmokeTime=smokeTime;V2._lastLossSmokeGround=V2.groundRevision;
         var lossStates=all.map(function(p){return p.userData.v2;});
         var trailPoints=KasselLossSmoke.sample(lossStates,smokeTime,KMMissionTimeline,KasselLossTrajectory,true);
         var lossPool=KM._lossSmoke;
@@ -7376,8 +7581,11 @@ KM._buildAnimation=function(){
           lossPool.pos[si*3]=spoint?spoint.x:-99999;
           lossPool.pos[si*3+1]=spoint?spoint.y:-99999;
           lossPool.pos[si*3+2]=spoint?spoint.z:-99999;
+          lossPool.plume[si*2]=spoint?spoint.size:0;
+          lossPool.plume[si*2+1]=spoint?spoint.opacity:0;
         }
         lossPool.geo.attributes.position.needsUpdate=true;
+        lossPool.geo.attributes.plume.needsUpdate=true;
       }
 
       /* fighters + escorts + tracers + chutes + flashes */
@@ -7459,6 +7667,7 @@ KM._buildAnimation=function(){
       updateHUD(curPhase,KM._missionT,battleT);
       if(KM._updateCamera)KM._updateCamera(camera,dt,elapsed);
     }catch(err){if((V2._frame&255)===0)console.error('KM v2 loop',err);}
+    if(V2._crewExterior)V2._crewExterior.update();
     renderer.render(scene,camera);
   }
   animate();
@@ -8115,26 +8324,44 @@ KM._hideAllInteriors=function(){
 };
 V2.attachInterior=function(planeOverride){
   var c=KM._camState;
-  V2.detachInterior();
-  if(!c||c.mode!=='crew')return;
-  /* the camera may have handed off to a surviving ship — the
-     enclosure follows the ship you're actually riding in */
+  if(!c||c.mode!=='crew'){V2.detachInterior();return false;}
   var plane=planeOverride||c.selectedPlane;
   var def=(V2.DETAIL_SEATS&&V2.DETAIL_SEATS[c.crewPos])||
     (KM._crewPositions?KM._crewPositions[c.crewPos]:null);
-  if(!plane||!def||!plane.visible)return;
-  /* hide YOUR OWN ship's exterior model — the camera would otherwise
-     clip through its solid meshes; the enclosure is what you see of
-     your aircraft, the world shows through its real windows */
-  plane.children.forEach(function(ch){
-    if(ch.visible){ch.visible=false;V2._hiddenOwnShip.push(ch);}
-  });
+  if(!plane||!def||!plane.visible){V2.detachInterior();return false;}
   var station=c.crewPos||'pilot';
+  var rebuilt;
+  var cache=V2._cabinCache||(V2._cabinCache=new Map());
   if(window.KasselInterior){
-    var rebuilt=window.KasselInterior.build(THREE,station);
+    var room={copilot:'pilot',bomb:'nav',nose:'nav',waistR:'waistL'}[station]||station;
+    rebuilt=cache.get(room);
+    if(!rebuilt){
+      try{rebuilt=window.KasselInterior.build(THREE,room);}
+      catch(err){console.warn('KM: cabin build failed',err);return false;}
+    }
+    cache.delete(room);cache.set(room,rebuilt);
+    if(rebuilt.group.parent===plane){c._intFor=plane;return true;}
+  }
+  V2.detachInterior();
+  // The replacement is ready before masking the selected fuselage.
+  if(rebuilt&&KM._ren&&window.KMCrewExterior){
+    KM._ren.localClippingEnabled=true;
+    V2._crewExterior=window.KMCrewExterior.attach(THREE,plane);
+  }else{
+    plane.children.forEach(function(ch){
+      if(ch.visible){ch.visible=false;V2._hiddenOwnShip.push(ch);}
+    });
+  }
+  c._intFor=plane;
+  if(rebuilt){
     V2.DETAIL_SEATS=rebuilt.seats;
     plane.add(rebuilt.group);V2._intActive=[rebuilt.group];
-    return; /* Never layer the legacy photo rooms over this reconstruction. */
+    if(cache.size>2){
+      var oldest=cache.keys().next().value;
+      V2.disposeCabin(cache.get(oldest).group);
+      cache.delete(oldest);
+    }
+    return true;
   }
   /* PREFERRED: the consolidated B-24 with its fully modeled cockpit —
      real instrument faces, real structure, real glazing. Lazy-loads on
@@ -8148,6 +8375,7 @@ V2.attachInterior=function(planeOverride){
   if(useDetail&&V2.templates&&V2.templates.b24detail){
     if(!V2._detailHolder){
       V2._detailHolder=new THREE.Group();
+      V2._detailHolder.userData.inspectionInterior=true;
       V2._detailHolder.add(V2.templates.b24detail.clone(true));
       var dl=new THREE.PointLight(0xffd9a8,0.38,14);
       dl.position.set(6,3,0);
@@ -8164,6 +8392,7 @@ V2.attachInterior=function(planeOverride){
        as the source of truth while making the view read as a finished
        aircraft interior rather than loose objects floating in the sky. */
     var enhanced=buildInterior(station);
+    enhanced.userData.inspectionInterior=true;
     /* These legacy enclosures were authored at twice the native cabin
        dimensions. Keep their glazing at the supplied model's scale. */
     enhanced.scale.setScalar(V2.detailRoomScale||0.5);
@@ -8184,6 +8413,7 @@ V2.attachInterior=function(planeOverride){
     return;
   }
   var holder=buildInterior(station);
+  holder.userData.inspectionInterior=true;
   /* shared compartments anchor at the COMPARTMENT center, not the
      individual eyepoint — pilot and co-pilot sit on opposite sides of
      the same deck and see genuinely different sightlines */
@@ -8202,22 +8432,35 @@ V2.attachInterior=function(planeOverride){
   plane.add(holder);
   V2._intActive=holder;
 };
+V2.disposeCabin=function(obj){
+  /* compartment models share geometry with their cached templates */
+  obj.children.filter(function(ch){return ch.userData.sharedCompartment;}).forEach(function(ch){obj.remove(ch);});
+  var disposed=new Set();
+  obj.traverse(function(o){
+    if(o.geometry)o.geometry.dispose();
+    if(o.material&&!disposed.has(o.material)){
+      disposed.add(o.material);
+      ['map','bumpMap','normalMap','roughnessMap'].forEach(function(k){
+        var tx=o.material[k];
+        if(tx&&!(tx.userData&&tx.userData.sharedCabinFinish)&&!disposed.has(tx)){
+          disposed.add(tx);tx.dispose();
+        }
+      });
+      o.material.dispose();
+    }
+  });
+};
 V2.detachInterior=function(){
+  if(V2._crewExterior){
+    V2._crewExterior.dispose();
+    V2._crewExterior=null;
+    KM._ren.localClippingEnabled=false;
+  }
   var active=Array.isArray(V2._intActive)?V2._intActive:[V2._intActive];
   active.forEach(function(obj){
     if(obj&&obj.parent)obj.parent.remove(obj);
-    if(obj&&obj.userData.rebuiltInterior){
-      /* compartment models share geometry with their cached templates */
-      obj.children.filter(function(ch){return ch.userData.sharedCompartment;}).forEach(function(ch){obj.remove(ch);});
-      var disposed=new Set();
-      obj.traverse(function(o){if(o.geometry)o.geometry.dispose();
-        if(o.material&&!disposed.has(o.material)){disposed.add(o.material);
-          ['map','bumpMap'].forEach(function(k){var tx=o.material[k];if(tx&&!disposed.has(tx)){disposed.add(tx);tx.dispose();}});
-          o.material.dispose();
-        }
-      });
-    }
   });
+  if(KM._camState)KM._camState._intFor=null;
   V2._intActive=null;
   V2._hiddenOwnShip.forEach(function(ch){ch.visible=true;});
   V2._hiddenOwnShip.length=0;
@@ -8252,14 +8495,14 @@ V2.updateStationOverlay=function(){};
       if(KM._cam&&m!=='crew'&&KM._cam.fov!==50){KM._cam.fov=50;KM._cam.updateProjectionMatrix();}
       if(KM._cam&&m==='crew'){KM._cam.fov=68;KM._cam.updateProjectionMatrix();}
       V2._syncSelectors(m);
-      V2.attachInterior();
+      if(V2.attachInterior()===false&&c&&c.mode==='crew'){KM.setView('orbit');return;}
       if(V2.refreshCrewCaption)V2.refreshCrewCaption();
     };
     try{V2._syncSelectors();}catch(eSS){}
     KM.setCrewPos=function(p){
       oSetCrew(p);
       var c=KM._camState;if(c){c.crewPos=p;c.crewYaw=0;c.crewPitch=0;}
-      V2.attachInterior();
+      if(V2.attachInterior()===false&&c&&c.mode==='crew'){KM.setView('orbit');return;}
       if(V2.refreshCrewCaption)V2.refreshCrewCaption();
     };
     KM.selectPlane=function(id){
@@ -8495,6 +8738,9 @@ V2.installStationCaption=function(){
   if(!wrap)return;
   var el=document.createElement('div');
   el.id='km-station-cap';
+  el.addEventListener('error',function(event){
+    if(event.target.tagName==='IMG')event.target.hidden=true;
+  },true);
   /* top-right, clear of the play button and scrubber */
   el.style.cssText='position:absolute;right:12px;top:64px;z-index:30;text-align:right;'+
     'font:600 11px/1.5 "Oswald",sans-serif;letter-spacing:0.08em;'+
@@ -8545,12 +8791,18 @@ V2.installStationCaption=function(){
           aSlug=pick.s||'';aImg=pick.img||'';
           if(resolution.uncertain)stationVacant=/^waist/.test(stationKey)?'WAIST SIDE NOT SPECIFIED IN THE ROSTER':'MULTIPLE CREWMEN LISTED FOR THIS ROLE';
         }else if(stationKey==='ball')stationVacant='NO BALL-TURRET CREWMAN IDENTIFIED IN THIS ROSTER';
-        else stationVacant='NO ROSTERED CREWMAN AT THIS STATION';
+        else stationVacant='STATION ASSIGNMENT UNKNOWN';
       }
     }
     /* clickable: airman → participant page, crew → crew page; the
        airman's CMS photo rides along when there is one */
     var crewSlug=(V2.CREW_SLUGS&&V2.CREW_SLUGS[String(ship)])||'';
+    // Where several people share a role, retain all recorded names in
+    // the expandable roster without presenting the first as identified.
+    if(resolution&&resolution.uncertain){
+      airman='';aSlug='';aImg='';
+    }
+    var roleHtml=airman&&pick&&pick.r?'<span class="station-role">'+String(pick.r)+'</span>':'';
     var airHtml=airman
       ?(aSlug
         ?'<a href="https://kasselmission.org/participant/'+aSlug+'" style="color:#fff;text-decoration:underline" target="_blank" rel="noopener">'+airman+'</a>'
@@ -8559,11 +8811,6 @@ V2.installStationCaption=function(){
     var crewHtml='CREW OF '+(crewSlug
       ?'<a href="https://kasselmission.org/crews/'+crewSlug+'" style="color:#e8e4d8;text-decoration:underline" target="_blank" rel="noopener">'+String(ship).toUpperCase()+'</a>'
       :String(ship).toUpperCase());
-    var photoHtml=(c.mode==='crew'&&aImg)
-      ?'<img src="'+aImg+'" style="float:left;width:54px;height:66px;'+
-       'object-fit:cover;margin:2px 10px 2px 0;border:1px solid rgba(255,196,1,0.5);border-radius:2px" alt="">'
-      :'';
-    /* hierarchy: PHOTO first, the man and his seat second, ship third */
     var bigPhoto=(c.mode==='crew'&&aImg)
       ?'<img src="'+aImg+'" style="float:right;width:44px;'+
        'height:52px;object-fit:cover;object-position:top;margin:0 0 5px 8px;'+
@@ -8583,20 +8830,30 @@ V2.installStationCaption=function(){
           return '<div style="margin-bottom:7px">'+String(m.n||'').toUpperCase()+' · '+String(m.r||'').toUpperCase()+
             (evidence?'<div style="margin-top:2px;opacity:.78;text-transform:none">'+evidence+'<br><span style="opacity:.65">Source: Reg Miner interview with Aaron Elson, April 11, 1999.</span></div>':'')+'</div>';
         }).join('')+'</div></details>'):'';
-    el.innerHTML=bigPhoto+
-      (airHtml?('<span style="font-size:13px;line-height:1.35">'+airHtml+'</span><br>'):'')+
-      (stationVacant?('<span style="color:#d6c9a4;font-size:10px">'+stationVacant+'</span><br>'):'')+
-      '<span style="color:#FFC401">'+head+'</span>'+
-      '<br><span style="opacity:0.78;font-size:10px">'+crewHtml+
+    var caption=bigPhoto+
+      (airHtml?('<span style="font-size:15px;line-height:1.35">'+airHtml+'</span><br>'):'')+
+      roleHtml+(stationVacant?('<span style="color:#d6c9a4;font-size:10px">'+stationVacant+'</span><br>'):'')+
+      '<span style="opacity:0.78;font-size:10px">'+crewHtml+
       (sq?(' · '+sq):'')+(serial?(' · '+serial):'')+'</span>'+
       (fate?('<br><span style="color:'+(pd.fate==='r'?'#ff7a66':'#9fd49a')+'">'+fate+chutes+'</span>'):'')+
       (pd.lossNote&&KM._battleT>=(pd.fateTime||0)&&KM._missionT>=BATTLE_START?('<br><span style="display:inline-block;margin-top:4px;opacity:.66;font:500 9px/1.35 Montserrat,sans-serif;letter-spacing:.01em">'+pd.lossNote.toUpperCase()+'</span>'):'')+
       bailoutHtml+rosterHtml;
-    el.style.maxWidth='210px';
+    if(c.mode==='crew'){
+      caption='<details class="station-record"><summary class="station-title">'+head+' · '+String(ship).toUpperCase()+'</summary>'+caption+'</details>';
+    }else caption='<span class="station-title">'+head+'</span>'+caption;
+    if(el._crewCaption!==caption){
+      var keepOpen=el.firstElementChild&&el.firstElementChild.open;
+      el.innerHTML=caption;
+      if(keepOpen&&el.firstElementChild.tagName==='DETAILS')el.firstElementChild.open=true;
+      el._crewCaption=caption;
+    }
+    el.style.maxWidth='min(290px, 44%)';
     el.style.maxHeight='calc(100% - 150px)';
     el.style.overflow='auto';
     el.style.pointerEvents='auto';
     el.style.display='block';
+    var snapshot=document.getElementById('cp-crew-snapshot');
+    if(snapshot)snapshot.classList.remove('show');
   };
   V2._capTimer=setInterval(V2.refreshCrewCaption,400);
   V2.refreshCrewCaption();
@@ -8609,8 +8866,8 @@ V2.makeContrails=function(scene,count){
   for(var i=0;i<count;i++){pos[i*3]=-99999;pos[i*3+1]=-99999;pos[i*3+2]=-99999;}
   geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
   var pts=new THREE.Points(geo,new THREE.PointsMaterial({
-    map:V2.softTex(),color:0xe6ecf4,size:4.4,transparent:true,
-    opacity:0.32,depthWrite:false,blending:THREE.NormalBlending}));
+    map:V2.softTex(),color:0xe6ecf4,size:.24,transparent:true,
+    opacity:0.18,depthWrite:false,blending:THREE.NormalBlending}));
   pts.frustumCulled=false;
   scene.add(pts);
   return {geo:geo,pos:pos,count:count,next:0,frame:0,
@@ -8622,9 +8879,9 @@ V2.emitContrail=function(sys,plane,engines){
   for(var e=0;e<engines.length;e++){
     var off=engines[e].clone().multiplyScalar(s).applyQuaternion(q);
     var i=sys.next;sys.next=(sys.next+1)%sys.count;
-    sys.pos[i*3]=plane.position.x+off.x+(Math.random()-0.5)*0.6;
-    sys.pos[i*3+1]=plane.position.y+off.y+(Math.random()-0.5)*0.6;
-    sys.pos[i*3+2]=plane.position.z+off.z+(Math.random()-0.5)*0.6;
+    sys.pos[i*3]=plane.position.x+off.x+(Math.random()-0.5)*.045;
+    sys.pos[i*3+1]=plane.position.y+off.y+(Math.random()-0.5)*.045;
+    sys.pos[i*3+2]=plane.position.z+off.z+(Math.random()-0.5)*.045;
     sys.age[i]=now;
   }
   sys.geo.attributes.position.needsUpdate=true;
@@ -8680,7 +8937,7 @@ V2.startLoop=function(){
         }
       }
     }
-    if(sys&&(frames%30)===0)V2.ageContrails(sys,16);
+    if(sys&&(frames%30)===0)V2.ageContrails(sys,8);
     if(V2.route)V2.route.tick(dt);
   }
   loop();
@@ -8960,14 +9217,14 @@ V2.fixTimeline=function(){
     if(!marks.length)return false;
     var h=marksC.getBoundingClientRect().height;
     if(getComputedStyle(marksC).position==='static')marksC.style.position='relative';
-    marksC.style.minHeight=Math.max(28,Math.round(h)+14)+'px';
+    if(!marksC.style.minHeight)marksC.style.minHeight=Math.max(28,Math.round(h)+14)+'px';
     marksC.style.overflow='visible';
     /* resolve each mark to its fraction, keep them in time order */
     var items=[];
     marks.forEach(function(m){
       var t=(m.textContent||'').replace(/\s+/g,' ').trim().toUpperCase();
       var hit=null;V2.TL_FRAC.forEach(function(d){if(!hit&&d.re.test(t))hit=d;});
-      if(hit)items.push({m:m,f:KMMissionTimeline.secondsAt(hit.f)/300,edge:hit.edge,t:t});
+      if(hit)items.push({m:m,f:KMMissionTimeline.seekFraction(KMMissionTimeline.secondsAt(hit.f),KM._playbackEndSeconds||300),edge:hit.edge,t:t});
     });
     if(items.length<5)return false;
     items.sort(function(a,b){return a.f-b.f;});
@@ -9058,7 +9315,7 @@ whenReady(function(){V2.fixDom();V2.fixDom2();V2._timelineWatch();});
 })();
 
 /* warm the tile and model caches immediately */
-V2.loadDEM();V2.loadImagery();
+V2.loadDEM().catch(function(){/* Terrain initialization handles the fallback. */});
 if(V2.loadModels)V2.loadModels();
 
 console.log('KM v2: engine ready');
