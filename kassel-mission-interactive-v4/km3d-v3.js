@@ -5606,7 +5606,7 @@ V2.prepareTemplate=function(gltf,key){
   /* Interior and exterior must share ONE airframe fit. Normalizing the
      filtered interior alone stretches its compartments and shifts every seat. */
   var airframeBounds=key==='b24detail'?new THREE.Box3().setFromObject(src):null;
-  var byMat=new Map(),props=[];
+  var byMat=new Map(),props=[],ballParts=[];
   var hasNamedExterior=false;
   if(key==='b24lo')src.traverse(function(n){
     if(n.name==='km-b24-exterior')hasNamedExterior=true;
@@ -5657,6 +5657,14 @@ V2.prepareTemplate=function(gltf,key){
       assembly:propRoot?propRoot.uuid:o.uuid,
       shaftDirection:new THREE.Vector3(0,0,1).transformDirection((propRoot||o).matrixWorld),
       anchor:propRoot&&!propRoot.isMesh?propRoot.getWorldPosition(new THREE.Vector3()):null});return;}
+    /* The Sperry ball turret is kept as its own switchable part: by
+       Kassel the 445th had pulled most ball turrets (see aircraft-damage-data.js).
+       Native glTF frame, +Z nose; the well sits about 5.3 m aft. */
+    if(key==='b24lo'){
+      g.computeBoundingBox();
+      var bc=g.boundingBox.getCenter(new THREE.Vector3()),bs=g.boundingBox.getSize(new THREE.Vector3());
+      if(Math.abs(bc.x)<.6&&bc.z>-6.2&&bc.z<-4.5&&bc.y>-2.2&&bc.y<.6&&Math.max(bs.x,bs.y,bs.z)<1.7){ballParts.push({g:g,m:o.material});return;}
+    }
     KasselAircraftMaterialGeometry.split(THREE,g,o.material).forEach(function(part){
       if(!byMat.has(part.material))byMat.set(part.material,[]);
       byMat.get(part.material).push(part.geometry);
@@ -5775,6 +5783,16 @@ V2.prepareTemplate=function(gltf,key){
     var merged=geos.length===1?geos[0]:mergeGeos(geos);
     inner.add(new THREE.Mesh(merged,mat));
   });
+  if(ballParts.length){
+    var ballGroup=new THREE.Group(),ballMat=new Map();ballGroup.name='km-ball-turret-exterior';
+    ballParts.forEach(function(b){KasselAircraftMaterialGeometry.split(THREE,b.g,b.m).forEach(function(part){
+      if(!ballMat.has(part.material))ballMat.set(part.material,[]);ballMat.get(part.material).push(part.geometry);});});
+    ballMat.forEach(function(geos,mat){
+      mat=mat&&mat.clone?mat.clone():mat;if(mat&&mat.map)mat.map.encoding=THREE.sRGBEncoding;
+      ballGroup.add(new THREE.Mesh(geos.length===1?geos[0]:mergeGeos(geos),mat));
+    });
+    inner.add(ballGroup);
+  }
   /* prop pivots — preserved separately so they can spin */
   KasselPropellerAssembly.build(THREE,props).forEach(function(pivot){inner.add(pivot);});
   /* orient + normalize scale (slight nose-down flying attitude for
@@ -5796,6 +5814,7 @@ V2.prepareTemplate=function(gltf,key){
   if(airframeBounds){orient.updateMatrix();bb.copy(airframeBounds.clone().applyMatrix4(orient.matrix));}
   var c2=bb.getCenter(new THREE.Vector3());
   orient.position.set(cfg.centerX-c2.x,cfg.centerY-c2.y,-c2.z);
+  if(key==='b24lo'){orient.updateMatrix();holder.userData.nativeMatrix=orient.matrix.toArray();}
   if(isB24&&typeof makeProp==='function'){
     orient.updateMatrix();
     [[-7.80,0.095,2.91],[-3.38,-0.055,3.20],[3.38,-0.055,3.21],[7.79,0.095,2.90]]
@@ -6297,6 +6316,82 @@ function updateTracers(dt){
   });
 }
 
+/* ═════════ defensive fire from the real gun positions ═════════
+   Each B-24 answers an attacker from the stations whose field of fire
+   covers it: tail, top and nose turrets (twin .50s) and the two waist
+   guns. No ball turret: the 445th flew Kassel without them. The ship
+   whose crew view is open also shows close-range tracers and muzzle
+   flashes, so the gunner's own guns are seen firing. Rates and paths
+   are illustrative on the compressed battle clock. */
+var GUNS=null,nearTracers=null,flashPool=null;
+function gunStations(){
+  if(GUNS)return GUNS;
+  var cc=window.KasselCrewCompartments,M=(cc&&cc.metresPerModelUnit)||(20.47/33),R=Math.PI/180;
+  function u(p){return cc&&cc.toUnits?new THREE.Vector3().fromArray(cc.toUnits(p)):new THREE.Vector3(-p[2]/M+7.55,p[1]/M+1.12-1.18/M,p[0]/M);}
+  function g(id,pivot,len,twin,dir,deg){return {id:id,pivot:u(pivot),len:len/M,twin:twin/M,cone:{dir:new THREE.Vector3().fromArray(dir).normalize(),cos:Math.cos(deg*R)}};}
+  return GUNS=[
+    g('tail',[0,0.80,14.75],1.1,0.11,[-1,0,0],75),
+    g('ttop',[0,1.98,2.29],1.2,0.11,[0,1,0],84),
+    g('nose',[0,0.62,-4.55],0.9,0.10,[1,0,0],65),
+    g('waistL',[-0.86,1.0,8.25],0.9,0,[0,0,-1],62),
+    g('waistR',[0.86,1.0,8.05],0.9,0,[0,0,1],62)
+  ];
+}
+function initNearTracers(scene){
+  var tex=tracerTex(false),texG=tracerTex(true),pool=[];
+  var geo=new THREE.PlaneGeometry(1,1);
+  for(var i=0;i<90;i++){
+    var grp=new THREE.Group(),mat=new THREE.MeshBasicMaterial({map:tex,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,side:THREE.DoubleSide});
+    var a=new THREE.Mesh(geo,mat),b=new THREE.Mesh(geo,mat);b.rotation.x=Math.PI/2;grp.add(a);grp.add(b);
+    grp.visible=false;grp.frustumCulled=false;a.frustumCulled=b.frustumCulled=false;scene.add(grp);
+    pool.push({g:grp,mat:mat,vel:new THREE.Vector3(),life:0});
+  }
+  nearTracers={pool:pool,next:0,tex:tex,texG:texG};
+}
+function fireNearTracer(from,to,german){
+  if(!nearTracers)return;
+  var t=nearTracers.pool[nearTracers.next];nearTracers.next=(nearTracers.next+1)%nearTracers.pool.length;
+  var d=to.clone().sub(from);var dist=d.length();if(dist<1e-6)return;d.divideScalar(dist);
+  d.x+=(Math.random()-.5)*.03;d.y+=(Math.random()-.5)*.03;d.z+=(Math.random()-.5)*.03;d.normalize();
+  t.vel.copy(d).multiplyScalar(4.6);   /* ~880 m/s at about 190 m per scene unit */
+  t.g.position.copy(from);t.g.quaternion.setFromUnitVectors(new THREE.Vector3(1,0,0),d);
+  t.g.scale.set(.16,.004,.004);t.mat.map=german?nearTracers.texG:nearTracers.tex;t.mat.opacity=1;
+  t.g.visible=true;t.life=Math.min(1.8,dist/4.6+.4);
+}
+function updateNearTracers(dt){
+  if(!nearTracers)return;
+  nearTracers.pool.forEach(function(t){
+    if(t.life<=0)return;t.life-=dt;t.g.position.addScaledVector(t.vel,dt);
+    t.mat.opacity=Math.max(0,Math.min(1,t.life/.3));if(t.life<=0)t.g.visible=false;
+  });
+  (flashPool||[]).forEach(function(f){if(f.life>0){f.life-=dt;if(f.life<=0)f.sp.visible=false;}});
+}
+function muzzleFlash(plane,local,dir,own){
+  if(!flashPool){flashPool=[];for(var i=0;i<16;i++){var sp=new THREE.Sprite(new THREE.SpriteMaterial({map:V2.softTex(),color:0xffcf73,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}));sp.visible=false;flashPool.push({sp:sp,life:0});}}
+  var f=flashPool.filter(function(q){return q.life<=0;})[0]||flashPool[0];
+  if(f.sp.parent!==plane)plane.add(f.sp);
+  f.sp.position.copy(local).addScaledVector(dir,.25);
+  var size=(own?.9:1.4)*(0.75+Math.random()*.5);f.sp.scale.set(size,size,1);
+  f.sp.visible=true;f.life=.045+Math.random()*.04;
+}
+V2.returnFire=function(bomber,fighter){
+  if(!bomber||!fighter)return;
+  var G=gunStations(),c=KM._camState;bomber.updateMatrixWorld(true);
+  var inv=new THREE.Matrix4().copy(bomber.matrixWorld).invert();
+  var rel=fighter.position.clone().applyMatrix4(inv);
+  var focus=c&&c.mode==='crew'&&c._intFor===bomber;
+  G.forEach(function(g){
+    var d=rel.clone().sub(g.pivot),dist=d.length();if(dist<1e-6)return;d.divideScalar(dist);
+    if(d.dot(g.cone.dir)<g.cone.cos)return;
+    var side=new THREE.Vector3().crossVectors(d,new THREE.Vector3(0,1,0));if(side.lengthSq()<1e-6)side.set(0,0,1);side.normalize();
+    (g.twin?[-1,1]:[0]).forEach(function(k){
+      var m=g.pivot.clone().addScaledVector(d,g.len).addScaledVector(side,k*g.twin),w=bomber.localToWorld(m.clone());
+      if(Math.random()<.35)fireTracer(w,fighter.position,9,false);
+      if(focus){fireNearTracer(w,fighter.position,false);muzzleFlash(bomber,m,d,c.crewPos===g.id);}
+    });
+  });
+};
+
 /* ---------- the bomb drop — visible, falling, impacting ---------- */
 var bombs=[];
 var bombVisual;
@@ -6602,11 +6697,316 @@ function clearDevastation(){
   V2._devastation.length=0;
 }
 
+/* ═══════════ documented battle damage (aircraft-damage.js) ═══════════
+   Outside: burning, dead or feathered engines on the recorded engine,
+   holes and torn skin in the recorded part of the ship, fires in the
+   recorded compartment, and the recorded turret fit (no ball turret on
+   the PFF lead and on Sollien's ship; an H2X radome on the PFF lead).
+   Inside: daylight through holes, cracked glazing and cabin smoke for
+   damage in the compartment the open station looks at. What and where
+   come from the crew accounts; WHEN is inferred from the roster cue. */
+var DMG_ZONE_X={nose:[10.8,13.4],flightdeck:[5.6,9.6],bombbay:[-0.4,4.8],waist:[-9.2,-2.4],tail:[-17.2,-10.2]};
+function dmgFract(v){return v-Math.floor(v);}
+function dmgRand(seed){var s=seed>>>0;return function(){s=(Math.imul(s^(s>>>15),2246822507)+0x9e3779b9)>>>0;s^=s>>>13;return (s>>>0)/4294967296;};}
+function dmgShared(){
+  if(V2._dmgShared)return V2._dmgShared;
+  var soft=V2.softTex();
+  var holeGeos=[0,1,2].map(function(v){
+    var g=new THREE.CircleGeometry(1,13),p=g.attributes.position;
+    for(var i=1;i<p.count;i++){var r=.62+dmgFract(Math.sin((i+1)*12.9898+v*78.233)*43758.5453)*.7;p.setXY(i,p.getX(i)*r,p.getY(i)*r);}
+    return g;
+  });
+  var crack=document.createElement('canvas');crack.width=crack.height=256;
+  var cx=crack.getContext('2d'),rnd=dmgRand(27091944);
+  cx.translate(128,128);cx.strokeStyle='rgba(235,240,240,0.85)';cx.lineCap='round';
+  for(var r=0;r<17;r++){
+    var ang=r/17*Math.PI*2+rnd()*.3,len=60+rnd()*65,x=0,y=0;cx.lineWidth=1+rnd()*1.4;cx.beginPath();cx.moveTo(0,0);
+    for(var s=1;s<=6;s++){x=Math.cos(ang+(rnd()-.5)*.35)*len*s/6;y=Math.sin(ang+(rnd()-.5)*.35)*len*s/6;cx.lineTo(x,y);}
+    cx.stroke();
+  }
+  cx.lineWidth=.9;cx.strokeStyle='rgba(225,232,232,0.55)';
+  for(var c=1;c<=3;c++){cx.beginPath();for(var a=0;a<=24;a++){var rr=c*24+rnd()*9,t=a/24*Math.PI*2;if(a)cx.lineTo(Math.cos(t)*rr,Math.sin(t)*rr);else cx.moveTo(Math.cos(t)*rr,Math.sin(t)*rr);}cx.stroke();}
+  cx.fillStyle='rgba(10,10,10,0.95)';cx.beginPath();cx.arc(0,0,7,0,Math.PI*2);cx.fill();
+  cx.strokeStyle='rgba(255,255,255,0.9)';cx.lineWidth=2;cx.beginPath();cx.arc(0,0,10,0,Math.PI*2);cx.stroke();
+  var crackTex=new THREE.CanvasTexture(crack);
+  return V2._dmgShared={holeGeos:holeGeos,
+    hole:new THREE.MeshBasicMaterial({color:0x0d0c0a,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-4}),
+    rim:new THREE.MeshStandardMaterial({color:0x8a8e90,metalness:.8,roughness:.4,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-3,polygonOffsetUnits:-3}),
+    scorch:new THREE.MeshBasicMaterial({color:0x14110d,transparent:true,opacity:.55,depthWrite:false,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2}),
+    daylight:new THREE.MeshBasicMaterial({color:0xfff4dc,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-4}),
+    beam:new THREE.MeshBasicMaterial({color:0xfff0d0,transparent:true,opacity:.07,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide}),
+    beamGeo:new THREE.CylinderGeometry(1,2.6,1,10,1,true).translate(0,.5,0).rotateX(Math.PI/2),
+    flame:function(){return new THREE.SpriteMaterial({map:soft,color:0xff7b22,transparent:true,opacity:.9,depthWrite:false,blending:THREE.AdditiveBlending});},
+    core:function(){return new THREE.SpriteMaterial({map:soft,color:0xffe7a0,transparent:true,opacity:.95,depthWrite:false,blending:THREE.AdditiveBlending});},
+    smoke:function(){return new THREE.SpriteMaterial({map:soft,color:0x55524c,transparent:true,opacity:.22,depthWrite:false});},
+    crack:new THREE.MeshBasicMaterial({map:crackTex,transparent:true,depthWrite:false,side:THREE.DoubleSide}),
+    radome:new THREE.MeshStandardMaterial({color:0x6f705f,roughness:.82,metalness:.08})};
+}
+/* Sample the formation model's own skin once, so holes sit ON the
+   airframe rather than on a guessed fuselage. Plane-local frame. */
+function dmgSurface(){
+  if(V2._dmgSurf)return V2._dmgSurf;
+  var holder=V2.templates&&V2.templates.b24lo;if(!holder)return null;
+  holder.updateMatrixWorld(true);
+  var meshes=[];
+  holder.traverse(function(o){
+    if(!o.isMesh||!o.material||o.material.transparent)return;
+    for(var q=o;q;q=q.parent)if(q.name==='B-24J rotating propeller'||q.name==='km-ball-turret-exterior')return;
+    meshes.push(o);
+  });
+  var props=[];holder.children.forEach(function(ch){if(ch.name==='B-24J rotating propeller')props.push(ch.position.clone());});
+  props.sort(function(a,b){return a.z-b.z;});
+  var rc=new THREE.Raycaster(),out={props:props},rnd=dmgRand(1944);
+  function cast(zone,o,d,maxZ){
+    rc.set(o,d);rc.far=200;
+    var h=rc.intersectObjects(meshes,false).filter(function(q){return !(maxZ>0)||Math.abs(q.point.z)<maxZ;})[0];if(!h||!h.face)return null;
+    var n=h.face.normal.clone().transformDirection(h.object.matrixWorld);if(n.dot(d)>0)n.negate();
+    var s={p:h.point.clone(),n:n};(out[zone]=out[zone]||[]).push(s);return s;
+  }
+  Object.keys(DMG_ZONE_X).forEach(function(zone){
+    var xr=DMG_ZONE_X[zone];
+    for(var i=0;i<40;i++){
+      var x=xr[0]+rnd()*(xr[1]-xr[0]),y=-3+rnd()*6,side=i%2?1:-1;
+      /* fuselage only: the skin within 2.6 units of the centreline */
+      if(i%5===4)cast(zone,new THREE.Vector3(x,40,(rnd()-.5)*1.2),new THREE.Vector3(0,-1,0),2.6);
+      else cast(zone,new THREE.Vector3(x,y,side*60),new THREE.Vector3(0,0,-side),2.6);
+    }
+  });
+  for(var f=0;f<30;f++){var sd=f%2?1:-1;cast('fin',new THREE.Vector3(-19.6+rnd()*3.4,.4+rnd()*4.2,sd*60),new THREE.Vector3(0,0,-sd));}
+  if(props.length===4){
+    ['left_wing','right_wing'].forEach(function(zone,wi){
+      var a=props[wi?2:0],b=props[wi?3:1];
+      for(var k=0;k<36;k++){
+        var t=rnd()*1.25-.1,z=a.z+(b.z-a.z)*t,x=(a.x+(b.x-a.x)*t)-2.4-rnd()*5.6;
+        cast(zone,new THREE.Vector3(x,40,z),new THREE.Vector3(0,-1,0));
+      }
+    });
+  }
+  var nm=holder.userData.nativeMatrix,ball=new THREE.Vector3(0,-.6,-5.3);
+  if(nm)ball.applyMatrix4(new THREE.Matrix4().fromArray(nm));else ball.set(-1.0,0,0);
+  out.belly=cast('belly',new THREE.Vector3(ball.x,-40,0),new THREE.Vector3(0,1,0));
+  return V2._dmgSurf=out;
+}
+function dmgHole(group,sh,s,r,rnd){
+  var g=sh.holeGeos[(rnd()*3)|0];
+  var m=new THREE.Mesh(g,sh.hole);m.scale.setScalar(r);
+  m.position.copy(s.p).addScaledVector(s.n,.012);m.lookAt(m.position.clone().add(s.n));m.rotation.z+=rnd()*6.28;
+  var rim=new THREE.Mesh(sh.holeGeos[(sh.holeGeos.indexOf(g)+1)%3],sh.rim);rim.scale.setScalar(r*1.3);rim.position.copy(s.p).addScaledVector(s.n,.008);rim.quaternion.copy(m.quaternion);rim.rotateZ(rnd()*6.28);
+  group.add(rim);group.add(m);
+}
+function dmgFlame(group,sh,pos,size,kind){
+  var f=new THREE.Sprite(sh.flame()),c=new THREE.Sprite(sh.core());
+  f.position.copy(pos);c.position.copy(pos);f.scale.setScalar(size);c.scale.setScalar(size*.5);
+  f.userData.flame={base:size,phase:Math.random()*6.28,kind:kind||'fire'};c.userData.flame={base:size*.5,phase:Math.random()*6.28,kind:'core'};
+  group.add(f);group.add(c);
+}
+/* nacelle aft end, behind the prop disc, in plane-local units */
+function dmgNacelle(surf,i){var p=surf.props[i];return new THREE.Vector3(p.x-4.6,p.y+.35,p.z);}
+function dmgFit(p,pd,D){
+  var holder=null;p.children.forEach(function(ch){if(!holder&&ch.children&&ch.children.length)holder=ch;});
+  if(!holder||p.userData.dmgFitFor===holder)return;
+  p.userData.dmgFitFor=holder;
+  var fit=D.fit(pd.pilot);
+  holder.traverse(function(o){if(o.name==='km-ball-turret-exterior')o.visible=fit.ballTurret;});
+  if(fit.h2xDome&&V2.templates&&V2.templates.b24lo){
+    var surf=dmgSurface();if(!surf||!surf.belly)return;
+    var sh=dmgShared(),dome=new THREE.Mesh(new THREE.SphereGeometry(1,24,12,0,Math.PI*2,Math.PI/2,Math.PI/2),sh.radome);
+    /* AN/APS-15 radome in the former ball-turret well, lowered for the run */
+    dome.scale.set(1.15,.62,.95);dome.position.copy(surf.belly.p).add(new THREE.Vector3(0,.12,0));dome.name='km-h2x-radome';
+    holder.add(dome);
+  }
+}
+V2.updateDamage=function(p,cue){
+  var D=window.KasselAircraftDamage,pd=p.userData&&p.userData.planeData;
+  if(!D||!pd||!V2.templates||!V2.templates.b24lo)return;
+  dmgFit(p,pd,D);
+  var u=p.userData;
+  if(!u.dmgEvents)u.dmgEvents=D.schedule(pd.pilot,pd.fate,pd.fateTime);
+  if(!u.dmgEvents.length)return;
+  var surf=dmgSurface();if(!surf||surf.props.length!==4)return;
+  var st=D.stateAt(u.dmgEvents,cue);u.dmgState=st;var sig=st.count+':'+st.engines.map(function(e){return (e.fire?1:0)+(e.dead?2:0)+(e.feathered?4:0);}).join('')+':'+Object.keys(st.fires).join(',');
+  if(!u.dmgGroup||u.dmgGroup.parent!==p||u.dmgSig!==sig){
+    if(u.dmgGroup&&u.dmgGroup.parent)u.dmgGroup.parent.remove(u.dmgGroup);
+    if(u.dmgGroup)u.dmgGroup.traverse(function(o){if(o.isSprite)o.material.dispose();});
+    var g=new THREE.Group();g.name='km-damage';u.dmgGroup=g;u.dmgSig=sig;p.add(g);
+    var sh=dmgShared();
+    st.holes.forEach(function(h){
+      var pts=surf[h.zone]||surf.waist||[];if(!pts.length)return;
+      var rnd=dmgRand(h.seed),n=h.many?34:h.kind==='wing_hole'?4:(h.big?5:9);
+      if(h.engine&&surf.props[h.engine-1]){
+        /* recorded engine: keep the holes on that part of the wing */
+        var ez=surf.props[h.engine-1].z;
+        pts=pts.slice().sort(function(a,b){return Math.abs(Math.abs(a.p.z-ez)-1.7)-Math.abs(Math.abs(b.p.z-ez)-1.7);}).slice(0,Math.max(4,pts.length>>2)); /* beside the nacelle, on the wing */
+      }
+      if(h.big){var b=pts[(rnd()*pts.length)|0];dmgHole(g,sh,b,.5+rnd()*.25,rnd);}
+      for(var i=0;i<n;i++){var s=pts[(rnd()*pts.length)|0];dmgHole(g,sh,s,(rnd()<.3?.22:.07)+rnd()*.1,rnd);}
+    });
+    st.engines.forEach(function(e,i){
+      var nac=dmgNacelle(surf,i);
+      if(e.fire){dmgFlame(g,sh,nac,2.1,'fire');dmgFlame(g,sh,nac.clone().add(new THREE.Vector3(-1.4,.1,0)),1.6,'fire');dmgFlame(g,sh,nac.clone().add(new THREE.Vector3(-2.7,.15,0)),1.1,'fire');}
+      if(e.fire||e.dead){var sc=new THREE.Mesh(sh.holeGeos[i%3],sh.scorch);sc.scale.set(1.3,.7,1);sc.position.copy(nac).add(new THREE.Vector3(.4,.25,0));sc.rotation.x=-Math.PI/2;g.add(sc);}
+    });
+    Object.keys(st.fires).forEach(function(zone){
+      if(zone==='left_wing'||zone==='right_wing'){
+        var a=surf.props[zone==='left_wing'?0:2],b=surf.props[zone==='left_wing'?1:3];
+        for(var k=0;k<4;k++){var t=k/3;dmgFlame(g,sh,new THREE.Vector3((a.x+(b.x-a.x)*t)-5,a.y+.4,a.z+(b.z-a.z)*t),1.9-k*.15,'fire');}
+        return;
+      }
+      /* compartment fire breaking out through the skin of that compartment */
+      var skin=(surf[zone]||surf.bombbay||[]).filter(function(q){return q.n.y<.35;}),rf=dmgRand(KasselAircraftDamage.hash(zone+pd.pilot));
+      for(var j=0;j<3&&skin.length;j++){var sp=skin[(rf()*skin.length)|0];dmgFlame(g,sh,sp.p.clone().addScaledVector(sp.n,.35),1.4-j*.2,'fire');}
+    });
+  }
+  /* props: feathered blades stop edge-on; a dead unfeathered prop windmills */
+  if(u.dmgPropFor!==u.dmgFitFor){
+    u.dmgPropFor=u.dmgFitFor;u.dmgProps=[];
+    p.traverse(function(o){if(o.name==='B-24J rotating propeller')u.dmgProps.push(o);});
+    u.dmgProps.sort(function(a,b){return a.position.z-b.position.z;});
+  }
+  (u.dmgProps||[]).forEach(function(prop,i){
+    var e=st.engines[i];if(!e)return;
+    prop.visible=!e.missing;
+    prop.traverse(function(o){
+      if(!o.userData||!o.userData.isProp)return;
+      o.userData.damageMode=e.feathered?'feathered':(e.dead||e.windmill)?'windmill':null;
+      /* makeProp: hub first, blur disc last, blades between */
+      var kids=o.children,last=kids.length-1;
+      kids.forEach(function(bl,ki){
+        if(ki===last)bl.visible=!o.userData.damageMode;
+        else if(ki>0)bl.scale.x=o.userData.damageMode==='feathered'?.3:1;
+      });
+    });
+  });
+  /* flicker + world smoke/fire trails while playing */
+  var t=KM._simSeconds||0,frame=V2._frame||0,emit=KM._playing;
+  u.dmgGroup.children.forEach(function(o){
+    var f=o.userData.flame;if(!f)return;
+    var k=1+.22*Math.sin(t*17+f.phase)+.12*Math.sin(t*31+f.phase*2);
+    o.scale.set(f.base*k,f.base*k*(f.kind==='core'?1:1.35),1);
+  });
+  if(emit&&p.visible){
+    var w=new THREE.Vector3();
+    st.engines.forEach(function(e,i){
+      var age=e.age||0;
+      if(e.fire&&(frame+i)%4===0&&KM._fire){w.copy(dmgNacelle(surf,i));p.localToWorld(w);emitPool(KM._fire,w.x,w.y,w.z);}
+      if((e.fire||(e.dead&&age<40))&&(frame+i*3)%9===0&&KM._smoke){w.copy(dmgNacelle(surf,i)).x-=3;p.localToWorld(w);emitPool(KM._smoke,w.x,w.y,w.z);}
+    });
+    if(Object.keys(st.fires).length&&frame%6===0&&KM._smoke){w.set(-2,0,0);p.localToWorld(w);emitPool(KM._smoke,w.x,w.y,w.z);}
+  }
+  V2.updateInteriorDamage(p,st);
+};
+/* the crew view of the same damage */
+function dmgSectionAt(yb){
+  if(yb>1.5)return {a:.92,zc:.24,b:1.18,n:3,zone:'nose'};
+  if(yb>-0.95)return {a:1.0,zc:.85,b:.85,n:3,zone:'flightdeck'};
+  if(yb>-3)return {a:1.0,zc:.84,b:.84,n:3,zone:'bombbay'};
+  if(yb>-11.2)return {a:.9,zc:.42,b:1.3,n:3.2,zone:'waist'};
+  return {a:.52,zc:.62,b:.62,n:3,zone:'tail'};
+}
+var DMG_ZONE_YB={nose:[1.7,3.4],flightdeck:[-.8,1.2],bombbay:[-2.8,-1.1],waist:[-10.6,-6.4],tail:[-14.1,-12.7]};
+V2.updateInteriorDamage=function(p,st){
+  var c=KM._camState,cc=window.KasselCrewCompartments,D=window.KasselAircraftDamage,u=p.userData;
+  var active=c&&c.mode==='crew'&&c._intFor===p&&cc&&cc.toUnits;
+  var station=active?c.crewPos:null;
+  if(!active||!st){if(u.dmgInterior&&u.dmgInterior.parent)u.dmgInterior.parent.remove(u.dmgInterior);u.dmgInterior=null;return;}
+  var zones=D.STATION_ZONES[station]||[],sig=station+'|'+st.count+'|'+Object.keys(st.fires).join(',');
+  if(!u.dmgInterior||u.dmgInterior.parent!==p||u.dmgInteriorSig!==sig){
+    if(u.dmgInterior&&u.dmgInterior.parent)u.dmgInterior.parent.remove(u.dmgInterior);
+    if(u.dmgInterior)u.dmgInterior.traverse(function(o){if(o.isSprite)o.material.dispose();});
+    var g=new THREE.Group();g.name='km-damage-interior';u.dmgInterior=g;u.dmgInteriorSig=sig;p.add(g);
+    var sh=dmgShared(),M=cc.metresPerModelUnit||(20.47/33);
+    function local(xm,zb,yb){var v=cc.toUnits([xm,zb,-yb]);return new THREE.Vector3(v[0],v[1],v[2]);}
+    st.holes.forEach(function(h){
+      if(zones.indexOf(h.zone)<0)return;
+      var yr=DMG_ZONE_YB[h.zone],rnd=dmgRand(h.seed^0x5bd1e995),n=h.big?4:7;
+      for(var i=0;i<n+(h.big?1:0);i++){
+        var yb=yr[0]+rnd()*(yr[1]-yr[0]),sec=dmgSectionAt(yb),side=rnd()<.5?-1:1,zb=sec.zc-sec.b*.55+rnd()*sec.b*1.35;
+        var tz=Math.min(1,Math.abs((zb-sec.zc)/sec.b)),xm=side*sec.a*Math.pow(1-Math.pow(tz,sec.n),1/sec.n)*.985;
+        var pos=local(xm,zb,yb),inward=local(xm-side*.3,zb,yb).sub(pos).normalize();
+        var r=(i===n&&h.big)?.42/M:(.035+rnd()*.06)/M;
+        var m=new THREE.Mesh(sh.holeGeos[i%3],sh.daylight);m.scale.setScalar(r);m.position.copy(pos);m.lookAt(pos.clone().add(inward));g.add(m);
+        var beam=new THREE.Mesh(sh.beamGeo,sh.beam);beam.scale.set(r,r,(1.1+rnd()*.6)/M);beam.position.copy(pos);beam.lookAt(pos.clone().add(inward));g.add(beam);
+      }
+    });
+    var seat=V2.DETAIL_SEATS&&V2.DETAIL_SEATS[station];
+    zones.forEach(function(z){
+      var glass=st.glass[z];if(!glass||!seat)return;
+      var eye=new THREE.Vector3(seat.offset.x,seat.offset.y,seat.offset.z),look=new THREE.Vector3(seat.look.x,seat.look.y,seat.look.z).normalize();
+      var right=new THREE.Vector3().crossVectors(look,new THREE.Vector3(0,1,0)).normalize(),rnd=dmgRand(glass.seed);
+      for(var k=0;k<2;k++){
+        var q=new THREE.Mesh(new THREE.PlaneGeometry(1,1),sh.crack);q.scale.setScalar((.34+rnd()*.14)/M);
+        q.position.copy(eye).addScaledVector(look,.55/M).addScaledVector(right,(k?-.22:.18)/M).add(new THREE.Vector3(0,(.06-k*.1)/M,0));
+        q.lookAt(eye);q.rotateZ(rnd()*6.28);g.add(q);
+      }
+    });
+    var fire=zones.filter(function(z){return st.fires[z];})[0],smoky=fire||zones.some(function(z){return st.damaged[z];})||
+      (zones.indexOf('flightdeck')>=0&&st.engines.some(function(e){return e.fire;}));
+    if(fire){var yr2=DMG_ZONE_YB[fire];for(var f=0;f<3;f++)dmgFlame(g,sh,local((f-1)*.25,.15,yr2[0]+.4+f*.2),.6/M,'fire');}
+    if(smoky){
+      var rs=dmgRand(st.count*7919+(fire?1:0)),yz=DMG_ZONE_YB[zones[0]];
+      for(var s2=0;s2<(fire?18:9);s2++){
+        var sp=new THREE.Sprite(sh.smoke());sp.material.opacity=fire?.3:.16;
+        var yb2=yz[0]+rs()*(yz[1]-yz[0]);sp.position.copy(local((rs()-.5)*1.4,.3+rs()*1.2,yb2));
+        sp.scale.setScalar((.7+rs()*.9)/M);sp.userData.drift={x:sp.position.x,y:sp.position.y,ph:rs()*6.28};g.add(sp);
+      }
+    }
+  }
+  var tt=KM._simSeconds||0;
+  u.dmgInterior.children.forEach(function(o){
+    var f=o.userData.flame,d=o.userData.drift;
+    if(f){var k=1+.25*Math.sin(tt*15+f.phase);o.scale.set(f.base*k,f.base*k*1.4,1);}
+    if(d){o.position.x=d.x-((tt*1.3+d.ph*3)%6)+3;o.position.y=d.y+.2*Math.sin(tt*.7+d.ph);}
+  });
+};
+
+/* live flight-deck instruments and controls (cockpit-live.js) for the
+   ship whose crew view is open; readings follow its flight and damage */
+V2.updateCockpit=function(p){
+  var c=KM._camState,L=window.KasselCockpitLive;
+  if(!L||!c||c.mode!=='crew'||c._intFor!==p)return;
+  var cabin=Array.isArray(V2._intActive)?V2._intActive[0]:V2._intActive;if(!cabin)return;
+  var u=p.userData,mt=KM._missionT||0,ph=KM._missionPhases||{},keys=Object.keys(ph),cur=null,nxt=null;
+  keys.forEach(function(k,i){if(mt>=ph[k].start){cur=ph[k];nxt=ph[keys[i+1]]||ph[k];}});
+  if(!cur)return;
+  var span=Math.max(1e-6,(nxt.start||1)-cur.start),f=nxt===cur?0:Math.max(0,Math.min(1,(mt-cur.start)/span));
+  var alt=cur.alt+(nxt.alt-cur.alt)*f,ias=cur.spd+(nxt.spd-cur.spd)*f;
+  p.updateMatrixWorld(true);
+  var e=p.matrixWorld.elements,fw=new THREE.Vector3(e[0],e[1],e[2]).normalize(),rt=new THREE.Vector3(e[8],e[9],e[10]).normalize();
+  var heading=(Math.atan2(fw.x,-fw.z)/Math.PI*180+360)%360,bank=Math.asin(Math.max(-1,Math.min(1,-rt.y))),pitch=Math.asin(Math.max(-1,Math.min(1,fw.y)));
+  var falling=u.alive===false,wy=new THREE.Vector3().setFromMatrixPosition(p.matrixWorld).y,ay=KM._anchor&&KM._anchor.pos?KM._anchor.pos.y:wy;
+  if(falling){alt=Math.max(0,alt+(wy-ay)*200);ias=Math.min(330,ias+60);}
+  var t=KM._simSeconds||0,now=KM._playbackSeconds||0,dt=Math.max(1e-3,now-(u.ckT||now-0.016));
+  var bankRate=u.ckBank===undefined?0:(bank-u.ckBank)/dt,pitchRate=u.ckPitch===undefined?0:(pitch-u.ckPitch)/dt;
+  u.ckT=now;u.ckBank=bank;u.ckPitch=pitch;
+  var vsi=falling?-Math.min(9000,3000+Math.abs(pitch)*9000):(nxt.alt>cur.alt+50?450:nxt.alt<cur.alt-50?-500:0);
+  var clk=String(KMMissionTimeline.clockAt(mt)).split(':');
+  var st=u.dmgState,battle=KM._battleT>0&&mt<RETURN_START;
+  var engines=[0,1,2,3].map(function(i){
+    var d=st?st.engines[i]:{};
+    if(d.missing||d.feathered)return {rpm:0,map:12.3,oilT:38,oilP:0,cht:90,dead:true,throttle:0};
+    if(d.dead)return {rpm:900,map:12.3,oilT:52,oilP:20,cht:130,dead:true,throttle:0};
+    return {rpm:battle?2550:2300,map:battle?40:33,oilT:d.fire?96:72,oilP:d.fire?45:82,cht:d.fire?285:205,dead:false,throttle:battle?.95:.8};
+  });
+  var deadL=(engines[0].dead?1:0)+(engines[1].dead?1:0),deadR=(engines[2].dead?1:0)+(engines[3].dead?1:0);
+  var hydOut=false;(u.dmgEvents||[]).forEach(function(ev){if(ev.kind==='hydraulics_out'&&(KM._battleT||0)>=ev.at)hydOut=true;});
+  var shake=battle?.06:.015;
+  var s={altFt:alt,ias:ias,heading:heading,bank:bank,pitch:pitch,vsi:vsi,
+    turnRate:ias>10?(1091*Math.tan(bank)/(ias*.869)):0,slip:(deadL-deadR)*.12,
+    clockHr:+clk[0]||0,clockMin:+clk[1]||0,engines:engines,
+    hyd:hydOut?0:1000,oat:15-1.98*alt/1000,carb:18,suction:4,amps:falling?20:62,fuel:Math.max(.1,1-mt*.85),
+    aileron:Math.max(-1,Math.min(1,bankRate*.9+bank*.35+shake*Math.sin(t*2.3)+(deadL-deadR)*-.08)),
+    elevator:Math.max(-1,Math.min(1,pitchRate*1.2+shake*Math.sin(t*1.7+1)+(falling?.6:0))),
+    rudder:Math.max(-1,Math.min(1,(deadL-deadR)*.4+shake*.5*Math.sin(t*1.3+2)))};
+  L.apply(THREE,cabin,s);
+};
+
 /* ---------- plane placement per frame ---------- */
 function placePlane(p,battleT,elapsed,scene,dt,bombRelease,bombIndex){
   /* Losses must continue after the attack clock caps at 420 seconds. */
   battleT=KMMissionTimeline.battleCueAtPlayback(KM._playbackSeconds||0);
   var v=p.userData.v2,a=KM._anchor;
+  if(V2.updateDamage)V2.updateDamage(p,battleT);
+  if(V2.updateCockpit)V2.updateCockpit(p);
   var off=p.userData.offset||{x:0,y:0,z:0};
   /* The plane's measured mesh bounds determine its map scale, not an
      arbitrary magnification that makes wings cross formation slots. */
@@ -6705,13 +7105,8 @@ function placePlane(p,battleT,elapsed,scene,dt,bombRelease,bombIndex){
     var _hd=(p.userData._lh!==undefined)?p.userData._lh:a.heading;
     if(p.userData._formationVelocity)KasselFlightAttitude.apply(THREE,p,p.userData._formationVelocity,p.userData._formationBank);
     else p.rotation.set(a.roll,_hd+Math.PI/2,0);
-    /* battle damage: a couple of the survivors limp home trailing
-       thin smoke from a feathered engine */
-    if(KM._playing&&ret>0&&p.userData.planeData&&(p.userData.planeData.rel%9===2)
-       &&(V2._frame%9)===0&&KM._smoke){
-      emitPool(KM._smoke,
-        p.position.x-a.dir.x*8,p.position.y+0.5,p.position.z-a.dir.z*8);
-    }
+    /* battle damage (smoke from the recorded engines) is drawn by
+       V2.updateDamage from the crew accounts, not picked by slot */
     return;
   }
   p.userData.alive=false;
@@ -6973,8 +7368,11 @@ function updateFighters(battleT,dt,elapsed,scene){
         var tgt=KasselFighterTargeting.select(f.position,gunNose,bombers,12,90,Math.PI/12);
         if(tgt){
           fireTracer(f.position,tgt.position,5,true);     /* German green-white */
-          /* the tail and waist gunners answer toward the attacker */
-          if((V2._frame&7)===0)fireTracer(tgt.position,f.position,9,false);
+          /* rounds coming at the ship whose crew view is open */
+          var cv=KM._camState;
+          if(cv&&cv.mode==='crew'&&cv._intFor===tgt)fireNearTracer(f.position,tgt.position.clone().add(new THREE.Vector3((Math.random()-.5)*.25,(Math.random()-.5)*.12,(Math.random()-.5)*.25)),true);
+          /* the gunners whose guns bear answer from their own stations */
+          if((V2._frame&3)===0&&V2.returnFire)V2.returnFire(tgt,f);
         }
       }
     });
@@ -7508,6 +7906,7 @@ KM._buildAnimation=function(){
   if(KM._animRunning)return;KM._animRunning=true;
   if(KM._setupInput)KM._setupInput();
   initTracers(scene);
+  initNearTracers(scene);
   var release=KMMissionTimeline.secondsAt(BOMBS_AWAY);
   var all=(KM._fp||[]).concat(KM._b24?[KM._b24]:[]);
   all.forEach(function(p){initPlaneBattle(p,scene);});
@@ -7593,6 +7992,7 @@ KM._buildAnimation=function(){
       updateFighters(fighterClock,sdt,elapsed,scene);
       updateEscorts(fighterClock,KM._missionT,sdt,elapsed);
       updateTracers(sdt);
+      updateNearTracers(sdt);
       updateChutes(sdt,elapsed);
       updateFlashes(sdt);
       updateDevastation(sdt);
@@ -8500,6 +8900,9 @@ V2.updateStationOverlay=function(){};
     };
     try{V2._syncSelectors();}catch(eSS){}
     KM.setCrewPos=function(p){
+      /* no ball turret on the selected ship: that station did not exist */
+      var selPd=KM._camState&&KM._camState.selectedPlane&&KM._camState.selectedPlane.userData&&KM._camState.selectedPlane.userData.planeData;
+      if(p==='ball'&&selPd&&window.KasselAircraftDamage&&!window.KasselAircraftDamage.fit(selPd.pilot).ballTurret)return;
       oSetCrew(p);
       var c=KM._camState;if(c){c.crewPos=p;c.crewYaw=0;c.crewPitch=0;}
       if(V2.attachInterior()===false&&c&&c.mode==='crew'){KM.setView('orbit');return;}
@@ -8518,6 +8921,15 @@ V2.updateStationOverlay=function(){};
         ft.textContent=m2[0];ft.style.color=m2[1];
         var sr=document.getElementById('cp-info-serial');
         if(sr)sr.textContent=(pd.acType||'B-24')+(pd.serial?' #'+pd.serial:'')+' · '+(pd.aircraftSq||pd.sq)+(pd.aircraftSq&&pd.aircraftSq!==pd.sq?' · '+pd.sq+' formation box':'');
+      }
+      /* No ball turret on this ship: the station did not exist on it. */
+      var ballBtn=document.querySelector('.cp-crew-btn[data-pos="ball"]');
+      if(ballBtn&&pd&&window.KasselAircraftDamage){
+        var fitNow=window.KasselAircraftDamage.fit(pd.pilot);
+        ballBtn.disabled=!fitNow.ballTurret;
+        ballBtn.style.opacity=fitNow.ballTurret?'':'0.35';
+        ballBtn.title=fitNow.ballTurret?'':(fitNow.h2xDome?'No ball turret: H2X radar dome fitted in its place':'Ball turret removed from this aircraft');
+        if(!fitNow.ballTurret&&KM._camState&&KM._camState.crewPos==='ball'){KM.setCrewPos('waistL');return;}
       }
       if(KM._camState&&KM._camState.mode==='crew')V2.attachInterior();
     };

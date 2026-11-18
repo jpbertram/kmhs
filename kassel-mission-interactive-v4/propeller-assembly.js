@@ -28,6 +28,9 @@
    var u=o.userData;if(!u||(!u.glbProp&&!u.isProp))return;
    var axis=u.glbProp?(u.spinAxis||'z'):'y',rate=u.glbProp?importedRate:proceduralRate;
    if(u.propRestAngle===undefined)u.propRestAngle=o.rotation[axis];
+   /* battle damage: a feathered prop stands still; a dead one windmills */
+   if(u.damageMode==='feathered'){o.rotation[axis]=u.propRestAngle;return;}
+   if(u.damageMode==='windmill')rate*=.16;
    o.rotation[axis]=u.propRestAngle+(seconds*rate)%(Math.PI*2);
   });
  }

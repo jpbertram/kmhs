@@ -131,6 +131,14 @@
     "bytes": 3243,
     "sha256": "db82670aeaeb5faa034c0396eafb81d18da70248d3857c9a98576a778b4b385d"
   },
+  "kassel-mission-interactive-v4/aircraft-damage-data.js": {
+    "bytes": 39100,
+    "sha256": "efe0dba2aafdf8251bb73b82fc4766dd4e338e006b370a9aac2078645dd425f1"
+  },
+  "kassel-mission-interactive-v4/aircraft-damage.js": {
+    "bytes": 5819,
+    "sha256": "87b959b1e1ee6c4eda6e61e76f41f48370fe577fb7f597fe1b1d9368e3e1f394"
+  },
   "kassel-mission-interactive-v4/aircraft-map-scale.js": {
     "bytes": 2962,
     "sha256": "f80301a5e5aba1b11b1e0c78b2706756a91087ad3b92786d1671d469926fe7e5"
@@ -207,6 +215,14 @@
     "bytes": 1536,
     "sha256": "1d662a35626b7e9430e9d6e0c2ecc56b758ed4f8c68a4cf90b7395c57ef07d3a"
   },
+  "kassel-mission-interactive-v4/cockpit-gauges.js": {
+    "bytes": 6088,
+    "sha256": "d4386b081f34de75c9f96bbdab749361e7217673e6c9c2d3abb69de77e209e4e"
+  },
+  "kassel-mission-interactive-v4/cockpit-live.js": {
+    "bytes": 16710,
+    "sha256": "775493529e80323b66f0e2c7d76f1bf4b43954ab6a3953c5b7507d59eedeb137"
+  },
   "kassel-mission-interactive-v4/coordinated-turn.html": {
     "bytes": 2212,
     "sha256": "ea49e767673cd51c44516036fd7c1259a55f885330265fbc3174cad177d525f2"
@@ -216,8 +232,8 @@
     "sha256": "3fa916c9b9ab8330fa0634b393c9c3f02da1e11be8ce021a2d8cc21c0f05f6db"
   },
   "kassel-mission-interactive-v4/crew-compartments.js": {
-    "bytes": 5657,
-    "sha256": "cc5aedc950a8d1ee7d410eaafacd326bff28163afbc2c53f7f4a261d02ae3213"
+    "bytes": 5956,
+    "sha256": "046af0cb17f13404a161e7665bbc5ccd76f2c8dd65c25d2224f2d46326479401"
   },
   "kassel-mission-interactive-v4/crew-exterior.js": {
     "bytes": 1376,
@@ -276,8 +292,8 @@
     "sha256": "ec4426568e2a8d75f9a602a8d2ed40f1e9d7c2e534847686cc8bd810ee296c22"
   },
   "kassel-mission-interactive-v4/km3d-v3.js": {
-    "bytes": 406888,
-    "sha256": "ce77bc2673a1964585f9d5930d15dbae5b3b982843b94e1f3045a214d1c0686b"
+    "bytes": 433803,
+    "sha256": "7922dac728bd0cb6bbde94f95abc42df334762675c20aeab344264c3c879ac4e"
   },
   "kassel-mission-interactive-v4/loss-smoke.js": {
     "bytes": 1710,
@@ -292,8 +308,8 @@
     "sha256": "32d41a0fff23d5b9af34bcb7624ba3f376bf4484c836a0d18fd7d9a566d91a8c"
   },
   "kassel-mission-interactive-v4/mission-reconstruction.html": {
-    "bytes": 341610,
-    "sha256": "ab503a505dff1c721c3d818a1c2d3b571ecbf1bdd6f89de707ba1704036df6eb"
+    "bytes": 341853,
+    "sha256": "93a8d310523ae21c597a23bc7ba1c4f1b6b6baa2ca4186718fd4206eb2b9196f"
   },
   "kassel-mission-interactive-v4/mission-timeline.js": {
     "bytes": 4589,
@@ -320,8 +336,8 @@
     "sha256": "a793a0dd8dd641e121f3e88ea09bf3ebd3e88856df13519113c22aa76ed6483a"
   },
   "kassel-mission-interactive-v4/propeller-assembly.js": {
-    "bytes": 2225,
-    "sha256": "53f0e6878129ced18d2b655e93a53082c1e2df0cd90bb4c0357346aea8104ea0"
+    "bytes": 2420,
+    "sha256": "ff1eeb70921e6115cface5559f05b4da93de87075f561b21f57284267a26ec88"
   },
   "kassel-mission-interactive-v4/reconstruct-navigation.js": {
     "bytes": 1816,
@@ -334,6 +350,10 @@
   "kassel-mission-interactive-v4/reference/B24-TECHNICAL-SOURCE-ACCESS.md": {
     "bytes": 2636,
     "sha256": "bc87882deccd181912e9901fa680f43bc202a56cfe724f31a63b5e13ace78dc9"
+  },
+  "kassel-mission-interactive-v4/reference/BATTLE-DAMAGE.md": {
+    "bytes": 16684,
+    "sha256": "c63456784d14cadc6e5ece2538ebc39a45061c9e3a07179417ca59e055949b6e"
   },
   "kassel-mission-interactive-v4/reference/BATTLE-ROUTE-CONTRADICTION.md": {
     "bytes": 5402,
@@ -471,6 +491,14 @@
     "bytes": 4569,
     "sha256": "76c3944392d175c2418f8c40e50a3b7dc0e6b535bf092ae43d1de58001e1124b"
   },
+  "kassel-mission-interactive-v4/test-aircraft-damage.js": {
+    "bytes": 2445,
+    "sha256": "f7e9f3f742fcbfc679a5a11502910ebf96b1a44aa652aac838a73b96c497979b"
+  },
+  "kassel-mission-interactive-v4/test-cockpit-live.js": {
+    "bytes": 3351,
+    "sha256": "550dc5dbb16d8865a927e663f0220f89e6e630cf3293ac2db6a1ccc3a81b5277"
+  },
   "kassel-mission-interactive-v4/test-coordinated-turn.js": {
     "bytes": 5198,
     "sha256": "c1cfcb39e175872d13040761bb3954c577a74750fa9b8d9beb91c938e402cba5"
@@ -562,6 +590,14 @@
   "kassel-mission-interactive-v4/textures/elevation-7-60-38.png": {
     "bytes": 5734331,
     "sha256": "da15a4498b26016ad11b3ead637e830fc5d4cdccbf5c9ec147f3db3ac9af3412"
+  },
+  "kassel-mission-interactive-v4/tools/cockpit-live/extract-gauges.mjs": {
+    "bytes": 4086,
+    "sha256": "92da130563b3bc44c2a9bcc722d51ad65dad705ed478139f8e9620410970a659"
+  },
+  "kassel-mission-interactive-v4/tools/cockpit-live/probe-controls.mjs": {
+    "bytes": 1171,
+    "sha256": "8004c45fd46cd683043e369125339dc085f2847b2e4a91c6e982007e4ceb5f2d"
   },
   "kassel-mission-interactive-v4/tools/crew-stations/README.md": {
     "bytes": 3536,
@@ -812,8 +848,8 @@
     "sha256": "9081355a91706c9da2f9da4e20e92f9ff8cbe8aa59d233e80770795776c3b316"
   },
   "run-m1.cjs": {
-    "bytes": 979,
-    "sha256": "48c3d5ef522901ce426996288270cf1e14b89869d57f322d4e545115831b6951"
+    "bytes": 1028,
+    "sha256": "53ad63263c3506c37ccc5a95e5791756557f0fa03cf93aea5ba097fd9593a2e8"
   },
   "serve.cjs": {
     "bytes": 1270,
