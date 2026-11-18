@@ -63,6 +63,8 @@
    new T.GLTFLoader().load(PARTS[part]+V,function(gltf){
     var holder=new T.Group();holder.name='B24-'+part;
     holder.add(gltf.scene);
+    /* flight deck: lift the yokes, pedals and throttles into moving parts (cockpit-live.js) */
+    if(part==='flightdeck'&&global.KasselCockpitLive){try{global.KasselCockpitLive.prepare(T,gltf.scene);}catch(e){if(typeof console!=='undefined')console.warn('KM: cockpit controls not separated',e);}}
     holder.rotation.y=-Math.PI/2;
     holder.scale.setScalar(1/M_PER_UNIT);
     var o=toUnits([0,0,0]);holder.position.set(o[0],o[1],o[2]);
