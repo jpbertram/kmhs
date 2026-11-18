@@ -6277,21 +6277,25 @@ function updateTracers(dt){
 
 /* ---------- the bomb drop — visible, falling, impacting ---------- */
 var bombs=[];
+var bombVisual;
 function spawnBombs(scene){
   var all=(KM._fp||[]).concat(KM._b24?[KM._b24]:[]);
   var droppers=all.filter(function(p){return p.visible;}).slice(0,18);
+  if(!bombVisual){
+    var outline=[[0,-1.15],[.21,-.97],[.32,-.60],[.32,.55],[.17,.85],[.14,1.1]];
+    bombVisual={
+      geometry:new THREE.LatheGeometry(outline.map(function(p){return new THREE.Vector2(p[0],p[1]);}),16),
+      material:new THREE.MeshStandardMaterial({color:0x474b39,roughness:.84,metalness:.22}),
+      nose:new THREE.Vector3(0,-1,0),velocity:new THREE.Vector3()
+    };
+  }
   droppers.forEach(function(p,pi){
     for(var i=0;i<4;i++){
-      var b=new THREE.Mesh(
-        new THREE.CylinderGeometry(0.55,0.28,3.6,8),
-        new THREE.MeshStandardMaterial({color:0x2a2d26,roughness:0.7,metalness:0.4}));
-      b.rotation.x=Math.PI/2;
-      b.position.copy(p.position);
-      b.position.y-=2.5;
-      b.position.x+=(Math.random()-.5)*3;
-      b.position.z+=(Math.random()-.5)*3;
+      var b=new THREE.Mesh(bombVisual.geometry,bombVisual.material);
+      b.scale.setScalar(p.userData.mapGeometryScale||p.scale.x);
+      b.visible=false;
       scene.add(b);
-      bombs.push({mesh:b,scene:scene,vy:-10,vx:KM._anchor.dir.x*7,vz:KM._anchor.dir.z*7,
+      bombs.push({mesh:b,scene:scene,plane:p,vy:-10,vx:KM._anchor.dir.x*7,vz:KM._anchor.dir.z*7,
         delay:pi*0.12+i*0.28});
     }
   });
@@ -6300,21 +6304,25 @@ function updateBombs(dt){
   for(var i=bombs.length-1;i>=0;i--){
     var b=bombs[i];
     if(b.delay>0){b.delay-=dt;continue;}
+    if(dt<=0)continue;
+    if(!b.mesh.visible){
+      b.mesh.position.copy(b.plane.position);
+      b.mesh.position.y-=2.5*b.mesh.scale.y;
+      b.mesh.visible=true;
+    }
     b.vy-=dt*30;                 /* gravity (faster so it strikes while the formation is still over the target) */
     b.mesh.position.x+=b.vx*dt;
     b.mesh.position.y+=b.vy*dt;
     b.mesh.position.z+=b.vz*dt;
     /* nose over with the velocity vector */
-    b.mesh.rotation.z=Math.atan2(-b.vy,Math.sqrt(b.vx*b.vx+b.vz*b.vz)+0.001)-Math.PI/2;
-    var gy=2;
-    try{gy=Math.max(1.5,(V2.demReady?V2.elevAt(b.mesh.position.x,b.mesh.position.z):20)*ELEV_SCALE);}catch(e2){}
+    b.mesh.quaternion.setFromUnitVectors(bombVisual.nose,bombVisual.velocity.set(b.vx,b.vy,b.vz).normalize());
+    var gy=(V2.groundAt&&V2.groundAt(b.mesh.position.x,b.mesh.position.z))??2;
     if(b.mesh.position.y<=gy){
       var bxp=b.mesh.position.x, bzp=b.mesh.position.z;
-      killFlash(b.scene,new THREE.Vector3(bxp,gy+1,bzp));
-      killFlash(b.scene,new THREE.Vector3(bxp+4,gy+2,bzp-3));
+      killFlash(b.scene,new THREE.Vector3(bxp,gy+.08,bzp),.35);
       /* a rising smoke column so the strike on Goettingen is unmistakable */
       for(var sC=0;sC<4;sC++){
-        emitPool(KM._smoke,bxp+(Math.random()-.5)*6,gy+3+sC*4,bzp+(Math.random()-.5)*6);
+        emitPool(KM._smoke,bxp,gy+.18+sC*.25,bzp);
       }
       b.scene.remove(b.mesh);
       bombs.splice(i,1);
@@ -6435,11 +6443,11 @@ function clearChutes(){
 }
 
 /* hit flash when a ship takes its fatal damage */
-function killFlash(scene,pos){
+function killFlash(scene,pos,size){
   var sp=new THREE.Sprite(new THREE.SpriteMaterial({
     map:V2.softTex(),color:0xffb144,transparent:true,opacity:0.95,
     depthWrite:false,blending:THREE.AdditiveBlending}));
-  sp.position.copy(pos);sp.scale.set(4,4,1);
+  sp.position.copy(pos);sp.scale.set(size||4,size||4,1);
   scene.add(sp);
   V2._flashes=V2._flashes||[];
   V2._flashes.push({sp:sp,scene:scene,t:0});
@@ -6635,7 +6643,7 @@ function placePlane(p,battleT,elapsed,scene,dt){
       /* A timeline scrub reconstructs state; it must not create a fatal
          hit flash and freeze that giant sprite over the aircraft. */
       if(KM._playing&&(battleT-ft)<2.5)killFlash(scene,v.startPos);
-      v.chutesOut=0;
+      v.chutesOut=0;v.bailoutSchedule=null;
       /* carry the formation's momentum into the fall — the ship keeps
          flying forward as it noses over, curving toward where it fell */
       v.fwd=KM._anchor.dir.clone();
@@ -6660,6 +6668,25 @@ function placePlane(p,battleT,elapsed,scene,dt){
         v.forwardRoute=KasselForwardEndpointRoute.build(v.startPos,entryVelocity,v.sitePos,metricScale,2500);
         v.forwardRoute.initialBank=p.userData._formationBank||0;
         v.forwardRoute.terrainHeight=V2.groundAt;
+        if(v.pilot==='Miner'){
+          v.profile=V2.LOSS_PROFILES.Miner;
+          // The interview gives an approximate altitude at the decision
+          // to leave. It gives event order, not elapsed seconds.
+          var recalledAltitude=10000*.3048/metricScale.y;
+          if(v.startPos.y>recalledAltitude&&s0.y<recalledAltitude){
+            var high=0,low=1;
+            for(var step=0;step<24;step++){
+              var middle=(high+low)/2;
+              if(KasselForwardEndpointRoute.sample(v.forwardRoute,middle).position.y>recalledAltitude)high=middle;
+              else low=middle;
+            }
+            var phase=(high+low)/2,remaining=1-phase;
+            v.profile=Object.assign({},v.profile,{
+              spinStart:phase+Math.min(.01,remaining*.25),
+              pilotExitPhase:phase+Math.min(.025,remaining*.50)
+            });
+          }
+        }
         v.dur=v.forwardRoute.length/Math.max(.001,Math.hypot(entryVelocity.x*metricScale.x,entryVelocity.z*metricScale.z));
         KM._playbackEndSeconds=Math.max(KM._playbackEndSeconds||300,KMMissionTimeline.playbackAtBattleCue(ft+v.dur)+2);
         v.routeClassification='ESTIMATED';
@@ -6686,12 +6713,12 @@ function placePlane(p,battleT,elapsed,scene,dt){
     var bailout=v.bailoutCrew||[];
     var nCh=bailout.length;
     if(nCh>0&&v.chutesOut<nCh&&u>=0.08){
+      if(!v.bailoutSchedule)v.bailoutSchedule=bailout.map(function(member,index){
+        var pilot=v.pilot==='Miner'&&/^(pilot|command pilot)$/i.test(member.r||'');
+        return {index:index,phase:pilot?v.profile.pilotExitPhase:0.08+0.34*index/Math.max(1,nCh-1),pilot:pilot};
+      }).sort(function(a,b){return a.phase-b.phase;});
       while(v.chutesOut<nCh){
-        var ci=v.chutesOut,bu=0.08+0.34*ci/Math.max(1,nCh-1);
-        /* Miner explicitly recalled the spin beginning after he left
-           the controls but before he exited. Exact elapsed timing is
-           unknown; preserve that ordering, not a fabricated early exit. */
-        if(v.pilot==='Miner'&&/^(pilot|command pilot)$/i.test(bailout[ci].r||''))bu=v.profile.pilotExitPhase;
+        var event=v.bailoutSchedule[v.chutesOut],ci=event.index,bu=event.phase;
         if(u<bu)break;
         var launchPose=KasselLossTrajectory.sample(v,bu).position;
         var launch=new THREE.Vector3(launchPose.x,launchPose.y,launchPose.z);
@@ -6701,7 +6728,7 @@ function placePlane(p,battleT,elapsed,scene,dt){
         var momentum=tb>ta?{x:(pb.x-pa.x)/(tb-ta),z:(pb.z-pa.z)/(tb-ta)}:null;
         /* His account establishes delayed deployment, not a measured
            duration. 0.65 playback seconds is presentation-only. */
-        var openingDelay=v.pilot==='Miner'&&/^(pilot|command pilot)$/i.test(bailout[ci].r||'')?.65:0;
+        var openingDelay=event.pilot?.65:0;
         spawnChute(scene,launch,bailout[ci],pd2,ci,ft+bu*v.dur,momentum,openingDelay,mapMetres);
         v.chutesOut++;
       }
@@ -6960,9 +6987,9 @@ function crewHandoffLens(elapsed,startFov){
     if(c._v2c)return;
     c._v2c=true;
     c.crewYaw=0;c.crewPitch=0;
-    c.fTheta=0.6;c.fPhi=1.25;c.fR=1.25;
+    c.fTheta=0.6;c.fPhi=1.25;c.fR=.85;
     c.cTheta=0;c.cPhi=1.15;c.cR=.32;c._chaseInit=false;
-    c.tdX=0;c.tdZ=0;c.tdH=5;
+    c.tdX=0;c.tdZ=0;c.tdH=3.7;
     c.radius=5;c.radTarget=5;
     c._autoR=true;
     if(c.target&&KM._anchor)c.target.copy(KM._anchor.pos);
@@ -7006,7 +7033,7 @@ function crewHandoffLens(elapsed,startFov){
       var formation=formationFocus(a);
       var halfV=camera.fov*Math.PI/360;
       var halfH=Math.atan(Math.tan(halfV)*camera.aspect);
-      var fit=Math.max(.45,1.12*formation.radius/Math.sin(Math.min(halfV,halfH)));
+      var fit=Math.max(.45,1.02*formation.radius/Math.sin(Math.min(halfV,halfH)));
       c.target.copy(formation.centre);
       c.radTarget=c._autoR===false?c._userR:fit;
       c.radius+=(c.radTarget-c.radius)*(1-Math.exp(-dt*12));
@@ -7085,7 +7112,7 @@ function crewHandoffLens(elapsed,startFov){
           c._chaseInit=true;
           c.cTheta=Math.PI;     /* start astern */
           c.cPhi=1.18;
-          c.cR=140*(pl.userData.mapGeometryScale||pl.scale.x||.0025);
+          c.cR=115*(pl.userData.mapGeometryScale||pl.scale.x||.0025);
         }
         /* Bank/pitch can change Euler yaw without changing heading.
            Derive heading from the normalized model's actual +X nose. */
@@ -7445,6 +7472,9 @@ KM._buildAnimation=function(){
       (V2._crashGroups||[]).forEach(function(cg){if(cg.scene===scene){cg.group.visible=!!mapView;cg.labels.visible=!!mapView;}});
       var battleT=KM._battleT;
 
+      /* planes */
+      all.forEach(function(p){placePlane(p,battleT,elapsed,scene,dt);});
+
       /* bombs away near Göttingen — you SEE them fall and strike */
       if(KM._missionT>=BOMBS_AWAY&&KM._missionT<BATTLE_START&&!V2._bombed){
         V2._bombed=true;
@@ -7453,8 +7483,6 @@ KM._buildAnimation=function(){
       if(KM._missionT<BOMBS_AWAY)V2._bombed=false;
       updateBombs(sdt*KM._speed);
 
-      /* planes */
-      all.forEach(function(p){placePlane(p,battleT,elapsed,scene,dt);});
       // A seek beyond the attack can construct previously unvisited routes.
       // Keep End anchored to the end if that construction extends the track.
       if(!KM._playing&&KM._seekToEnd&&KM._playbackSeconds<KM._playbackEndSeconds-1e-7){
