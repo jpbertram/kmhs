@@ -135,6 +135,10 @@
     "bytes": 39100,
     "sha256": "efe0dba2aafdf8251bb73b82fc4766dd4e338e006b370a9aac2078645dd425f1"
   },
+  "kassel-mission-interactive-v4/aircraft-damage-visuals.js": {
+    "bytes": 22845,
+    "sha256": "ab3eaa09347eaab62494ca93b84605245170fa1351101d7d734e1e96460cba44"
+  },
   "kassel-mission-interactive-v4/aircraft-damage.js": {
     "bytes": 5819,
     "sha256": "87b959b1e1ee6c4eda6e61e76f41f48370fe577fb7f597fe1b1d9368e3e1f394"
@@ -292,8 +296,8 @@
     "sha256": "ec4426568e2a8d75f9a602a8d2ed40f1e9d7c2e534847686cc8bd810ee296c22"
   },
   "kassel-mission-interactive-v4/km3d-v3.js": {
-    "bytes": 433803,
-    "sha256": "7922dac728bd0cb6bbde94f95abc42df334762675c20aeab344264c3c879ac4e"
+    "bytes": 439852,
+    "sha256": "593e9ec0d589886eba0141212d974924a8da88a3cd6832127f050ff8821833bf"
   },
   "kassel-mission-interactive-v4/loss-smoke.js": {
     "bytes": 1710,
@@ -308,8 +312,8 @@
     "sha256": "32d41a0fff23d5b9af34bcb7624ba3f376bf4484c836a0d18fd7d9a566d91a8c"
   },
   "kassel-mission-interactive-v4/mission-reconstruction.html": {
-    "bytes": 341853,
-    "sha256": "93a8d310523ae21c597a23bc7ba1c4f1b6b6baa2ca4186718fd4206eb2b9196f"
+    "bytes": 341918,
+    "sha256": "6265d430ece5eadb0ccbe6215fd11bd2534efce6f59f856848bf908059be9127"
   },
   "kassel-mission-interactive-v4/mission-timeline.js": {
     "bytes": 4589,
@@ -490,6 +494,10 @@
   "kassel-mission-interactive-v4/supplied-interior-review.js": {
     "bytes": 4569,
     "sha256": "76c3944392d175c2418f8c40e50a3b7dc0e6b535bf092ae43d1de58001e1124b"
+  },
+  "kassel-mission-interactive-v4/test-aircraft-damage-visuals.js": {
+    "bytes": 3453,
+    "sha256": "cf307b6ff94aed9b7c9c4ae71315ac54be78d0ee2399bbf78b4dfd768dfb6089"
   },
   "kassel-mission-interactive-v4/test-aircraft-damage.js": {
     "bytes": 2445,
@@ -848,8 +856,8 @@
     "sha256": "9081355a91706c9da2f9da4e20e92f9ff8cbe8aa59d233e80770795776c3b316"
   },
   "run-m1.cjs": {
-    "bytes": 1028,
-    "sha256": "53ad63263c3506c37ccc5a95e5791756557f0fa03cf93aea5ba097fd9593a2e8"
+    "bytes": 1062,
+    "sha256": "96c860245a856883fe2fd24ab7acb680312af8a66b8f00e61849b4aeb7593907"
   },
   "serve.cjs": {
     "bytes": 1270,

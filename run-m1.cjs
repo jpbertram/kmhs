@@ -1,7 +1,7 @@
 'use strict';
 const {spawnSync}=require('node:child_process'),path=require('node:path');
 const cwd=path.join(__dirname,'kassel-mission-interactive-v4');
-const tests=['test-forward-endpoint-route.js','test-aircraft-damage.js','test-cockpit-live.js','test-m1-clock.js','test-m1-terrain-loading.js','test-m1-imagery-service.js','test-m1-terrain-contact.js','test-m1-cabin-cache.js','test-m1-aircraft-bounds.js','test-m1-crew-exterior.js','test-m1-boundaries.js','test-m1-return-ground.js','test-m1-mission.js','test-m1-transitions.js','test-m1-clearance.js','test-m1-fighters.js'];
+const tests=['test-forward-endpoint-route.js','test-aircraft-damage.js','test-aircraft-damage-visuals.js','test-cockpit-live.js','test-m1-clock.js','test-m1-terrain-loading.js','test-m1-imagery-service.js','test-m1-terrain-contact.js','test-m1-cabin-cache.js','test-m1-aircraft-bounds.js','test-m1-crew-exterior.js','test-m1-boundaries.js','test-m1-return-ground.js','test-m1-mission.js','test-m1-transitions.js','test-m1-clearance.js','test-m1-fighters.js'];
 let failures=0;
 for(const test of tests){
  const result=spawnSync(process.execPath,[path.join(cwd,test)],{cwd,stdio:'inherit'});
