@@ -6289,13 +6289,7 @@ var bombs=[];
 var bombVisual;
 function spawnBombs(scene){
   var all=(KM._fp||[]).concat(KM._b24?[KM._b24]:[]);
-  var droppers=all.filter(function(p){return p.visible;});
-  var replay=KM._camState&&KM._camState._bombReplay;
-  if(replay&&replay.plane&&droppers.includes(replay.plane)){
-    droppers.splice(droppers.indexOf(replay.plane),1);
-    droppers.unshift(replay.plane);
-  }
-  droppers=droppers.slice(0,18);
+  var droppers=all.filter(function(p){return p.visible;}).slice(0,18);
   if(!bombVisual){
     var outline=[[0,-1.15],[.21,-.97],[.32,-.60],[.32,.55],[.17,.85],[.14,1.1]];
     var tailPoints=[];
@@ -6325,11 +6319,8 @@ function spawnBombs(scene){
       b.scale.setScalar(p.userData.mapGeometryScale||p.scale.x);
       b.visible=false;
       scene.add(b);
-      var drop={mesh:b,scene:scene,plane:p,vy:-10,vx:KM._anchor.dir.x*7,vz:KM._anchor.dir.z*7,
-        delay:pi*0.12+i*0.28};
-      bombs.push(drop);
-      if(replay&&pi===0&&i===0)replay.drop=drop;
-
+      bombs.push({mesh:b,scene:scene,plane:p,vy:-10,vx:KM._anchor.dir.x*7,vz:KM._anchor.dir.z*7,
+        delay:pi*0.12+i*0.28});
     }
   });
 }
@@ -6358,7 +6349,6 @@ function updateBombs(dt){
         emitPool(KM._smoke,bxp,gy+.18+sC*.25,bzp);
       }
       b.scene.remove(b.mesh);
-      b.finished=true;
       bombs.splice(i,1);
     }
   }
@@ -7103,22 +7093,6 @@ function crewHandoffLens(elapsed,startFov){
     var wantFov=handoffLens?handoffLens.fov:camera.fov;
     if(c.mode!=='chase'&&(camera.near!==wantNear||camera.fov!==wantFov)){camera.near=wantNear;camera.fov=wantFov;camera.updateProjectionMatrix();}
 
-    var replay=c._bombReplay;
-    if(replay){
-      if(KM._playbackSeconds>=replay.until||replay.drop?.finished){c._bombReplay=null;}
-      else{
-        var drop=replay.drop;
-        var bomber=drop?drop.plane:replay.plane;
-        var scale=bomber.userData.mapGeometryScale||bomber.scale.x;
-        var focus=drop&&drop.mesh.visible?drop.mesh.position:bomber.position;
-        var distance=(drop&&drop.mesh.visible?20:53)*scale;
-        camera.position.set(focus.x-a.dir.x*distance*.36-a.dir.z*distance,
-          focus.y-distance*.22,focus.z-a.dir.z*distance*.36+a.dir.x*distance);
-        camera.lookAt(focus);
-        camera.near=scale;camera.updateProjectionMatrix();
-        return;
-      }
-    }
     if(c.mode==='orbit'){
       var formation=formationFocus(a);
       var halfV=camera.fov*Math.PI/360;
@@ -7371,7 +7345,6 @@ KM.scrubTimeline=function(e){
   seekMission(KMMissionTimeline.seekSeconds((e.clientX-rect.left)/rect.width,KM._playbackEndSeconds||300));
 };
 function seekMission(seconds){
-  if(KM._camState)KM._camState._bombReplay=null;
   KM._seekToEnd=seconds>=(KM._playbackEndSeconds||300)-1e-7;
   var pct=KMMissionTimeline.routeAt(seconds);
   KM._missionT=pct;
@@ -7389,18 +7362,6 @@ function seekMission(seconds){
     KM._battleT=BATTLE_SPAN-1;
     applyBattleState(KM._s,KMMissionTimeline.battleCueAtPlayback(KM._playbackSeconds));
   }
-};
-
-KM.watchBombDrop=function(){
-  var c=KM._camState;
-  if(!c||!KM._s||!KM._b24)return;
-  var release=KMMissionTimeline.secondsAt(BOMBS_AWAY);
-  var bomber=c.selectedPlane||KM._b24;
-  seekMission(release-1.5);
-  KM.setView('chase');
-  c._bombReplay={plane:bomber,until:release+8};
-  KM.setSpeed(1,document.querySelector('#cp-play + .cp-btn'));
-  if(!KM._playing)KM.togglePlay();
 };
 
 /* ---------- sun arc ---------- */
@@ -8512,7 +8473,6 @@ V2.updateStationOverlay=function(){};
       if(c){
         c.crewYaw=0;c.crewPitch=0;
         c._crewLossHandoff=false;
-        c._bombReplay=null;
         if(m==='chase')c._chaseInit=false;
       }
       if(KM._cam&&m!=='crew'&&KM._cam.fov!==50){KM._cam.fov=50;KM._cam.updateProjectionMatrix();}
