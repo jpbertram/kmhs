@@ -1,7 +1,83 @@
 {
+  ".assetsignore": {
+    "bytes": 813,
+    "sha256": "afa66d62125381da6a112a49cb861404e6676045e6f4fcd6715b3a44bca460c9"
+  },
   ".gitignore": {
     "bytes": 102,
     "sha256": "218d5732d2a29c0dcdcaab29e7defa4d6665a85ba5d08a4d4c8682836dcd1c9a"
+  },
+  ".wrangler/state/v3/cache/miniflare-CacheObject/metadata.sqlite": {
+    "bytes": 4096,
+    "sha256": "89a2318c76452be80e1d743f163f3dd96623b2b05604aa06985c6b5501238362"
+  },
+  ".wrangler/state/v3/cache/miniflare-CacheObject/metadata.sqlite-shm": {
+    "bytes": 32768,
+    "sha256": "6238abd3df62f1cb7baa0fa1a616a7c82b35a310b46be8a4ef971c15b1e7812f"
+  },
+  ".wrangler/state/v3/cache/miniflare-CacheObject/metadata.sqlite-wal": {
+    "bytes": 8272,
+    "sha256": "f217a8f797542405ef9e03e8f8acd193cedcaeca1344489070a1b601d93e5536"
+  },
+  ".wrangler/state/v3/d1/miniflare-D1DatabaseObject/metadata.sqlite": {
+    "bytes": 4096,
+    "sha256": "89a2318c76452be80e1d743f163f3dd96623b2b05604aa06985c6b5501238362"
+  },
+  ".wrangler/state/v3/d1/miniflare-D1DatabaseObject/metadata.sqlite-shm": {
+    "bytes": 32768,
+    "sha256": "4a1c979403ead07ca17f84aa886661d84f7420a5b99fdc19fa8717b28b148d35"
+  },
+  ".wrangler/state/v3/d1/miniflare-D1DatabaseObject/metadata.sqlite-wal": {
+    "bytes": 8272,
+    "sha256": "1424144159e3cf1bcef6e7c33589d39dd932e4428640872868e45dc5513acea8"
+  },
+  ".wrangler/state/v3/flagship/miniflare-flagship-FlagshipObject/metadata.sqlite": {
+    "bytes": 4096,
+    "sha256": "89a2318c76452be80e1d743f163f3dd96623b2b05604aa06985c6b5501238362"
+  },
+  ".wrangler/state/v3/flagship/miniflare-flagship-FlagshipObject/metadata.sqlite-shm": {
+    "bytes": 32768,
+    "sha256": "5c03ccde81dad3a6caca341203100b2ae99705a75137352851f563c07c0a6492"
+  },
+  ".wrangler/state/v3/flagship/miniflare-flagship-FlagshipObject/metadata.sqlite-wal": {
+    "bytes": 8272,
+    "sha256": "36a115fb61f59a35cebe2411a287244b18b3ef7a851ae6231e87da42507dcbe2"
+  },
+  ".wrangler/state/v3/kv/miniflare-KVNamespaceObject/metadata.sqlite": {
+    "bytes": 4096,
+    "sha256": "89a2318c76452be80e1d743f163f3dd96623b2b05604aa06985c6b5501238362"
+  },
+  ".wrangler/state/v3/kv/miniflare-KVNamespaceObject/metadata.sqlite-shm": {
+    "bytes": 32768,
+    "sha256": "4012a49d351334f8fdfd2c6695119258fb31761652dac0f9006c69cdabc8a283"
+  },
+  ".wrangler/state/v3/kv/miniflare-KVNamespaceObject/metadata.sqlite-wal": {
+    "bytes": 8272,
+    "sha256": "dc1a4b49b230bde02232f3320c70125ad9d3b83873047428c5af48ff70cf386a"
+  },
+  ".wrangler/state/v3/observability/miniflare-wobs-trace-store/metadata.sqlite": {
+    "bytes": 4096,
+    "sha256": "89a2318c76452be80e1d743f163f3dd96623b2b05604aa06985c6b5501238362"
+  },
+  ".wrangler/state/v3/observability/miniflare-wobs-trace-store/metadata.sqlite-shm": {
+    "bytes": 32768,
+    "sha256": "95b20bda1550278e65b0ccdcdc57d01387b656cf848add4c53f3a55dda436e01"
+  },
+  ".wrangler/state/v3/observability/miniflare-wobs-trace-store/metadata.sqlite-wal": {
+    "bytes": 8272,
+    "sha256": "f7ec69d5a3764cad9e5ef73bba894525077e666f5445695cf0687b849c3dfed6"
+  },
+  ".wrangler/state/v3/r2/miniflare-R2BucketObject/metadata.sqlite": {
+    "bytes": 4096,
+    "sha256": "89a2318c76452be80e1d743f163f3dd96623b2b05604aa06985c6b5501238362"
+  },
+  ".wrangler/state/v3/r2/miniflare-R2BucketObject/metadata.sqlite-shm": {
+    "bytes": 32768,
+    "sha256": "76b22c76b0ff91e7ec2b5bf5e56500f7d9bb41cddf1e0326ffe53a7893559e96"
+  },
+  ".wrangler/state/v3/r2/miniflare-R2BucketObject/metadata.sqlite-wal": {
+    "bytes": 8272,
+    "sha256": "ff96df5dcc1079dcf110785109fd59a1c554f75bc7edc43ec587868555805dc1"
   },
   "AGENTS.md": {
     "bytes": 1656,
@@ -78,6 +154,10 @@
   "handoff/goal-objective.md": {
     "bytes": 6841,
     "sha256": "f144cdf78239af96705e9719fd05faf019e4d71f2f03172fbe517819ead5e85c"
+  },
+  "index.html": {
+    "bytes": 324,
+    "sha256": "3db5ec3dae7ecf35d1c6db67e81303e9aca4edc169290803bd05df3049c01737"
   },
   "kassel-mission-interactive-v4/ACCURACY-AND-VALIDATION-GATE.md": {
     "bytes": 7313,
@@ -730,5 +810,9 @@
   "tmp/three-r128.js": {
     "bytes": 603445,
     "sha256": "9274bbcec8d96168626c732b5d31c775aa8cfb7eaa0599bec0c175908a2c1ce2"
+  },
+  "wrangler.jsonc": {
+    "bytes": 363,
+    "sha256": "9c6b818318dc75438b574b39d8308db11577dbed14094848a9610b7dc685b3b9"
   }
 }

@@ -1,0 +1,11 @@
+// Cloudflare Workers Builds deploy for the Kassel mission simulator.
+// Static site only: .assetsignore limits what is published to the mission
+// pages, their scripts and the aircraft/compartment models.
+{
+  "name": "kassel-mission-simulator",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": ".",
+    "not_found_handling": "404-page"
+  }
+}
