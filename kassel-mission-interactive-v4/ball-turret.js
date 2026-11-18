@@ -39,8 +39,11 @@
    var hub=mesh(new T.CylinderGeometry(.063,.063,.09,24),metal,[0,0,s*(r+.05)]);hub.rotation.x=Math.PI/2;
    // Hand grips flank the computing sight; no other crewman inside the station.
    rod([.18,.12,s*.23],[.18,.28,s*.23],.035,black);rod([.18,.11,s*.23],[.06,.08,s*.15],.018,metal);
+   rod([.06,.08,s*.15],[.06,-.19,s*.15],.024,metal);
+   rod([.06,-.19,s*.15],[.06,-.21,z],.032,metal);
    for(var ringN=0;ringN<9;ringN++){var gripRing=mesh(new T.TorusGeometry(.035,.0025,6,32),black,[.18,.135+ringN*.015,s*.23]);gripRing.rotation.x=Math.PI/2;}
    var handle=mesh(new T.TorusGeometry(.087,.012,8,32),metal,[-.13,.26,s*.64]);handle.rotation.y=Math.PI/2;
+   rod([-.13,.26,s*.72],[-.13,.27,s*(r-.027)],.018,metal);
    // Ammunition feed chute, visually shaped from exploded-view component layout.
    var path=new T.CatmullRomCurve3([new T.Vector3(-.25,.46,s*.38),new T.Vector3(-.23,.22,s*.58),new T.Vector3(-.20,.04,z)]);mesh(new T.TubeGeometry(path,24,.026,8,false),metal);
   });
@@ -48,6 +51,8 @@
   var back=mesh(new T.SphereGeometry(1,32,20),paint,[-.60,-.03,0]);back.scale.set(.065,.36,.35);
   // Computing sight body and padded binocular eyepiece (placement estimated).
   var sightBody=mesh(new T.SphereGeometry(1,40,28),black,[.31,.25,0]);sightBody.scale.set(.115,.125,.10);
+  rod([.34,.18,0],[.44,-.17,0],.041,metal);
+  rod([.44,-.17,-r*.68],[.44,-.17,r*.68],.025,metal);
   var sightDial=mesh(new T.CylinderGeometry(.047,.047,.018,32),metal,[.31,.21,.103]);sightDial.rotation.x=Math.PI/2;
   var sightKnob=mesh(new T.CylinderGeometry(.019,.019,.030,24),black,[.31,.21,.12]);sightKnob.rotation.x=Math.PI/2;
   [-.045,.045].forEach(function(z){rod([.14,.29,z],[.31,.29,z],.027,black);var cup=mesh(new T.TorusGeometry(.029,.009,12,36),pad,[.14,.29,z]);cup.rotation.y=Math.PI/2;});

@@ -80,7 +80,7 @@
   function seat(x,y,z){box([x,y,z],[.62,.12,.70],'canvas');var back=box([x-.30,y+.42,z],[.12,.80,.72],'canvas');back.rotation.z=-.10;[-.26,.26].forEach(function(d){rod([x-.2,y-.1,z+d],[x-.2,y-.6,z+d],.028,'metal');rod([x+.2,y-.1,z+d],[x+.2,y-.6,z+d],.028,'metal');});box([x-.37,y+.48,z-.18],[.035,.67,.09],'canvas');box([x-.37,y+.48,z+.18],[.035,.67,.09],'canvas');}
   // The eight vertices of each section are shared by the wall, roof,
   // belly and glazing. Never cut an entire longitudinal strip for a window.
-  function shell(x0,x1,rx,ry,windowStart,windowEnd,sill,header,frontGlass){
+  function shell(x0,x1,rx,ry,windowStart,windowEnd,sill,header,frontGlass,forwardSideGlass=true){
    var sections=[x0,windowStart,windowEnd,x1];
    function section(x){
     var nose=frontGlass&&x===x1;
@@ -95,7 +95,7 @@
     var ahead=rings[bay+1],aft=rings[bay];
     for(var side=0;side<8;side++){
      var next=(side+1)%8;
-     var glazing=(side===2||side===6)&&(bay===1||frontGlass&&bay===2);
+     var glazing=(side===2||side===6)&&(bay===1||frontGlass&&forwardSideGlass&&bay===2);
      pane([aft[side],ahead[side],ahead[next],aft[next]],glazing,true);
     }
    }
@@ -141,7 +141,7 @@
   }
   function oxygen(x,y,z){var m=mesh(new T.CylinderGeometry(.15,.15,.75,20),'paint',[x,y,z]);mesh(new T.SphereGeometry(.15,16,8),'paint',[x,y+.375,z]);rod([x,y+.5,z],[x+.2,y+.6,z],.022,'metal');var curve=new T.CatmullRomCurve3([new T.Vector3(x+.2,y+.6,z),new T.Vector3(x+.5,y+.2,z),new T.Vector3(x+.3,y-.2,z)]);mesh(new T.TubeGeometry(curve,20,.026,8,false),'black');}
   function gun(x,y,z,dir){var body=box([x,y,z],[.55,.18,.16],'black');var end=[x+dir[0]*1.4,y+dir[1]*1.4,z+dir[2]*1.4];rod([x,y,z],end,.043,'metal');for(var i=0;i<12;i++){var t=i/12;mesh(new T.SphereGeometry(.013,5,3),'black',[x+dir[0]*(.45+t*.85),y+dir[1]*(.45+t*.85)+.037,z+dir[2]*(.45+t*.85)]);}rod([x-.1,y-.1,z],[x-.1,y-.45,z],.05,'black');}
-  var seats={pilot:[7.55,1.12,-.63],copilot:[7.55,1.12,.63],nav:[9.6,.34,.65],bomb:[11,.17,0],nose:[12.2,.10,0],radio:[3.3,.7,-.45],ttop:[4.9,2.15,0],ball:[-2,-2.2,0],waistL:[-6,.45,-.80],waistR:[-6,.45,.80],tail:[-15.9,.1,0]};
+  var seats={pilot:[7.55,1.12,-.63],copilot:[7.55,1.12,.63],nav:[9.6,.34,.65],bomb:[11,.17,0],nose:[12.2,.10,0],radio:[3.3,.7,-.21],ttop:[4.9,2.15,0],ball:[-2,-2.2,0],waistL:[-6,.45,-.80],waistR:[-6,.45,.80],tail:[-15.9,.1,0]};
   /* Standing eyes must be measured above the walkable floor, not the
      fuselage origin. NASA CR-114271 printed p.1-5 gives shirtsleeve
      standing eye-height design bounds 61.1–68.9 in (AF flying personnel
@@ -152,7 +152,7 @@
   // Seat centers drive both the furniture and the camera. Heights in
   // this table refer to the midpoint of the .12-unit cushion.
   var chairs={pilot:[7.35,-.15,-.63],copilot:[7.35,-.15,.63],
-   nav:[9.15,-.88,.6],bomb:[10.8,-1.05,0],radio:[3.3,-.56,-.4]};
+   nav:[9.15,-.88,.6],bomb:[10.8,-1.05,0],radio:[3.3,-.56,-.21]};
   var seatedEyeM=30.9*.0254;
   Object.keys(chairs).forEach(function(key){
    var chair=chairs[key];
@@ -177,7 +177,7 @@
    standingEyeM:standingEyeM,standingRangeM:[61.1*.0254,68.9*.0254],waistFloorTop:waistFloorTop,
    source:'NASA CR-114271, printed 1-5; 1950 flying-personnel basis; not individual 1944 crew measurements',
    geometryStatus:'Estimated airframe/floor normalization, not factory schematic exact'};
-  var looks={pilot:[1,.09,0],copilot:[1,.09,0],nav:[.86,.055,.55],bomb:[1,-.12,0],nose:[1,0,0],radio:[.23,.09,-1],ttop:[1,0,0],ball:[.5,-.7,0],waistL:[0,-.03,-1],waistR:[0,-.03,1],tail:[-1,0,0]};
+  var looks={pilot:[1,.09,0],copilot:[1,.09,0],nav:[.86,.055,.55],bomb:[1,-.12,0],nose:[1,0,0],radio:[.06,-.34,-1],ttop:[1,0,0],ball:[.5,-.7,0],waistL:[0,-.03,-1],waistR:[0,-.03,1],tail:[-1,0,0]};
   if(station==='pilot'||station==='copilot'){
    shell(5.9,9.2,1.68,1.92,6.3,8.05,.72,1.72,true);
    // Fig. 10, AN 01-5EC-1: continuous fascia beneath the windshield,
@@ -265,7 +265,7 @@
    box([8.38,1.63,0],[.16,.44,.42],'black');gauge(8.29,1.65,0,.11,'COMPASS',.4);
    oxygen(6.3,-.2,-1.35);oxygen(6.3,-.2,1.35);
   }else if(station==='nav'||station==='bomb'||station==='nose'){
-   shell(9,13.2,1.45,1.55,9.30,12.25,-.24,1.16,true);
+   shell(9,13.2,1.45,1.55,9.85,11.35,.30,.83,true,false);
    // Sheet-metal lining runs up to the lower window rail. The worktop
    // sits on a drawer cabinet and brackets attached to that lining.
    [-1,1].forEach(function(side){
@@ -345,9 +345,31 @@
   }else if(station==='radio'){
    shell(1.8,5.3,1.75,1.8,2.5,4.4,.45,1.30,false);
    box([3.4,-.15,-1.06],[1.8,.08,.90],'paint');chairAt('radio');
-   for(var i=0;i<3;i++){box([2.8+i*.52,.28,-1.37],[.47,.58,.30],'black');for(var j=0;j<3;j++){var knob=mesh(new T.CylinderGeometry(.042,.042,.04,18),'metal',[2.8+i*.52,.17+j*.12,-1.19]);knob.rotation.x=Math.PI/2;}
-    box([2.8+i*.52,.42,-1.205],[.24,.12,.009],new T.MeshStandardMaterial({color:0xc4b687,roughness:.6}));}
-   for(var i=0;i<4;i++)rod([2.75+i*.2,.02,-1.2],[2.75+i*.2,-.95,-1.2],.014,'black');oxygen(4.9,-.1,1.35);
+   box([3.43,-.055,-1.33],[1.61,.12,.41],'rib');
+   var panel=document.createElement('canvas');panel.width=768;panel.height=256;
+   var display=panel.getContext('2d');
+   display.fillStyle='#252826';display.fillRect(0,0,768,256);
+   display.fillStyle='#111817';display.fillRect(35,57,295,82);
+   display.fillRect(406,64,122,62);
+   display.fillStyle='#c3bda0';display.font='24px sans-serif';
+   display.fillText('RECEIVER',48,38);display.fillText('TUNING',413,38);
+   display.fillText('BAND',76,203);display.fillText('GAIN',320,203);display.fillText('OUTPUT',576,203);
+   for(var tick=0;tick<21;tick++)display.fillRect(53+tick*12,86,1,tick%5===0?25:13);
+   display.fillStyle='#e3b46e';display.fillRect(183,73,2,54);
+   var panelTex=new T.CanvasTexture(panel);panelTex.encoding=T.sRGBEncoding;
+   box([3.18,.20,-1.40],[1.07,.43,.30],'black');
+   box([3.18,.20,-1.244],[1.03,.39,.014],new T.MeshStandardMaterial({map:panelTex,roughness:.7})).name='radio-receiver-face';
+   box([3.98,.135,-1.39],[.44,.30,.31],'black');
+   box([3.98,.252,-1.232],[.34,.038,.014],'metal');
+   [[2.82,.09,.048],[3.16,.09,.065],[3.52,.09,.048],[3.94,.14,.058],[4.10,.07,.028]].forEach(function(k){
+    var knob=mesh(new T.CylinderGeometry(k[2],k[2],.035,22),'black',[k[0],k[1],-1.22]);knob.rotation.x=Math.PI/2;
+    box([k[0],k[1]+k[2]*.58,-1.198],[.009,.018,.005],'metal');
+   });
+   for(var vent=0;vent<6;vent++)box([3.98,.104-vent*.025,-1.231],[.26,.008,.008],'rib');
+   box([3.76,-.085,-.91],[.27,.04,.17],'black');
+   rod([3.69,-.057,-.91],[3.84,-.04,-.91],.013,'metal');
+   box([3.83,-.032,-.91],[.045,.018,.047],'black');
+   oxygen(4.9,-.1,1.35);
   }else if(station==='waistL'||station==='waistR'){
    shell(-8.8,-3.5,1.90,2.1,-7.9,-4.8,-.35,1.60,false);
    [-1,1].forEach(function(s){gun(-6,.28,s*1.40,[0,0,s]);rod([-6,-1.3,s*1.3],[-6,.1,s*1.3],.048,'metal');box([-6.7,-.7,s*1.5],[.45,.48,.30],'paint');});
@@ -358,14 +380,28 @@
    root.userData.ballTurretDiameterIn=turret.dimensions.diameterIn;
   }else{
    var pos=seats[station]||seats.tail;var x=pos[0],y=pos[1],r=station==='ball'?.85:station==='ttop'?1.12:.95;
-   for(var j=0;j<12;j++){var a=j/12*Math.PI*2,b=(j+1)/12*Math.PI*2;pane([[x+Math.cos(a)*r,y-.65,Math.sin(a)*r],[x+Math.cos(b)*r,y-.65,Math.sin(b)*r],[x+Math.cos(b)*r*.75,y+.65,Math.sin(b)*r*.75],[x+Math.cos(a)*r*.75,y+.65,Math.sin(a)*r*.75]],true);}
+   var header=y+(station==='ttop'?.47:.65);
+   for(var j=0;j<12;j++){var a=j/12*Math.PI*2,b=(j+1)/12*Math.PI*2;pane([[x+Math.cos(a)*r,y-.65,Math.sin(a)*r],[x+Math.cos(b)*r,y-.65,Math.sin(b)*r],[x+Math.cos(b)*r*.75,header,Math.sin(b)*r*.75],[x+Math.cos(a)*r*.75,header,Math.sin(a)*r*.75]],true,true);}
    var capTop=[],capBottom=[];
    for(var k=0;k<12;k++){
     var theta=k*Math.PI/6;
-    capTop.push([x+Math.cos(theta)*r*.75,y+.65,Math.sin(theta)*r*.75]);
+    capTop.push([x+Math.cos(theta)*r*.75,header,Math.sin(theta)*r*.75]);
     capBottom.push([x+Math.cos(theta)*r,y-.65,Math.sin(theta)*r]);
    }
-   pane(capTop,station==='ttop',true);pane(capBottom,false,true);
+   if(station==='ttop'){
+    var domeGlass=mats.glass.clone();
+    domeGlass.opacity=.22;
+    domeGlass.color.setHex(0xb2c5c8);
+    var crown=[x,y+1.10,0];
+    for(var segment=0;segment<capTop.length;segment++){
+     var start=capTop[segment],end=capTop[(segment+1)%capTop.length];
+     var paneStart=root.children.length;
+     pane([start,end,crown],true,true);
+     root.children[paneStart].material=domeGlass;
+    }
+    seats.ttop=[x-.30,y-.105,0];looks.ttop=[1,.06,0];
+   }else pane(capTop,false,true);
+   pane(capBottom,false,true);
    var dir=station==='tail'?-1:1;[-.27,.27].forEach(function(z){gun(x+dir*.5,y-.25,z,[dir,0,0]);});orientedChair([x-dir*.2,y-.75,0],dir<0?Math.PI:0);rod([x+dir*.4,y-.5,0],[x+dir*.4,y-.18,0],.025,'metal');
   }
   // Mission sunlight and sky illumination follow the aircraft through the turn.

@@ -5340,9 +5340,18 @@ KM._buildFormation=function(){
     transparent:true,opacity:0.5,depthWrite:false}));
   KM._smoke={geo:smoke.geo,pos:smoke.pos,alpha:new Float32Array(2000),
     life:new Float32Array(2000),count:2000,nextIdx:0};
-  var lossSmoke=pool(1100,new THREE.PointsMaterial({map:soft,color:0x35373a,size:1.2,
-    transparent:true,opacity:.40,depthWrite:false}));
-  KM._lossSmoke={geo:lossSmoke.geo,pos:lossSmoke.pos,count:1100,nextIdx:0};
+  var lossMaterial=new THREE.PointsMaterial({map:soft,color:0x35373a,size:1.2,
+    transparent:true,opacity:.40,depthWrite:false});
+  lossMaterial.onBeforeCompile=function(shader){
+    shader.vertexShader='attribute vec2 plume; varying float plumeOpacity;\n'+shader.vertexShader
+      .replace('gl_PointSize = size;', 'gl_PointSize = size * plume.x; plumeOpacity = plume.y;');
+    shader.fragmentShader='varying float plumeOpacity;\n'+shader.fragmentShader
+      .replace('vec4 diffuseColor = vec4( diffuse, opacity );','vec4 diffuseColor = vec4( diffuse, opacity * plumeOpacity );');
+  };
+  var lossSmoke=pool(1100,lossMaterial);
+  var plume=new Float32Array(2200);
+  lossSmoke.geo.setAttribute('plume',new THREE.BufferAttribute(plume,2));
+  KM._lossSmoke={geo:lossSmoke.geo,pos:lossSmoke.pos,plume:plume,count:1100,nextIdx:0};
   var fire=pool(500,new THREE.PointsMaterial({map:soft,color:0xff7a33,size:5,
     transparent:true,opacity:0.65,depthWrite:false,blending:THREE.AdditiveBlending}));
   KM._fire={geo:fire.geo,pos:fire.pos,count:500,nextIdx:0};
@@ -6283,15 +6292,30 @@ function spawnBombs(scene){
   var droppers=all.filter(function(p){return p.visible;}).slice(0,18);
   if(!bombVisual){
     var outline=[[0,-1.15],[.21,-.97],[.32,-.60],[.32,.55],[.17,.85],[.14,1.1]];
+    var tailPoints=[];
+    for(var fin=0;fin<4;fin++){
+      var angle=fin*Math.PI/2,x=Math.cos(angle),z=Math.sin(angle);
+      var a=[.22*x,.59,.22*z],b=[.43*x,1.04,.43*z],c=[.43*x,1.19,.43*z],d=[.13*x,1.19,.13*z];
+      tailPoints.push(...a,...b,...c,...a,...c,...d);
+      var next=angle+Math.PI/2;
+      var outer=[.43*Math.cos(next),1.19,.43*Math.sin(next)];
+      var inner=[outer[0],1.03,outer[2]];
+      tailPoints.push(...b,...c,...outer,...b,...outer,...inner);
+    }
+    var tail=new THREE.BufferGeometry();
+    tail.setAttribute('position',new THREE.Float32BufferAttribute(tailPoints,3));
+    tail.computeVertexNormals();
     bombVisual={
+      tail:tail,
       geometry:new THREE.LatheGeometry(outline.map(function(p){return new THREE.Vector2(p[0],p[1]);}),16),
-      material:new THREE.MeshStandardMaterial({color:0x474b39,roughness:.84,metalness:.22}),
+      material:new THREE.MeshStandardMaterial({color:0x474b39,roughness:.84,metalness:.22,side:THREE.DoubleSide}),
       nose:new THREE.Vector3(0,-1,0),velocity:new THREE.Vector3()
     };
   }
   droppers.forEach(function(p,pi){
     for(var i=0;i<4;i++){
       var b=new THREE.Mesh(bombVisual.geometry,bombVisual.material);
+      b.add(new THREE.Mesh(bombVisual.tail,bombVisual.material));
       b.scale.setScalar(p.userData.mapGeometryScale||p.scale.x);
       b.visible=false;
       scene.add(b);
@@ -6447,23 +6471,24 @@ function killFlash(scene,pos,size){
   var sp=new THREE.Sprite(new THREE.SpriteMaterial({
     map:V2.softTex(),color:0xffb144,transparent:true,opacity:0.95,
     depthWrite:false,blending:THREE.AdditiveBlending}));
-  sp.position.copy(pos);sp.scale.set(size||4,size||4,1);
+  var baseSize=size||4;
+  sp.position.copy(pos);sp.scale.set(baseSize,baseSize,1);
   scene.add(sp);
   V2._flashes=V2._flashes||[];
-  V2._flashes.push({sp:sp,scene:scene,t:0});
+  V2._flashes.push({sp:sp,scene:scene,t:0,baseSize:baseSize});
 }
 function updateFlashes(dt){
   var fl=V2._flashes||[];
   for(var i=fl.length-1;i>=0;i--){
     var f=fl[i];f.t+=dt;
-    var s=4+f.t*24;
+    var s=f.baseSize*(1+f.t*6);
     f.sp.scale.set(s,s,1);
     f.sp.material.opacity=Math.max(0,0.95-f.t*2.4);
-    if(f.t>0.55){f.scene.remove(f.sp);fl.splice(i,1);}
+    if(f.t>0.55){f.scene.remove(f.sp);f.sp.material.dispose();fl.splice(i,1);}
   }
 }
 function clearFlashes(){
-  (V2._flashes||[]).forEach(function(f){f.scene.remove(f.sp);});
+  (V2._flashes||[]).forEach(function(f){f.scene.remove(f.sp);f.sp.material.dispose();});
   V2._flashes=[];
 }
 
@@ -6471,8 +6496,8 @@ function clearFlashes(){
    and soot, and substantial fragments that retain forward momentum.
    It is still performant, but no longer reads as one cheap sprite. */
 V2._devastation=[];
-function spawnDevastation(scene,pos,profile,seed,forward){
-  var grp=new THREE.Group();grp.position.copy(pos);scene.add(grp);
+function spawnDevastation(scene,pos,profile,seed,forward,modelScale){
+  var grp=new THREE.Group();grp.position.copy(pos);grp.scale.setScalar(modelScale);scene.add(grp);
   var soft=V2.softTex(),items=[];
   function rnd(n){return ((hash(String(seed)+':'+n)%10000)/10000);}
   for(var i=0;i<8;i++){
@@ -6488,6 +6513,34 @@ function spawnDevastation(scene,pos,profile,seed,forward){
   }
   var drab=new THREE.MeshStandardMaterial({color:0x343b24,metalness:0.35,roughness:0.72});
   var metal=new THREE.MeshStandardMaterial({color:0x62676c,metalness:0.8,roughness:0.38});
+  // Major pieces are visual proxies for the recorded kind of separation.
+  var motion=profile.motion;
+  if(motion==='breakup'||motion==='rammed_tail'||motion==='wingless_roll'){
+    var fwd=forward||new THREE.Vector3(1,0,0);
+    var sideAxis=new THREE.Vector3(-fwd.z,0,fwd.x);
+    var separation=motion==='wingless_roll'?[-1,1]:[0];
+    separation.forEach(function(side){
+      var piece=new THREE.Group();
+      piece.rotation.y=-Math.atan2(fwd.z,fwd.x);
+      var section=new THREE.Mesh(side?new THREE.BoxGeometry(4,.28,11):
+        new THREE.CylinderGeometry(.52,1.03,6.8,14),drab);
+      if(side)section.position.z=side*5;
+      else section.rotation.z=Math.PI/2;
+      piece.add(section);
+      if(!side){
+        var tailplane=new THREE.Mesh(new THREE.BoxGeometry(1.85,.16,6),drab);
+        tailplane.position.x=-2.2;piece.add(tailplane);
+        [-2.7,2.7].forEach(function(z){
+          var fin=new THREE.Mesh(new THREE.SphereGeometry(1,12,8),drab);
+          fin.scale.set(.9,1.05,.09);fin.position.set(-2.3,.61,z);piece.add(fin);
+        });
+        piece.position.set(-fwd.x*7,0,-fwd.z*7);
+      }
+      grp.add(piece);
+      items.push({o:piece,kind:'debris',v:fwd.clone().multiplyScalar(side?9:4).addScaledVector(sideAxis,side*11),
+        spin:new THREE.Vector3(side*.85,.35,side?-.48:.74)});
+    });
+  }
   for(var d=0;d<12;d++){
     var large=d<4;
     var shard=new THREE.Mesh(new THREE.BoxGeometry(
@@ -6516,11 +6569,20 @@ function updateDevastation(dt){
         it.o.material.opacity=Math.max(0,(it.hot?0.95:0.72)-e.t*(it.hot?0.85:0.22));
       }
     });
-    if(e.t>3.4){e.scene.remove(e.group);V2._devastation.splice(i,1);}
+    if(e.t>3.4){disposeDevastation(e);V2._devastation.splice(i,1);}
   }
 }
+function disposeDevastation(effect){
+  effect.scene.remove(effect.group);
+  var materials=new Set();
+  effect.group.traverse(function(o){
+    if(o.isMesh)o.geometry.dispose();
+    if(o.material)materials.add(o.material);
+  });
+  materials.forEach(function(m){m.dispose();});
+}
 function clearDevastation(){
-  V2._devastation.forEach(function(e){e.scene.remove(e.group);});
+  V2._devastation.forEach(disposeDevastation);
   V2._devastation.length=0;
 }
 
@@ -6642,7 +6704,7 @@ function placePlane(p,battleT,elapsed,scene,dt){
       v.startPos=new THREE.Vector3();formPos(v.startPos,lossMission);
       /* A timeline scrub reconstructs state; it must not create a fatal
          hit flash and freeze that giant sprite over the aircraft. */
-      if(KM._playing&&(battleT-ft)<2.5)killFlash(scene,v.startPos);
+      if(KM._playing&&(battleT-ft)<2.5)killFlash(scene,v.startPos,4*(p.userData.mapGeometryScale||p.scale.x));
       v.chutesOut=0;v.bailoutSchedule=null;
       /* carry the formation's momentum into the fall — the ship keeps
          flying forward as it noses over, curving toward where it fell */
@@ -6706,7 +6768,8 @@ function placePlane(p,battleT,elapsed,scene,dt){
     var u=(battleT-ft)/v.dur;
     if(v.profile&&v.profile.event!=null&&!v.devastated&&u>=v.profile.event){
       v.devastated=true;
-      if(KM._playing)spawnDevastation(scene,p.position,v.profile,v.seed,v.fwd);
+      if(KM._playing)spawnDevastation(scene,KasselLossTrajectory.sample(v,v.profile.event).position,
+        v.profile,v.seed,v.fwd,p.userData.mapGeometryScale||p.scale.x);
     }
     /* the POW survivors bail out on the way down */
     var pd2=p.userData.planeData;
@@ -6836,7 +6899,7 @@ function updateFighters(battleT,dt,elapsed,scene){
   var bombers=(KM._fp||[]).concat(KM._b24?[KM._b24]:[]).filter(function(b){return b.visible&&b.userData.alive;});
   (KM._fighterWaves||[]).forEach(function(w,wi){
     var t0=waveTime(w,wi);
-    var waveDur=w.duration||54;
+    var waveDur=w.duration||90;
     var act=battleT>=t0&&battleT<t0+waveDur;
     (w.models||[]).forEach(function(f,fi){
       if(!act){f.visible=false;return;}
@@ -6858,6 +6921,7 @@ function updateFighters(battleT,dt,elapsed,scene){
       var alongPath=fighterPassCoordinate(ph,[-68,38,50,80]);
       var lateralPath=fighterPassCoordinate(ph,[0,0,12,22]);
       var verticalPath=fighterPassCoordinate(ph,[1.2,-.8,-4.8,-6.8]);
+      var passScale=.30; // Presentation scale for the compressed battle clock.
       var along=alongPath.value+u.stag;
       var lat=u.lat+side*lateralPath.value;
       var vert=verticalPath.value+u.alt;
@@ -6868,9 +6932,9 @@ function updateFighters(battleT,dt,elapsed,scene){
       var lateralPhase=ph*waveDur*1.15+fi*0.35;
       var verticalPhase=ph*waveDur*2+fi*0.31;
       lat+=Math.sin(lateralPhase)*0.28*envelope;
-      var px=a.pos.x+a.dir.x*along+across.x*lat;
-      var pz=a.pos.z+a.dir.z*along+across.z*lat;
-      var py=a.pos.y+vert+Math.sin(verticalPhase)*0.18*envelope;
+      var px=a.pos.x+passScale*(a.dir.x*along+across.x*lat);
+      var pz=a.pos.z+passScale*(a.dir.z*along+across.z*lat);
+      var py=a.pos.y+passScale*(vert+Math.sin(verticalPhase)*0.18*envelope);
       var want=new THREE.Vector3(px,py,pz);
       f.position.copy(want);
       /* Analytic pass tangent: seeking and pausing never uses the
@@ -7502,8 +7566,11 @@ KM._buildAnimation=function(){
           lossPool.pos[si*3]=spoint?spoint.x:-99999;
           lossPool.pos[si*3+1]=spoint?spoint.y:-99999;
           lossPool.pos[si*3+2]=spoint?spoint.z:-99999;
+          lossPool.plume[si*2]=spoint?spoint.size:0;
+          lossPool.plume[si*2+1]=spoint?spoint.opacity:0;
         }
         lossPool.geo.attributes.position.needsUpdate=true;
+        lossPool.geo.attributes.plume.needsUpdate=true;
       }
 
       /* fighters + escorts + tracers + chutes + flashes */

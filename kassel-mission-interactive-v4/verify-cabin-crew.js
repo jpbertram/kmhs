@@ -33,13 +33,13 @@ for (const key of ['waistL','waistR']) {
   const ray=new T.Raycaster(eye,new T.Vector3().copy(seat.look).normalize(),0,3);
   assert(!ray.intersectObjects(group.children,true).some(hit=>!hit.object.material.transparent),'Opaque geometry obstructs the window');
 }
-for (const [station,asset] of [['pilot','flight-deck-coaming'],['nav','archival-flight-record']]){
+for (const [station,asset] of [['pilot','flight-deck-coaming'],['nav','archival-flight-record'],['radio','radio-receiver-face']]){
   const {group}=context.window.KasselInterior.build(T,station,[]);
   assert(group.getObjectByName(asset), station+' missing '+asset);
 }
 const desk=context.window.KasselInterior.build(T,'nav',[]).group.getObjectByName('wooden-worktop');
 assert(desk && desk.material.map,'Navigator worktop needs a finished surface');
-for(const key of ['pilot','copilot','nav','radio']){
+for(const key of ['pilot','copilot','nav']){
   const {group,seats}=context.window.KasselInterior.build(T,key);
   group.updateMatrixWorld(true);
   const eye=new T.Vector3().copy(seats[key].offset);
@@ -101,3 +101,14 @@ const waist=context.window.KasselInterior.build(T,'waistL');
 assert(waist.group.getObjectByName('bulkhead-stiffeners'),'Missing formed bulkhead channels');
 assert(context.window.KasselInterior.build(T,'pilot').group.getObjectByName('rolled-glare-shield'));
 assert(context.window.KasselInterior.build(T,'nav').group.children.some(o=>o.material?.userData.cabinFinish==='enamel'),'Missing painted metal finish');
+{
+  const {group}=context.window.KasselInterior.build(T,'nav');
+  group.updateMatrixWorld(true);
+  for(const side of [-1,1])for(const [x,y,glass] of [[9.65,.55,false],[10.6,.55,true],[11.75,.55,false],[10.6,1.03,false]]){
+    const ray=new T.Raycaster(new T.Vector3(x,y,0),new T.Vector3(0,0,side));
+    const hit=ray.intersectObject(group,true).find(hit=>hit.object.material.userData.cabinBoundary);
+    assert(hit,'Navigator nose shell missing');
+    assert.equal(hit.object.material.transparent,glass,'Navigator glazing boundary at '+x+', '+y);
+  }
+  console.log('PASS navigator glazing has opaque forward and aft surrounds and overhead skin');
+}
