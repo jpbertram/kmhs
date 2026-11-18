@@ -6497,6 +6497,26 @@ function chuteTemplate(){
   V2._chuteTpl=KasselParachuteGeometry.build(THREE);
   return V2._chuteTpl;
 }
+/* World position of a crewman's exit on the falling ship at loss cue bu,
+   and mark that opening open so the doors show (V2.updateDamage). */
+var _exitDummy=null;
+function bailoutExitPoint(p,v,bu,plan,member){
+  var BX=window.KasselBailoutExits,surf=dmgSurface();
+  if(!BX||!surf||!surf.exits)return null;
+  var key=plan.exit;
+  if(key==='waist_window'&&/left/i.test(plan.note||''))key='waist_window_L';
+  var hit=surf.exits[key]||surf.exits[plan.exit];if(!hit)return null;
+  var open=BX.OPENS[plan.exit];
+  if(open){p.userData.dmgOpen=p.userData.dmgOpen||{};p.userData.dmgOpen[open]=true;}
+  var pose=KasselLossTrajectory.pose(v,bu);
+  if(!_exitDummy)_exitDummy=new THREE.Object3D();
+  _exitDummy.position.set(pose.position.x,pose.position.y,pose.position.z);
+  _exitDummy.scale.copy(p.scale);
+  KasselFlightAttitude.apply(THREE,_exitDummy,pose.tangent,pose.bank||0);
+  _exitDummy.updateMatrixWorld(true);
+  var local=hit.p.clone().addScaledVector(hit.n,.35);
+  return _exitDummy.localToWorld(local);
+}
 function spawnChute(scene,pos,member,planeData,index,born,momentum,openingDelay,metresPerUnit){
   var g=chuteTemplate().clone();
   // Approximate 24-ft canopy diameter on the same horizontal map scale
@@ -6747,6 +6767,8 @@ function dmgShared(){
     structure:new THREE.MeshStandardMaterial({color:0x252b1a,roughness:.8,metalness:.2}),
     /* primed inside of the airframe, seen through the cuts */
     liner:window.KasselDamageVisuals?window.KasselDamageVisuals.linerMaterial(THREE):null,
+    /* bomb bay and nose-wheel doors standing open */
+    door:new THREE.MeshStandardMaterial({color:0x0d0f07,roughness:.9,metalness:0,side:THREE.DoubleSide}),
     /* crew view: a ragged daylight hole with a torn bare-metal rim */
     holeMask:window.KasselDamageVisuals?window.KasselDamageVisuals.holeMask(THREE):null,
     holeQuads:window.KasselDamageVisuals?window.KasselDamageVisuals.holeQuads(THREE):null};
@@ -6824,6 +6846,19 @@ function dmgSurface(){
   var nm=holder.userData.nativeMatrix,ball=new THREE.Vector3(0,-.6,-5.3);
   if(nm)ball.applyMatrix4(new THREE.Matrix4().fromArray(nm));else ball.set(-1.0,0,0);
   out.belly=cast('belly',new THREE.Vector3(ball.x,-40,0),new THREE.Vector3(0,1,0));
+  /* the openings crews bailed out through (bailout-exits.js) */
+  out.exits={};
+  var BX=window.KasselBailoutExits;
+  if(BX)Object.keys(BX.EXITS).forEach(function(k){
+    var e=BX.EXITS[k],hit=null;
+    if(e.side==='belly')hit=cast('exit',new THREE.Vector3(e.x,-40,0),new THREE.Vector3(0,1,0));
+    else if(e.side==='top')hit=cast('exit',new THREE.Vector3(e.x,40,0),new THREE.Vector3(0,-1,0),2.6);
+    else if(e.side==='waist'){out.exits[k+'_L']=cast('exit',new THREE.Vector3(e.x,.6,-60),new THREE.Vector3(0,0,1),2.6);hit=cast('exit',new THREE.Vector3(e.x,.6,60),new THREE.Vector3(0,0,-1),2.6);}
+    else hit={p:new THREE.Vector3(),n:new THREE.Vector3(0,-1,0)};
+    if(hit)out.exits[k]=hit;
+  });
+  /* bomb bay length from the bay's two ends */
+  out.bayLen=BX?Math.abs(BX.EXITS.bomb_bay_fwd.x-BX.EXITS.bomb_bay_aft.x)+.9:4.5;
   return V2._dmgSurf=out;
 }
 function dmgFlame(group,sh,pos,size,kind){
@@ -6879,15 +6914,36 @@ function dmgPatchSkin(p,u){
   });
   return u.dmgSkin;
 }
+/* Bomb bay doors, nose-wheel doors and hatches standing open once a crewman
+   has gone out through them: a clean cut in the skin (shader type 6) and
+   the doors themselves. Plane-local units, belly normal -Y. */
+function dmgOpenings(surf,open,g,sh){
+  var out=[],X=surf.exits||{};if(!open)return out;
+  function rect(at,hx,hz,axis){return {prio:11,type:6,c:at,r:hz,b:[axis,0,hx/hz],n:new THREE.Vector3(0,axis===1?(at.y<0?-1:1):0,0)};}
+  function door(cx,cy,cz,sx,sy,sz,rx,rz){var m=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),sh.door);m.position.set(cx,cy,cz);m.rotation.set(rx||0,0,rz||0);m.userData.dmgOwn=true;g.add(m);}
+  if(open.bomb_bay_doors&&X.bomb_bay_fwd&&X.bomb_bay_aft){
+    var f=X.bomb_bay_fwd.p,a=X.bomb_bay_aft.p,mid=new THREE.Vector3((f.x+a.x)/2,Math.min(f.y,a.y),0),hx=(surf.bayLen||4.5)/2;
+    out.push(rect(mid,hx,.62,1));
+    /* the roller doors run up the outside of the fuselage on both sides */
+    [-1,1].forEach(function(sd){door(mid.x,mid.y+.55,sd*1.43,hx*2,.62,.05,0,0);});
+  }
+  if(open.nose_wheel_doors&&X.nose_wheel){
+    var nw=X.nose_wheel.p;out.push(rect(nw.clone(),.6,.36,1));
+    [-1,1].forEach(function(sd){door(nw.x,nw.y-.2,sd*.42,1.15,.42,.03,sd*.35,0);});
+  }
+  /* the main entrance (camera) hatch is already modelled open, tunnel gun in it */
+  if(open.top_hatch&&X.top_hatch)out.push(rect(X.top_hatch.p.clone(),.38,.3,1));
+  return out;
+}
 V2.updateDamage=function(p,cue){
   var D=window.KasselAircraftDamage,VX=window.KasselDamageVisuals,pd=p.userData&&p.userData.planeData;
   if(!D||!pd||!V2.templates||!V2.templates.b24lo)return;
   dmgFit(p,pd,D);
   var u=p.userData;
   if(!u.dmgEvents)u.dmgEvents=D.schedule(pd.pilot,pd.fate,pd.fateTime);
-  if(!u.dmgEvents.length)return;
+  if(!u.dmgEvents.length&&!u.dmgOpen)return;
   var surf=dmgSurface();if(!surf||surf.props.length!==4)return;
-  var st=D.stateAt(u.dmgEvents,cue);u.dmgState=st;var sig=st.count+':'+st.engines.map(function(e){return (e.fire?1:0)+(e.dead?2:0)+(e.feathered?4:0);}).join('')+':'+Object.keys(st.fires).join(',');
+  var st=D.stateAt(u.dmgEvents,cue);u.dmgState=st;var sig=Object.keys(u.dmgOpen||{}).join(',')+'|'+st.count+':'+st.engines.map(function(e){return (e.fire?1:0)+(e.dead?2:0)+(e.feathered?4:0);}).join('')+':'+Object.keys(st.fires).join(',');
   if(!u.dmgGroup||u.dmgGroup.parent!==p||u.dmgSig!==sig){
     if(u.dmgGroup&&u.dmgGroup.parent)u.dmgGroup.parent.remove(u.dmgGroup);
     if(u.dmgGroup)u.dmgGroup.traverse(function(o){if(o.isSprite)o.material.dispose();else if(o.isMesh&&o.userData.dmgOwn)o.geometry.dispose();});
@@ -6896,7 +6952,9 @@ V2.updateDamage=function(p,cue){
     if(VX){
       /* torn skin, flak fields, soot and oil in the skin shader; petals and
          exposed structure as real geometry (aircraft-damage-visuals.js) */
-      var L=VX.layout(surf,st,u.dmgEvents,cue,pd.pilot),skin=st.count?dmgPatchSkin(p,u):[];
+      var L=VX.layout(surf,st,u.dmgEvents,cue,pd.pilot),open=dmgOpenings(surf,u.dmgOpen,g,sh);
+      L.entries=open.concat(L.entries);
+      var skin=L.entries.length?dmgPatchSkin(p,u):[];
       skin.forEach(function(m){VX.setEntries(m,L.entries);});
       var pg=VX.petalGeometry(THREE,L.petals.slice(0,48));
       if(pg){var pm=new THREE.Mesh(pg,sh.petal);pm.userData.dmgOwn=true;pm.name='km-damage-petals';g.add(pm);}
@@ -7199,7 +7257,7 @@ function placePlane(p,battleT,elapsed,scene,dt,bombRelease,bombIndex){
       /* A timeline scrub reconstructs state; it must not create a fatal
          hit flash and freeze that giant sprite over the aircraft. */
       if(KM._playing&&(battleT-ft)<2.5)killFlash(scene,v.startPos,4*(p.userData.mapGeometryScale||p.scale.x));
-      v.chutesOut=0;v.bailoutSchedule=null;
+      v.chutesOut=0;v.bailoutSchedule=null;p.userData.dmgOpen=null;
       /* carry the formation's momentum into the fall — the ship keeps
          flying forward as it noses over, curving toward where it fell */
       v.fwd=KM._anchor.dir.clone();
@@ -7270,15 +7328,28 @@ function placePlane(p,battleT,elapsed,scene,dt,bombRelease,bombIndex){
     var bailout=v.bailoutCrew||[];
     var nCh=bailout.length;
     if(nCh>0&&v.chutesOut<nCh&&u>=0.08){
-      if(!v.bailoutSchedule)v.bailoutSchedule=bailout.map(function(member,index){
-        var pilot=v.pilot==='Miner'&&/^(pilot|command pilot)$/i.test(member.r||'');
-        return {index:index,phase:pilot?v.profile.pilotExitPhase:0.08+0.34*index/Math.max(1,nCh-1),pilot:pilot};
-      }).sort(function(a,b){return a.phase-b.phase;});
+      if(!v.bailoutSchedule){
+        /* who goes out which opening, and in what order: the AAF bail-out
+           poster, overridden where a crew account names the exit
+           (bailout-exits.js). The pilot leaves last. */
+        var BX=window.KasselBailoutExits,plans=BX?BX.plan(v.pilot,bailout,V2.CREW_LISTS&&V2.CREW_LISTS[v.pilot]):null;
+        var rankOf=bailout.map(function(member,index){
+          var pl=plans&&plans[index],isPilot=/^(pilot|command pilot)$/i.test(member.r||'');
+          return {index:index,pilot:isPilot,plan:pl,key:(isPilot?100:0)+(pl?pl.order:index)+index*.01};
+        }).sort(function(a,b){return a.key-b.key;});
+        v.bailoutSchedule=rankOf.map(function(e,k){
+          var phase=e.pilot&&v.pilot==='Miner'?v.profile.pilotExitPhase:0.08+0.34*k/Math.max(1,nCh-1);
+          return {index:e.index,phase:phase,pilot:e.pilot&&v.pilot==='Miner',plan:e.plan};
+        }).sort(function(a,b){return a.phase-b.phase;});
+        pd2.bailoutPlans=plans;
+      }
       while(v.chutesOut<nCh){
         var event=v.bailoutSchedule[v.chutesOut],ci=event.index,bu=event.phase;
         if(u<bu)break;
         var launchPose=KasselLossTrajectory.sample(v,bu).position;
         var launch=new THREE.Vector3(launchPose.x,launchPose.y,launchPose.z);
+        /* leave from the right opening on the model, and show it open */
+        if(event.plan)launch=bailoutExitPoint(p,v,bu,event.plan,bailout[ci])||launch;
         var du=.0001,ua=Math.max(0,bu-du),ub=Math.min(1,bu+du);
         var pa=KasselLossTrajectory.sample(v,ua).position,pb=KasselLossTrajectory.sample(v,ub).position;
         var ta=KMMissionTimeline.playbackAtBattleCue(ft+ua*v.dur),tb=KMMissionTimeline.playbackAtBattleCue(ft+ub*v.dur);

@@ -29,7 +29,7 @@
  */
 (function(root){
  'use strict';
- var TYPE={hole:0,field:1,soot:2,streak:3,fabric:4,panel:5};
+ var TYPE={hole:0,field:1,soot:2,streak:3,fabric:4,panel:5,opening:6};
 
  function rand(seed){var s=seed>>>0;return function(){s=(Math.imul(s^(s>>>15),2246822507)+0x9e3779b9)>>>0;s^=s>>>13;return (s>>>0)/4294967296;};}
  function hash(str){var h=2166136261;for(var i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
@@ -216,6 +216,11 @@
   '   float keep=max(step(q+(tat-.5)*1.2,.3),step(.68,kmNoise(P*vec3(.9,3.4,.9)+B.z*1.3)));',
   '   if(rib<.5&&keep<.5&&tat>.33)kmCut=1.;',
   '   kmSoot=max(kmSoot,.35*(1.-q)+.3*rib*(1.-keep));',
+  '  }else if(ty==6){', /* door or hatch standing open: a clean rectangle */
+  '   if(abs(d.y)>r*1.6)continue;vec2 uv=d.xz;uv.x/=B.w;',
+  '   float e=max(abs(uv.x),abs(uv.y))/r;if(e>1.12)continue;',
+  '   if(e<1.0)kmCut=1.;',
+  '   kmEdge=max(kmEdge,(1.-smoothstep(1.,1.06,e))*.6);',
   '  }else{', /* panel torn off: straight edges along frames, rivet line */
   '   vec2 uv=B.y<.5?d.yz:(B.y<1.5?d.xz:d.xy);float dep=B.y<.5?d.x:(B.y<1.5?d.y:d.z);if(abs(dep)>r*.8)continue;uv.x/=B.w;',
   '   float e=max(abs(uv.x),abs(uv.y))/r;if(e>1.4)continue;',
@@ -333,11 +338,11 @@
   if(!tris||!tris.length)return null;
   var pos=[],nT=tris.length/9;
   entries.forEach(function(e){
-   if(e.type!==TYPE.hole&&e.type!==TYPE.field&&e.type!==TYPE.panel)return;
+   if(e.type!==TYPE.hole&&e.type!==TYPE.field&&e.type!==TYPE.panel&&e.type!==TYPE.opening)return;
    if(e.type===TYPE.hole&&e.r<.035)return;
-   var R=e.type===TYPE.field?e.r*1.05:e.r*(e.type===TYPE.panel?(e.b[2]||1)*1.6:2.1);
+   var R=e.type===TYPE.field?e.r*1.05:e.type===TYPE.opening?e.r*(e.b[2]||1)*1.5:e.r*(e.type===TYPE.panel?(e.b[2]||1)*1.6:2.1);
    var n=e.n||v(0,0,0);if(!len(n))return;
-   var depth=Math.min(.16,.05+e.r*.12);
+   var depth=e.type===TYPE.opening?.9:Math.min(.16,.05+e.r*.12);
    for(var t=0;t<nT;t++){
     var o=t*9,cx=(tris[o]+tris[o+3]+tris[o+6])/3,cy=(tris[o+1]+tris[o+4]+tris[o+7])/3,cz=(tris[o+2]+tris[o+5]+tris[o+8])/3;
     var dx=cx-e.c.x,dy=cy-e.c.y,dz=cz-e.c.z;if(dx*dx+dy*dy+dz*dz>R*R)continue;
