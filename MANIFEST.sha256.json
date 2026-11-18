@@ -188,8 +188,8 @@
     "sha256": "dfa5b7436d632fee800adadf107fbe56aba20844fea1867abf4a8163b2cebbbe"
   },
   "kassel-mission-interactive-v4/b24-waist.glb": {
-    "bytes": 1531212,
-    "sha256": "2ea66ec9ab0751fd252b135ed3d41d08289cd4bd0073134b0fb06e233dae7bdb"
+    "bytes": 1544244,
+    "sha256": "e8a49cf0ec1987ba7dbb376a7fd39b54686727ce6751c2ff551a0be1b3b5f423"
   },
   "kassel-mission-interactive-v4/b24j-interior-olive.obj": {
     "bytes": 24802899,
@@ -564,8 +564,8 @@
     "sha256": "da15a4498b26016ad11b3ead637e830fc5d4cdccbf5c9ec147f3db3ac9af3412"
   },
   "kassel-mission-interactive-v4/tools/crew-stations/README.md": {
-    "bytes": 3407,
-    "sha256": "5b2234393d5698262214a42b8c82333d10b2f335e59d5f74d97cece36aa5c45e"
+    "bytes": 3536,
+    "sha256": "e44342db6829e9327b2a101c77abcf99f441e2e97aa01a8f58399823ff4ed0d6"
   },
   "kassel-mission-interactive-v4/tools/crew-stations/__pycache__/b24lib.cpython-311.pyc": {
     "bytes": 41092,
@@ -608,8 +608,8 @@
     "sha256": "937b04dbd91930691203a59f32737c752dc93d639cf6648ed34e26723b582fbd"
   },
   "kassel-mission-interactive-v4/tools/crew-stations/waist.py": {
-    "bytes": 9129,
-    "sha256": "38414ef217e37eee25395f659bf1d605225666479a7eb82b4c275d2b20d27f17"
+    "bytes": 10668,
+    "sha256": "17aae48d37ab6ee7bec45217c80217e46da9c18ffb0b81d59fcc000509992fbc"
   },
   "kassel-mission-interactive-v4/turn-browser-preview.png": {
     "bytes": 142725,

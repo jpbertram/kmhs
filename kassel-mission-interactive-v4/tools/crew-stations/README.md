@@ -40,6 +40,8 @@ Gun Turrets" table:
   Sperry ball's standard sight, but no source read ties it to these blocks.
 - Tail: Consolidated A-6B (Motor Products built) on the H and later J blocks,
   with ammunition boxes outside the turret feeding along rails.
+- Waist: enclosed Plexiglas windows with the gun on a K-6 mount at the sill
+  (modelled), not the open hatches of museum photos.
 - Nose: Emerson A-15 on the Fort Worth and Douglas Tulsa ships (modelled);
   San Diego Js carried the Consolidated A-6A/B nose turret instead.
 

@@ -1,15 +1,22 @@
 """B-24H/J waist gunners' compartment.
 
 From JP's NMUSAF photos: zinc-chromate yellow-green structure with deep
-formers and stringers, open waist windows with the hatch covers swung up
-under the roof, .50 cal M2 guns on pedestal (K-6 style) mounts, ammunition
+formers and stringers, .50 cal M2 guns on K-6 mounts, ammunition
 belts riding up to the guns, yellow oxygen bottles below the windows, brown
 plywood kick panels, corrugated floor with black mats. Same frame as the
 flight deck (metres, Y forward). Station positions follow the existing
 mission reconstruction; dimensions are estimates, not factory drawings.
+
+Kassel-era fit (27 Sep 1944): the 445th's B-24Hs and Js flew with the waist
+positions enclosed: framed Plexiglas windows with the gun on a K-6 mount at
+the sill, its barrel through a booted port in the glazing (B-24 variant notes
+on kasselmission.org and Warbirds Resource Group). The open windows with the
+hatch covers swung up under the roof seen in museum photos are the earlier
+arrangement and are not modelled.
 """
 import sys, math
 import bpy  # noqa: F401
+import bmesh
 from mathutils import Vector, Euler
 import b24lib as L
 
@@ -28,6 +35,7 @@ BLACK = L.mat('black_crinkle', tex='black_crinkle', rough=.6, metal=.25)
 AMMO = L.mat('ammo_belt', tex='ammo_belt', rough=.4, metal=.7)
 GREY = L.mat('hatch_grey', tex='hatch_grey', rough=.6, metal=.1)
 GLASS = L.mat('plexiglas', color=(.62, .72, .78), rough=.05, metal=0, alpha=.12)
+BOOT = L.mat('canvas_boot', color=(.26, .24, .17), rough=.9, metal=0)
 ALU = L.mat('aluminium', color=(.55, .56, .55), rough=.35, metal=.85)
 WIRE = L.mat('wiring_tan', color=(.42, .33, .17), rough=.7, metal=0)
 RED = L.mat('extinguisher_red', color=(.45, .04, .03), rough=.4, metal=.2)
@@ -89,18 +97,35 @@ for s in (-1, 1):
         L.box((s * 0.82, WY0 - 0.1 + k * 0.17, WZ0 + 0.0), (0.2, 0.015, 0.02), ZC, bevel=0.003)
     xw = L.section_x(sec, -8.35, -0.2, s) - s * 0.04
     L.panel((xw, -8.35, -0.2), 1.6, 0.66, WOOD, normal=(-s, 0, 0), up=(0, 0, 1))
-# hatch covers swung up under the roof (grey with small windows), one per side
+# enclosed waist windows: framed Plexiglas with a booted gun port at the K-6 mount
+PY, PZ, PW, PH = -8.2, 0.79, 0.20, 0.18
 for s in (-1, 1):
-    c = Vector((s * 0.5, (WY0 + WY1) / 2, 1.6))
-    L.box(c, (0.75, 1.15, 0.03), GREY, bevel=0.06, segs=4, rot=Euler((0, s * math.radians(-28), 0)), tile=1.0)
-    L.panel(c + Vector((-s * 0.02, 0, -0.03)), 0.22, 0.3, GLASS, normal=(-s * 0.8, 0, -0.6), up=(0, 1, 0))
-    L.tube([(s * 0.86, WY1 - 0.1, 1.4), (s * 0.86, WY0 + 0.1, 1.4)], 0.015, ALU, segs=8)   # hinge rail
+    def wp(y, z, s=s):
+        return (L.section_x(sec, y, z, s) - s * 0.018, y, z)
+    y0, y1, z0, z1 = WY0 + 0.03, WY1 - 0.03, WZ0 + 0.03, WZ1 - 0.03
+    for (ya, yb, za, zb) in [(y0, PY - PW / 2, z0, z1), (PY + PW / 2, y1, z0, z1),
+                             (PY - PW / 2, PY + PW / 2, z0, PZ - PH / 2), (PY - PW / 2, PY + PW / 2, PZ + PH / 2, z1)]:
+        bm = bmesh.new(); vs = [bm.verts.new(wp(*q)) for q in [(ya, za), (yb, za), (yb, zb), (ya, zb)]]; bm.faces.new(vs)
+        L._obj(bm, GLASS, 'waist_glass', tile=0.5, smooth=0)
+    # frame: horizontal rail at the port top, mullions either side of the port
+    L.tube([wp(y0, PZ + PH / 2 + 0.01), wp(y1, PZ + PH / 2 + 0.01)], 0.016, ZCF, segs=8)
+    for y in (PY - PW / 2 - 0.01, PY + PW / 2 + 0.01):
+        L.tube([wp(y, z0), wp(y, z1)], 0.016, ZCF, segs=8)
+    L.tube([wp(PY - PW / 2, PZ - PH / 2 - 0.01), wp(PY + PW / 2, PZ - PH / 2 - 0.01)], 0.016, ZCF, segs=8)
+    # canvas boot round the barrel in the port
+    c = Vector(wp(PY, PZ))
+    L.box(c, (0.04, PW - 0.02, PH - 0.02), BOOT, bevel=0.03, segs=3)
+    # latch handles (the window and mount jettison together)
+    for y in (y0 + 0.05, y1 - 0.05):
+        L.box(Vector(wp(y, z1 - 0.06)) - Vector((s * 0.02, 0, 0)), (0.03, 0.05, 0.03), BLACK, bevel=0.006)
 
 # ------------------------------------------------------------- guns on pedestal mounts
 for s in (-1, 1):
     px, py = s * 0.76, -8.2
-    L.tube([(px, py, FLOOR_Z), (px, py, 0.6)], 0.032, ZCF, segs=12)         # pedestal post
-    L.tube([(px, py, -0.1), (s * 0.86, py - 0.25, WZ0 - 0.03)], 0.02, ZCF, segs=10)  # brace to sill
+    L.box((s * 0.84, py, WZ0 + 0.01), (0.16, 0.22, 0.04), PARK, bevel=0.008)  # K-6 base plate on the sill
+    L.tube([(s * 0.80, py, WZ0 + 0.03), (px, py, 0.6)], 0.03, PARK, segs=12)  # K-6 post
+    L.tube([(s * 0.86, py - 0.1, WZ0 + 0.03), (px, py, 0.45)], 0.016, PARK, segs=10)
+    L.tube([(s * 0.86, py + 0.1, WZ0 + 0.03), (px, py, 0.45)], 0.016, PARK, segs=10)
     L.box((px, py, 0.64), (0.07, 0.07, 0.09), PARK, bevel=0.01)              # yoke / cradle
     gun_dir = Vector((s, 0, 0.06)).normalized()
     rec_c = Vector((px - s * 0.1, py, 0.77))
