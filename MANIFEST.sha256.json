@@ -336,8 +336,8 @@
     "sha256": "ec4426568e2a8d75f9a602a8d2ed40f1e9d7c2e534847686cc8bd810ee296c22"
   },
   "kassel-mission-interactive-v4/km3d-v3.js": {
-    "bytes": 451420,
-    "sha256": "ba29b39c903336b0467f094bc3e38cb583e0ef9d707ba8edc93757c88c976771"
+    "bytes": 453955,
+    "sha256": "bf3413abb680ed31ee2f18e8d77009ac0632a7838e8e6fe39bf3a4cd05b33def"
   },
   "kassel-mission-interactive-v4/loss-smoke.js": {
     "bytes": 1710,
@@ -357,11 +357,11 @@
   },
   "kassel-mission-interactive-v4/mission-reconstruction.html": {
     "bytes": 344395,
-    "sha256": "675deeeff53ce63f990b9158821cc87e343712c28236af0da72ae1a4bf9d04df"
+    "sha256": "e16bb6a7134d09d4f3f35174933553883827873c8819a8c8fdab16d8443d979e"
   },
   "kassel-mission-interactive-v4/mission-timeline.js": {
-    "bytes": 6834,
-    "sha256": "2f418c4ee4a3e5c9470ec73086fba7d249c70b39c8acb6c15b80595b3916ffc4"
+    "bytes": 7303,
+    "sha256": "9d30b8ae511d5d4998940147c76114049a8be8c3e5c529bc8eefda4e15e195d4"
   },
   "kassel-mission-interactive-v4/parachute-contact.js": {
     "bytes": 2133,
@@ -584,8 +584,8 @@
     "sha256": "4f2fad2f5be81f0fe00dc2b330ed376c070545ff5df2dcaa9e3545a381d8c5aa"
   },
   "kassel-mission-interactive-v4/test-m1-clock.js": {
-    "bytes": 2987,
-    "sha256": "5748ad49825802027ca409cdaeeeca078fa1f7dfc00ccc9a66d8a17975dd4af3"
+    "bytes": 3011,
+    "sha256": "1d4156c72a52d72e12dc9528149bd2ae9c6de448e111de64ce93cf8aab5e3712"
   },
   "kassel-mission-interactive-v4/test-m1-crew-exterior.js": {
     "bytes": 1049,

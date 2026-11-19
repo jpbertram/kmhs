@@ -6451,34 +6451,64 @@ function prepareBombVisual(){
     };
   }
 }
+/* A 500-lb AN-M64 is about 1.5 m long. Released at about 105 m/s from
+   23,000 ft it leaves the bay level, weathervanes nose-down as it picks
+   up speed, nears a terminal speed of roughly 280 m/s and takes about
+   45 s to reach the ground, trailing a little behind the ship that
+   dropped it. The fall runs on the same compressed clock as the
+   formation, so the bombs stay under the ships instead of streaking
+   off; the drop itself plays slowly (mission-timeline.js). Terminal
+   speed, the horizontal drag constant and the release nose-up are
+   ESTIMATES for a representative fall, not a ballistics table. */
+var BOMB={lengthM:1.52,tasMps:105,g:9.81,vtMps:280,dragK:1e-4,minPx:13};
+function bombMetres(){
+  var mx=111195*Math.cos(51.4*Math.PI/180)*(GEO.xToLon(1)-GEO.xToLon(0));
+  var mz=111195*(GEO.zToLat(0)-GEO.zToLat(1));
+  return {x:mx,z:mz,y:7010/115};
+}
 function queueBombs(scene,plane,index,release,samplePosition){
   prepareBombVisual();
-  var scale=plane.userData.mapGeometryScale||plane.scale.x;
+  var scale=plane.userData.mapGeometryScale||plane.scale.x,m=bombMetres();
   for(var i=0;i<4;i++){
-    var born=release+index*.12+i*.28;
-    var route=KMMissionTimeline.routeAt(born);
-    var launch=new THREE.Vector3();
-    samplePosition(launch,route);
+    /* the box salvos on its leaders: a short ripple, not a long trickle */
+    var born=release+index*.03+i*.12;
+    var launch=new THREE.Vector3(),ahead=new THREE.Vector3();
+    samplePosition(launch,KMMissionTimeline.routeAt(born));
+    samplePosition(ahead,KMMissionTimeline.routeAt(born+.25));
     launch.y-=2.5*scale;
-    var track=KM._full;
-    var direction=track?track.getTangentAt(Math.min(1,fullArc(route)/(track.__len||track.getLength()))):KM._anchor.dir;
+    var dx=(ahead.x-launch.x)/.25,dz=(ahead.z-launch.z)/.25;
+    var speedM=Math.hypot(dx*m.x,dz*m.z)||1;
     var mesh=new THREE.Mesh(bombVisual.geometry,bombVisual.material);
     mesh.name='mission-bomb';
     mesh.add(new THREE.Mesh(bombVisual.tail,bombVisual.material));
     mesh.visible=false;
     scene.add(mesh);
-    bombs.push({mesh:mesh,scene:scene,born:born,launch:launch,scale:scale,vx:direction.x*7,vz:direction.z*7});
+    bombs.push({mesh:mesh,scene:scene,born:born,launch:launch,
+      /* unit heading in metres, and real seconds per playback second */
+      hx:dx*m.x/speedM,hz:dz*m.z/speedM,realPerPlayback:speedM/BOMB.tasMps,
+      wobble:hash('bomb'+index+'-'+i)%628/100});
   }
 }
+V2.bombFallAt=function(t){
+  var v0=BOMB.tasMps,k=BOMB.dragK,vt=BOMB.vtMps,g=BOMB.g;
+  return {
+    alongM:Math.log(1+k*v0*t)/k,
+    dropM:vt*vt/g*Math.log(Math.cosh(g*t/vt)),
+    vAlong:v0/(1+k*v0*t),
+    vDown:vt*Math.tanh(g*t/vt)
+  };
+};
 function updateBombs(seconds,camera,showImpacts){
-  var canvas=KM._ren.domElement;
+  var canvas=KM._ren.domElement,m=bombMetres();
   var pixelSpan=2*Math.tan(camera.fov*Math.PI/360)/Math.max(1,canvas.clientHeight);
+  var trueScale=BOMB.lengthM/2.34/m.x;
+  var axis=new THREE.Vector3(),tip=new THREE.Quaternion();
   for(var i=bombs.length-1;i>=0;i--){
     var b=bombs[i],age=seconds-b.born;
-    if(age<0)continue;
-    var pos=b.mesh.position;
+    if(age<0){b.mesh.visible=false;continue;}
     // Use the playback clock so the same drop is visible after a seek.
-    pos.set(b.launch.x+b.vx*age,b.launch.y-10*age-15*age*age,b.launch.z+b.vz*age);
+    var t=age*b.realPerPlayback,f=V2.bombFallAt(t),pos=b.mesh.position;
+    pos.set(b.launch.x+b.hx*f.alongM/m.x,b.launch.y-f.dropM/m.y,b.launch.z+b.hz*f.alongM/m.z);
     var gy=(V2.groundAt&&V2.groundAt(pos.x,pos.z))??2;
     if(pos.y<=gy){
       if(showImpacts){
@@ -6490,10 +6520,16 @@ function updateBombs(seconds,camera,showImpacts){
       continue;
     }
     b.mesh.visible=true;
-    // A minimum screen size keeps a distant payload legible. It affects
-    // the display mesh only, never the sampled release or impact position.
-    b.mesh.scale.setScalar(Math.max(b.scale,pixelSpan*camera.position.distanceTo(pos)*2));
-    b.mesh.quaternion.setFromUnitVectors(bombVisual.nose,bombVisual.velocity.set(b.vx,-10-30*age,b.vz).normalize());
+    // True size up close; a minimum screen length keeps a distant bomb
+    // reading as a bomb rather than a speck. Display only.
+    b.mesh.scale.setScalar(Math.max(trueScale,BOMB.minPx*pixelSpan*camera.position.distanceTo(pos)/2.34));
+    // Nose follows the velocity on screen, after a short nose-up release
+    // and a damped fin wobble while the bomb picks up speed.
+    var vel=bombVisual.velocity.set(b.hx*f.vAlong/m.x,-f.vDown/m.y,b.hz*f.vAlong/m.z).normalize();
+    b.mesh.quaternion.setFromUnitVectors(bombVisual.nose,vel);
+    var settle=Math.exp(-t/7),pitch=settle*(.22*Math.exp(-t/2.5)+.09*Math.sin(1.6*t+b.wobble));
+    axis.set(-b.hz,0,b.hx).normalize();
+    b.mesh.quaternion.premultiply(tip.setFromAxisAngle(axis,pitch));
   }
 }
 function clearBombs(){
@@ -8163,19 +8199,32 @@ KM._buildAnimation=function(){
   all.forEach(function(p){initPlaneBattle(p,scene);});
   V2._frame=0;
   var elapsed=0,lastTime=performance.now(),holdT=0;
-  var frameInterval=1000/30,nextRender=lastTime+frameInterval;
+  /* About 30 frames a second, locked to the display's refresh. Drawing
+     every Nth refresh (N = 2 at 60 Hz, 4 at 120 Hz) shows each frame for
+     the same time and advances the clock by the same step. A deadline
+     read off performance.now() drifted against the refresh, so some
+     frames stayed up for one refresh and others for three: the ground
+     stalled, then lurched, and the formation looked as if it slid back
+     and jumped forward. */
+  var frameInterval=1000/30,refresh=1000/60,lastTick=null,tick=0;
   document.addEventListener('visibilitychange',function(){
-    lastTime=performance.now();nextRender=lastTime+frameInterval;
+    lastTime=null;lastTick=null;
   });
 
-  function animate(){
+  function animate(ts){
     requestAnimationFrame(animate);
-    var now=performance.now();
-    // Keep a stable deadline. Resetting it to each delivered frame
-    // can skip an extra refresh and alternate between uneven intervals.
-    if(document.hidden||now+1<nextRender)return;
-    nextRender+=frameInterval*Math.max(1,Math.floor((now-nextRender)/frameInterval)+1);
-    var wallDelta=(now-lastTime)/1000;
+    if(document.hidden)return;
+    var now=typeof ts==='number'?ts:performance.now();
+    if(lastTick!==null){
+      var gap=now-lastTick;
+      /* learn the refresh period from ordinary gaps, not dropped frames */
+      if(gap>2&&gap<refresh*1.5)refresh+=(gap-refresh)*.1;
+    }
+    lastTick=now;
+    var stride=Math.max(1,Math.round(frameInterval/refresh));
+    if((++tick)%stride)return;
+    if(lastTime===null)lastTime=now-stride*refresh;
+    var wallDelta=Math.max(0,(now-lastTime)/1000);
     lastTime=now;
     var dt=Math.min(wallDelta,0.05);
     /* sim clock: choreography freezes dead when paused — the camera
