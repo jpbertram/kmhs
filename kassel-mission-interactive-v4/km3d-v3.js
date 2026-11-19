@@ -4345,12 +4345,12 @@ V2.cityDot=function(scene,x,y,z,col){
   var s=new THREE.Mesh(new THREE.SphereGeometry(2.2,10,10),
     new THREE.MeshBasicMaterial({color:col||0xffffff}));
   s.position.set(x,y,z);scene.add(s);
-  s.userData.geoMarker=true;s.material.transparent=true;(V2._halos=V2._halos||[]).push(s);
+  s.userData.geoMarker=true;
   var halo=new THREE.Sprite(new THREE.SpriteMaterial({
     map:V2.softTex(),color:col||0xffffff,transparent:true,
     opacity:0.3,depthWrite:false,blending:THREE.AdditiveBlending}));
   halo.position.set(x,y,z);halo.scale.set(9,9,1);scene.add(halo);
-  halo.userData.geoMarker=true;halo.userData.kmHalo=true;(V2._halos=V2._halos||[]).push(halo);
+  halo.userData.geoMarker=true;
 };
 
 V2.addGeoLabels=function(scene){
@@ -5402,9 +5402,6 @@ KM._buildFormation=function(){
         new THREE.MeshBasicMaterial({color:wp.c,transparent:true,opacity:0.18,side:THREE.DoubleSide}));
       ring.position.copy(wp.p);ring.position.y+=1;ring.rotation.x=-Math.PI/2;
       ring.userData={phase:Math.random()*Math.PI*2};scene.add(ring);
-      /* hidden from the chase and crew cameras: an 800 m red sphere at
-         altitude read as a pink blob in the sky */
-      (V2._halos=V2._halos||[]).push(ws,ring);
     });
   }
 
@@ -5465,12 +5462,12 @@ V2.addCrashSites=function(scene,subtle){
     var col=V2.FATE_COLORS[cs.f]||0xe74c3c;
     var dot=new THREE.Mesh(new THREE.SphereGeometry(1.6,8,8),
       new THREE.MeshBasicMaterial({color:col}));
-    dot.position.set(xz[0],y,xz[1]);group.add(dot);dot.material.transparent=true;(V2._halos=V2._halos||[]).push(dot);
+    dot.position.set(xz[0],y,xz[1]);group.add(dot);
     var halo=new THREE.Sprite(new THREE.SpriteMaterial({map:soft,color:col,
       transparent:true,opacity:subtle?0.22:0.4,depthWrite:false,
       blending:THREE.AdditiveBlending}));
     halo.position.set(xz[0],y+0.5,xz[1]);halo.scale.set(8,8,1);
-    group.add(halo);halo.userData.kmHalo=true;(V2._halos=V2._halos||[]).push(halo);
+    group.add(halo);
     /* label sprite (revealed in crash view / when the ship goes down) */
     var c=document.createElement('canvas');c.width=512;c.height=96;
     var g2=c.getContext('2d');
@@ -8208,11 +8205,6 @@ KM._buildAnimation=function(){
       }
 
       if(V2._frame%30===1)V2.capPoints(scene);
-      /* map-marker glows (city and crash-site halos) read as pink and white
-         circles hanging in the sky from the chase and crew cameras: show
-         them only in the map-style views */
-      if(V2._frame%15===1&&V2._halos){var csm=KM._camState&&KM._camState.mode,near=csm==='chase'||csm==='crew'||csm==='follow';
-        V2._halos.forEach(function(h){var m=h.material,u=h.userData;if(near&&u._kmHid===undefined){u._kmHid=m.opacity;m.opacity=0;}else if(!near&&u._kmHid!==undefined){m.opacity=u._kmHid;delete u._kmHid;}});}
       /* thinner haze through the attack so damage and fires read */
       if(scene.fog&&scene.fog.density!==undefined){if(V2._fogBase===undefined)V2._fogBase=scene.fog.density;
         var inBattle=KM._missionT>.80&&KM._missionT<.96;scene.fog.density=V2._fogBase*(inBattle?.45:1);}
@@ -9284,7 +9276,7 @@ V2.postUpgrade=function(){
     var sm=findPoints(KM._smoke.geo);
     if(sm){sm.material.dispose();sm.material=new THREE.PointsMaterial({
       map:soft,color:0x3a3b40,size:9,transparent:true,opacity:0.5,
-      depthWrite:false,fog:false,blending:THREE.NormalBlending});}
+      depthWrite:false,blending:THREE.NormalBlending});}
   }
   if(KM._fire){
     var fr=findPoints(KM._fire.geo);
