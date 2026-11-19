@@ -4345,7 +4345,7 @@ V2.cityDot=function(scene,x,y,z,col){
   var s=new THREE.Mesh(new THREE.SphereGeometry(2.2,10,10),
     new THREE.MeshBasicMaterial({color:col||0xffffff}));
   s.position.set(x,y,z);scene.add(s);
-  s.userData.geoMarker=true;
+  s.userData.geoMarker=true;s.material.transparent=true;(V2._halos=V2._halos||[]).push(s);
   var halo=new THREE.Sprite(new THREE.SpriteMaterial({
     map:V2.softTex(),color:col||0xffffff,transparent:true,
     opacity:0.3,depthWrite:false,blending:THREE.AdditiveBlending}));
@@ -5465,7 +5465,7 @@ V2.addCrashSites=function(scene,subtle){
     var col=V2.FATE_COLORS[cs.f]||0xe74c3c;
     var dot=new THREE.Mesh(new THREE.SphereGeometry(1.6,8,8),
       new THREE.MeshBasicMaterial({color:col}));
-    dot.position.set(xz[0],y,xz[1]);group.add(dot);
+    dot.position.set(xz[0],y,xz[1]);group.add(dot);dot.material.transparent=true;(V2._halos=V2._halos||[]).push(dot);
     var halo=new THREE.Sprite(new THREE.SpriteMaterial({map:soft,color:col,
       transparent:true,opacity:subtle?0.22:0.4,depthWrite:false,
       blending:THREE.AdditiveBlending}));
