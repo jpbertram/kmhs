@@ -224,3 +224,225 @@ No ship is shown with a ball turret. Documented removed: Chilton (H2X radar dome
 ### Fromm
 - **fuselage holes (waist)**, inferred. "Heavily damaged" Waist gunner Joseph Williams was badly wounded and immobilised at his station.
 - **explosion**, documented. "exploded at low altitude about 400 metres south of Reichenbach"
+
+## Bailout exits
+
+Where each man who bailed out leaves the ship in the battle view, and in what order. Each exit is marked:
+
+- **documented**: a crew account in reference/society-crew-cms-snapshot.json names the opening (quoted).
+- **documented (bomb bay unusable)**: the account says the bomb bay could not be used, so the man the poster sends there takes the next exit the poster allows.
+- **poster**: the AAF Flight Control Command poster "How to Bail Out of the B-24" (Safety Education Division with the AAF School of Applied Tactics). Nose-wheel door: navigator 1, bombardier 2. Forward end of the bomb bay: engineer 1, radio operator 2, co-pilot 3, pilot 4, the pilot last to leave. Aft end of the bomb bay: ball turret gunner 1, right waist gunner 2 (alternate: main entrance hatch). Main entrance hatch: tail gunner 1, left waist gunner 2.
+- **inferred**: the poster has no station for him. The nose turret gunner leaves by the nose-wheel door after the navigator and bombardier; a command pilot or observer on the flight deck leaves with the flight-deck crew. Where a crew list does not say which waist gunner stood on which side, the first listed is taken as the right waist gunner.
+
+The bomb bay doors roll up the outside of the fuselage, the nose-wheel doors hang open and the floor hatches are cut open on the model once someone uses them (bailout-exits.js, km3d-v3.js).
+
+### Baynham
+
+- Charles M. Bousquet (Co-Pilot): forward end of the bomb bay, poster
+- Hektor V. Scala (Bombardier): nose-wheel door, poster
+- Howard L. Boldt (Engineer / Top Turret Gunner): forward end of the bomb bay, documented. "I hit the auxiliary bomb door lever. The left two doors opened all the way … and out I went"
+- John W. Cowgill (Navigator): nose-wheel door, poster
+- James T. Fields (Radio Operator): forward end of the bomb bay, poster
+- John W. Knox (Tail Gunner): main entrance hatch, poster
+- John R. Lemons (Waist Gunner): main entrance hatch, poster
+- James C. Baynham (Pilot): forward end of the bomb bay, poster
+
+### Bolin
+
+- Orland J. Schooley (Tail Gunner): main entrance hatch, poster
+
+### Brent
+
+- Walter E. George (Co-Pilot): forward end of the bomb bay, poster
+- Constantine Galuszewski (Engineer / Top Turret Gunner): forward end of the bomb bay, poster
+- Sammy S. Weiner (Radio Operator): forward end of the bomb bay, poster
+
+### Bruce
+
+- Peter Pogovich (Radio Operator): forward end of the bomb bay, poster
+- William S. Bruce (Pilot): forward end of the bomb bay, poster
+
+### Bruland
+
+- Peter S. Belitsos (Co-Pilot): forward end of the bomb bay, poster
+- Stephen J. Gray (Engineer / Top Turret Gunner): forward end of the bomb bay, poster
+- Norman J. Cuddy (Navigator): nose-wheel door, poster
+- Ferdinand K. Flach (Nose Turret Gunner): nose-wheel door, inferred. The poster has no nose turret; the nose gunner leaves with the navigator and bombardier.
+- James H. Boman (Radio Operator): forward end of the bomb bay, poster
+- Charles M. Dove (Tail Gunner): main entrance hatch, poster
+- Lee R.J. Huffman (Waist Gunner): aft end of the bomb bay, poster
+- Hugh J. Sullivan (Waist Gunner): main entrance hatch, poster
+- Palmer M. Bruland (Pilot): forward end of the bomb bay, poster
+
+### Carrow
+
+- Newell W. Brainard (Co-Pilot): forward end of the bomb bay, poster
+- Herbert A. Ledin (Tail Gunner): main entrance hatch, poster
+- Nicholas H. Dengler (Waist Gunner): aft end of the bomb bay, poster
+- Charles W. Loether (Waist Gunner): main entrance hatch, poster
+- Raphael E. Carrow (Pilot): forward end of the bomb bay, poster
+
+### Chilton
+
+- Glen S. McCormick (Ball Turret Gunner): aft end of the bomb bay, poster
+- Parker S. Trefethen (Bombardier): nose-wheel door, poster
+- Howard L. Sturdy (Engineer / Top Turret Gunner): forward end of the bomb bay, poster
+- Carlton V. Hudson (Pilotage Navigator): nose-wheel door, poster
+- Cloys V. Johnson (Radar Navigator): nose-wheel door, poster
+- William J. Sloane (Radio Operator): forward end of the bomb bay, poster
+- Donald W. Mills (Tail Gunner): main entrance hatch, poster
+- Merle R. Briggs (Waist Gunner): aft end of the bomb bay, poster
+
+### Donald
+
+- Eric C. Smith (Co-Pilot): forward end of the bomb bay, poster
+- Frank C. Smith (Co-Pilot): forward end of the bomb bay, poster
+- Ira P. Weinstein (Bombardier): nose-wheel door, documented. "out of the nose turret and out the nose wheel hatch"
+- Jack B. Stidham (Radio Operator): forward end of the bomb bay, poster
+- Myron H. Donald (Pilot): forward end of the bomb bay, poster
+
+### Elder
+
+- Roy E. Ellender (Co-Pilot): forward end of the bomb bay, poster
+- Paul E. Devries (Engineer / Top Turret Gunner): forward end of the bomb bay, poster
+- Harold P. Whidden (Navigator): nose-wheel door, poster
+- John J. Donahue (Radio Operator): forward end of the bomb bay, poster
+- Charles J. Deckert (Waist Gunner): aft end of the bomb bay, poster
+- John L. Durr (Waist Gunner): main entrance hatch, poster
+
+### Fromm
+
+- Russell C. Lene (Engineer / Top Turret Gunner): forward end of the bomb bay, poster
+- Charles B. McCann (Navigator / Bombardier): nose-wheel door, poster
+- Raymond E. Bence (Nose Turret Gunner): nose-wheel door, inferred. The poster has no nose turret; the nose gunner leaves with the navigator and bombardier.
+- Joseph J. Rackis (Radio Operator): forward end of the bomb bay, documented. "Radio operator Joseph Rackis and copilot Edward Globis dropped through the bomb bay one behind the other"
+- Lee H. Coffin (Tail Gunner): main entrance hatch, poster
+- Joseph F. Williams (Waist Gunner): aft end of the bomb bay, poster
+- William N. Brower (Waist Gunner): main entrance hatch, poster
+- Richard A. Fromm (Pilot): forward end of the bomb bay, poster
+
+### Golden
+
+- Robert C. Christie (Co-Pilot): forward end of the bomb bay, poster
+- Theodore C. Boecher (Bombardier): nose-wheel door, poster
+- Earl C. Romine (Engineer / Top Turret Gunner): forward end of the bomb bay, poster
+- Edmund F. Boomhower (Navigator): nose-wheel door, poster
+- Jack M. Erickson (Radio Operator): forward end of the bomb bay, poster
+- Norman J. Stewart (Tail Gunner): main entrance hatch, documented. "dropped him out through the camera hatch"
+- Robert R. Bagley (Waist Gunner): aft end of the bomb bay, poster
+- Edward H. Feltus (Waist Gunner): main entrance hatch, poster
+
+### Hansen
+
+- Herbert C. Bridges (Co-Pilot): forward end of the bomb bay, poster
+- John C. Woodley (Bombardier): nose-wheel door, documented. "He crawled to the nose-wheel hatch"
+- Charles C. Palmer (Engineer / Top Turret Gunner): forward end of the bomb bay, poster
+- Porter M. Pile (Navigator): nose-wheel door, poster
+- James M. Triplett (Radio Operator): forward end of the bomb bay, poster
+- Ralph H. Bode (Tail Gunner): main entrance hatch, poster
+- Elwyn J. Hornsby (Waist Gunner): aft end of the bomb bay, poster
+- S E. Howell (Waist Gunner): main entrance hatch, documented. "waist gunner S. E. Howell, shot in the chest, was pushed out the rear hatch"
+
+### Hautman
+
+- Carrol G. Snidow (Co-Pilot): forward end of the bomb bay, poster
+- Thomas W. Land (Engineer / Top Turret Gunner): forward end of the bomb bay, poster
+- Maynard L. Jones (Navigator): nose-wheel door, poster
+- Dale C. Maupin (Nose Turret Gunner): nose-wheel door, inferred. The poster has no nose turret; the nose gunner leaves with the navigator and bombardier.
+- Harold W. Giesler (Radio Operator): forward end of the bomb bay, poster
+- Orvel G. Howe (Waist Gunner): aft end of the bomb bay, poster
+
+### Johnson
+
+- Edward M. Kelly (Co-Pilot): forward end of the bomb bay, poster
+- James E. Dowling (Bombardier): nose-wheel door, documented. "Dowling clipped on his chest chute and rolled out the nose-wheel opening"
+- Arthur P. Eisenman (Engineer / Top Turret Gunner): forward end of the bomb bay, poster
+- William E. Flickner (Navigator / Nose Turret Gunner): nose-wheel door, inferred. The poster has no nose turret; the nose gunner leaves with the navigator and bombardier.
+- Charles H. Reilly (Radio Operator): forward end of the bomb bay, poster
+- Floyd L. Jackson (Tail Gunner): main entrance hatch, poster
+- Alan M. Baldwin (Waist Gunner): aft end of the bomb bay, poster
+- Rubin J. Sisco (Waist Gunner): main entrance hatch, poster
+- Joseph E. Johnson (Pilot): forward end of the bomb bay, poster
+
+### Jones
+
+- Joseph A. Wilski (Bombardier): nose-wheel door, poster
+- Robert Fulton (Navigator): nose-wheel door, poster
+- Milton H. Lee (Nose Turret Gunner): nose-wheel door, inferred. The poster has no nose turret; the nose gunner leaves with the navigator and bombardier.
+- William C. Stremme (Radio Operator): forward end of the bomb bay, poster
+- Willis A. Meier (Waist Gunner): waist window, documented. "Meier bailed from the waist window"
+- Warren B. Pendleton (Waist Gunner): main entrance hatch, poster
+- Howard A. Jones (Pilot): forward end of the bomb bay, poster
+
+### Miner
+
+- Virgil Chima (Co-Pilot): nose-wheel door, documented (bomb bay unusable). "the bomb-bay doors jammed, so he pulled himself out the nose-wheel opening"
+- John V. Omick (Bombardier): nose-wheel door, poster
+- Robert M. Ault (Engineer / Top Turret Gunner): nose-wheel door, documented (bomb bay unusable). "the bomb-bay doors jammed, so he pulled himself out the nose-wheel opening"
+- Frank J. Bertram (Navigator): nose-wheel door, poster
+- Charles W. Jackson (Pilotage Navigator): nose-wheel door, poster
+- Branch H. Henard (Radar Navigator): nose-wheel door, poster
+- Joseph H. Gilfoil (Radio Operator): nose-wheel door, documented (bomb bay unusable). "the bomb-bay doors jammed, so he pulled himself out the nose-wheel opening"
+- Alvis O. Kitchens (Tail Gunner): main entrance hatch, poster
+- Lawrence S. Bowers (Waist Gunner): main entrance hatch, documented (bomb bay unusable). "the bomb-bay doors jammed, so he pulled himself out the nose-wheel opening"
+- Arthur W. Lamberson (Waist Gunner): main entrance hatch, poster
+- Mertis "Mac" C. Thornton (Waist Gunner): main entrance hatch, poster
+- Reginald R. Miner (Pilot): nose-wheel door, documented. "the bomb-bay doors jammed, so he pulled himself out the nose-wheel opening as the plane fell into a spin"
+
+### Mowat
+
+- Theodore J. Myers (Engineer / Top Turret Gunner): forward end of the bomb bay, poster
+- Frank T. Plesa (Tail Gunner): main entrance hatch, poster
+
+### Pearson
+
+- Nelson L. Dimick (Co-Pilot): forward end of the bomb bay, poster
+- Doye L. O'Keefe (Radio Operator): forward end of the bomb bay, poster
+- Dwight F. Galyon (Tail Gunner): main entrance hatch, poster
+- John M. Loving (Waist Gunner): aft end of the bomb bay, poster
+- Harry F. Tachovsky (Waist Gunner): main entrance hatch, poster
+- Ralph H. Pearson (Pilot): forward end of the bomb bay, documented. "Pearson clawed back through the fire to the bomb bay … waved engineer Robert Johnson out ahead of him, and jumped"
+
+### Potts
+
+- Gerald J. Kathol (Co-Pilot): thrown clear as the ship broke up, documented. "Scott was boosting Gerry up when the wing tanks exploded and the ship disintegrated"
+- Ernest J. Biasetti (Radio Operator): top escape hatch, documented (bomb bay unusable). "With the bomb bay aflame and its doors jammed, the only way out was up through the top hatch."
+- Rogers Silverman (Tail Gunner): main entrance hatch, poster
+- Roger L. Scott (Waist Gunner): thrown clear as the ship broke up, documented. "Scott was boosting Gerry up when the wing tanks exploded and the ship disintegrated"
+
+### Reynolds
+
+- Herbert T. Robinson (Co-Pilot): forward end of the bomb bay, poster
+- James T. Engleman (Engineer / Top Turret Gunner): forward end of the bomb bay, poster
+- James T. Withey (Navigator / Bombardier): nose-wheel door, poster
+- Robert C. Sheehan (Radio Operator): forward end of the bomb bay, poster
+- Harry G. Twigg (Tail Gunner): main entrance hatch, poster
+- Maynard R. Danner (Waist Gunner): aft end of the bomb bay, poster
+- Donald N. Reynolds (Pilot): forward end of the bomb bay, poster
+
+### Schaen
+
+- Bobby C. McGough (Co-Pilot): forward end of the bomb bay, poster
+- George M. Collar (Bombardier): nose-wheel door, poster
+- George S. Eppley (Engineer / Top Turret Gunner): forward end of the bomb bay, poster
+- Corman H. Bean (Navigator): nose-wheel door, poster
+- Robert L. Collins (Radio Operator): forward end of the bomb bay, poster
+
+### Sollien
+
+- Malcolm J. MacGregor (Bombardier): nose-wheel door, poster
+- Wesley L. Hudelson (Navigator): nose-wheel door, poster
+- Charles J. Graham (Radio Operator): forward end of the bomb bay, poster
+- Amml H. Miller (Tail Gunner): main entrance hatch, poster
+- Carl J. Sollien (Pilot): forward end of the bomb bay, poster
+
+### Walther
+
+- Edgar N. Walther (Pilot): forward end of the bomb bay, poster
+
+### Warman
+
+- Wilbur E. Brown (Engineer / Top Turret Gunner): forward end of the bomb bay, poster
+- Francis W. Costley (Navigator): nose-wheel door, poster
+- Francis R.E. Barnish (Nose Turret Gunner): nose-wheel door, inferred. The poster has no nose turret; the nose gunner leaves with the navigator and bombardier.
+- Raymond W. Ray (Tail Gunner): main entrance hatch, documented. "landed 15 feet into the aircraft between the waist gunners … opened the escape hatch and rolled out"

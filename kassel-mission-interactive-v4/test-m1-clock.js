@@ -30,6 +30,12 @@ for(const hz of [10,30,60]){
   let playhead=start;
   for(let i=0;i<90*hz;i++)playhead=timeline.advancePlayback(playhead,1/hz,endSeconds);
   assert(Math.abs(playhead-endSeconds)<1e-6,'Extended presentation must finish within 90 seconds at '+hz+' Hz');
-  assert.equal(timeline.advancePlayback(219,1,endSeconds),220);
+  // the attack plays at a quarter pace; the rest of the documentary at full pace
+  assert(Math.abs(timeline.advancePlayback(219,1,endSeconds)-219.25)<1e-9,'battle advances a quarter second per second');
+  assert(Math.abs(timeline.advancePlayback(100,1,endSeconds)-101)<1e-9,'cruise advances one second per second');
 }
-console.log('PASS remaining paths: continuous 90-second presentation at 10, 30 and 60 Hz');
+{let p=0,w=0;while(p<300){p=timeline.advancePlayback(p,1/30,endSeconds);w+=1/30;}
+ const attack=timeline.seekFraction(240,300)-timeline.seekFraction(210,300);
+ assert(w>390&&w<405,'documentary with the quarter-pace attack takes about 398 s, took '+w.toFixed(1));
+ assert(attack>.28,'the attack is a wide stretch of the bar');}
+console.log('PASS remaining paths: continuous 90-second presentation at 10, 30 and 60 Hz; attack at quarter pace');

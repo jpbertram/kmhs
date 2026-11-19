@@ -15,9 +15,10 @@
  */
 (function(root){
  'use strict';
+ var LIVE={'AIR SPEED':1,'ALTITUDE':1,'GYRO HORIZON':1,'TURN':1,'DIRECTIONAL GYRO':1,'RATE OF CLIMB':1,'CLOCK':1};
  var D=Math.PI/180,FONT='Arial, Helvetica, "DejaVu Sans", sans-serif';
  var DEFS={
-  'AIR SPEED':{nums:['','50','100','150','200','250','300','350'],unit:'M.P.H.',arcs:[[0.12,0.55,'#2f8f3a'],[0.55,0.8,'#c9a227']]},
+  'AIR SPEED':{nums:['0','','100','','200','','300','','400','','500'],unit:'M.P.H.',arcs:[[0.545,0.555,'#b3261e']]},
   'ALTITUDE':{kind:'alt'},'GYRO HORIZON':{kind:'att'},'TURN':{kind:'turn'},'DIRECTIONAL GYRO':{kind:'compass'},
   'RATE OF CLIMB':{start:180,sweep:340,nums:['0','1','2','3','4','5','4','3','2','1'],unit:'1000 FT/MIN'},
   'MANIFOLD PRESS':{nums:['10','20','30','40','50','60','70'],unit:'IN. HG',dual:true,arcs:[[0.35,0.62,'#2f8f3a'],[0.62,0.75,'#c9a227']]},
@@ -102,7 +103,7 @@
   function e(n){return s.engines[(n+4)%4];}
   var pair=[2*(idx%2),2*(idx%2)+1],one=e(idx);
   switch(label){
-   case 'AIR SPEED':return [s.ias/350];
+   case 'AIR SPEED':return [s.ias/500];
    case 'MANIFOLD PRESS':return pair.map(function(n){return (e(n).map-10)/60;});
    case 'TACHOMETER':return pair.map(function(n){return e(n).rpm/4000;});
    case 'FUEL PRESS':return [(one.dead?2:16)/25];
@@ -124,7 +125,9 @@
   var list=root.KasselCockpitGauges||[],made=[],count={};
   var grp=new T.Group();grp.name='live-gauges';
   list.forEach(function(gd){
-   var d=DEFS[gd.label];if(!d)return;
+   /* only the flight instruments are redrawn live; every other dial keeps the
+      cockpit page's own checked face (instrument pass, Nov 18) */
+   var d=LIVE[gd.label]&&DEFS[gd.label];if(!d)return;
    var k=count[gd.label]=(count[gd.label]||0);count[gd.label]++;
    var cv=document.createElement('canvas');cv.width=cv.height=128;
    var tx=new T.CanvasTexture(cv);if(T.sRGBEncoding)tx.encoding=T.sRGBEncoding;

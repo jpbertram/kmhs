@@ -115,6 +115,31 @@ html,body{margin:0;min-height:100%;background:#080a0e;color:#e8e5dc;font-family:
 #km-station-cap .station-record > summary {cursor:pointer;display:list-item;margin:0}
 #km-station-cap .station-record[open] > summary {margin-bottom:6px}
 #km-station-cap summary:focus-visible {outline:2px solid #ffc401;outline-offset:2px}
+@media(max-width:600px){
+  /* phones: keep the cockpit visible in crew view */
+  #km-crew-keyboard-hint{display:none!important}
+  #cp-hud.crew-mode .cp-sel{padding:4px 6px!important;margin-bottom:4px!important}
+  #cp-hud.crew-mode .cp-sel label{display:none!important}
+  #cp-hud.crew-mode .cp-sel select{min-height:36px!important}
+  #cp-hud.crew-mode .cp-crew-btn{min-width:64px!important;min-height:36px!important;font-size:9px!important;padding:4px 6px!important}
+  #terrain-wrap #km-station-cap{font-size:9px!important;padding:6px 8px!important;opacity:.92}
+  /* crew view: under the station buttons; chase view: top right, clear of the pickers */
+  #cp-hud.crew-mode ~ #km-station-cap{top:186px!important;bottom:auto!important;left:8px!important;right:auto!important;max-width:62%!important}
+  #cp-hud:not(.crew-mode) ~ #km-station-cap{top:62px!important;bottom:auto!important;right:8px!important;left:auto!important;max-width:52%!important}
+  /* map toggles mean nothing in the cockpit; elsewhere keep them on one scrolling row */
+  #cp-hud.crew-mode .cp-toggle-row{display:none!important}
+  #cp-hud .cp-toggle-row{flex-wrap:nowrap!important;overflow-x:auto}
+  #cp-hud .cp-toggle{min-height:32px!important;padding:4px 8px!important;flex:0 0 auto}
+  #cp-hud .cp-btn{min-height:34px!important;padding:4px 8px!important}
+  /* the Following card sits top right under the readouts instead of on the timeline */
+  #cp-hud .cp-right{position:absolute!important;top:62px!important;right:8px!important;bottom:auto!important;left:auto!important;width:46%!important;max-width:46%!important;transform:none!important}
+  #cp-hud .cp-info{padding:6px 8px!important;font-size:9px!important}
+  #cp-hud .cp-info-name{font-size:11px!important}
+  #cp-hud .cp-info-crew,#cp-hud .cp-info-fate{font-size:9px!important}
+  #km-station-cap .station-title{font-size:9px!important;margin-bottom:2px!important}
+  .km-model-credit{font-size:7px!important;line-height:1.2!important;max-width:none!important;left:0!important;right:0!important;bottom:0!important;padding:1px 6px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:transparent!important;color:#9a9a90!important}
+}
+.km-model-credit{position:absolute;left:6px;bottom:3px;z-index:40;max-width:45%;padding:2px 5px;background:rgba(18,23,28,.8);color:#ddd;font:10px/1.25 sans-serif;pointer-events:none}
 .km-imagery-credit{position:absolute;right:6px;bottom:3px;z-index:40;max-width:calc(100% - 12px);padding:2px 5px;background:#12171c;color:#fff;font:10px/1.25 sans-serif;text-decoration:underline}
 </style>
 
@@ -2006,12 +2031,13 @@ window.addEventListener('load',function(){
 
 console.log('KM: animation + init loaded');
 </script>
-<script src="mission-timeline.js?v=20261117-tail"></script>
+<script src="mission-timeline.js?v=20261119-fall"></script>
 <script src="crew-stations.js?v=20261117-eyeview"></script>
 <script src="ball-turret.js?v=20261118-mounts"></script>
 <script src="cockpit-gauges.js?v=20261118-live"></script>
 <script src="cockpit-live.js?v=20261118-live"></script>
-<script src="crew-compartments.js?v=20261118-live"></script>
+<script src="meshopt-decoder.js?v=0.22.0"></script>
+<script src="crew-compartments.js?v=20261118-sections"></script>
 <script src="interior-rebuild.js?v=20261118-r8"></script>
 <script src="historical-geometry.js?v=20261117-eyeview"></script>
 <script src="airman-anatomy.js"></script>
@@ -2028,10 +2054,12 @@ console.log('KM: animation + init loaded');
 <script src="propeller-assembly.js?v=20261118-damage"></script>
 <script src="aircraft-damage-data.js?v=20261118-damage"></script>
 <script src="aircraft-damage.js?v=20261118-damage"></script>
+<script src="aircraft-damage-visuals.js?v=20261118-bail"></script>
+<script src="bailout-exits.js?v=20261118-bail"></script>
 <script src="aircraft-material-geometry.js?v=20261001-r1"></script>
 <script src="fighter-targeting.js?v=20261001-r1"></script>
 <script src="crew-exterior.js"></script>
 <script src="simulator-config.js"></script>
-<script src="km3d-v3.js?v=20261118-damage"></script>
+<script src="km3d-v3.js?v=20261119-mobile"></script>
 <script src="crew-navigation.js"></script>
 </body></html>

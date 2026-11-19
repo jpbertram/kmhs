@@ -53,19 +53,59 @@
   var documentaryEnd=300,documentaryShare=.8;
   function seekSeconds(fraction,end){
     var f=Math.max(0,Math.min(1,fraction));
-    if(end<=documentaryEnd)return f*documentaryEnd;
-    if(f<=documentaryShare)return f/documentaryShare*documentaryEnd;
+    if(end<=documentaryEnd)return documentarySeconds(f);
+    if(f<=documentaryShare)return documentarySeconds(f/documentaryShare);
     return documentaryEnd+(f-documentaryShare)/(1-documentaryShare)*(end-documentaryEnd);
   }
   function seekFraction(seconds,end){
     var t=Math.max(0,Math.min(end,seconds));
-    if(end<=documentaryEnd)return t/documentaryEnd;
-    if(t<=documentaryEnd)return t/documentaryEnd*documentaryShare;
+    if(end<=documentaryEnd)return documentaryFraction(t);
+    if(t<=documentaryEnd)return documentaryFraction(t)*documentaryShare;
     return documentaryShare+(t-documentaryEnd)/(end-documentaryEnd)*(1-documentaryShare);
   }
+  // The attack (playback 210..240 s, battle cues 0..420) plays at a quarter
+  // of the pace of the rest of the documentary, eased in and out over four
+  // seconds either side. Playback seconds, the route and the clock are
+  // unchanged; only how fast playback advances, and how wide the attack is
+  // on the bar, change.
+  var BATTLE_FROM=210,BATTLE_TO=240,BATTLE_PACE=.25,RAMP=4;
+  function smooth(u){u=Math.max(0,Math.min(1,u));return u*u*(3-2*u);}
+  function pace(s){
+    if(s<=BATTLE_FROM-RAMP||s>=BATTLE_TO+RAMP)return 1;
+    if(s<BATTLE_FROM)return 1+(BATTLE_PACE-1)*smooth((s-(BATTLE_FROM-RAMP))/RAMP);
+    if(s<=BATTLE_TO)return BATTLE_PACE;
+    return BATTLE_PACE+(1-BATTLE_PACE)*smooth((s-BATTLE_TO)/RAMP);
+  }
+  // presentation seconds: wall seconds at 1x to reach playback second s
+  var STEP=.05,shown=[0];
+  for(var k=1;k*STEP<=documentaryEnd+1e-9;k++)shown.push(shown[k-1]+STEP/pace((k-.5)*STEP));
+  var shownEnd=shown[shown.length-1];
+  function presentationAt(s){
+    s=Math.max(0,Math.min(documentaryEnd,s));var i=Math.min(shown.length-2,Math.floor(s/STEP)),u=s/STEP-i;
+    return shown[i]+u*(shown[i+1]-shown[i]);
+  }
+  function secondsAtPresentation(p){
+    p=Math.max(0,Math.min(shownEnd,p));var lo=0,hi=shown.length-1;
+    while(hi-lo>1){var mid=(lo+hi)>>1;if(shown[mid]<p)lo=mid;else hi=mid;}
+    return (lo+(p-shown[lo])/((shown[hi]-shown[lo])||1))*STEP;
+  }
+  function documentaryFraction(s){return presentationAt(s)/shownEnd;}
+  function documentarySeconds(f){return secondsAtPresentation(f*shownEnd);}
   // Presentation time after the return blends from normal speed into
   // a 90-second time-lapse. Trajectory sampling still uses source seconds.
-  function advancePlayback(seconds,delta,end){
+  // fullPace: the caller is following a ship that is going down, so the
+  // attack's quarter pace is skipped and playback runs at normal speed.
+  function advancePlayback(seconds,delta,end,fullPace){
+    var s=seconds,d=delta,pc=fullPace?function(){return 1;}:pace;
+    while(d>1e-9&&s<documentaryEnd){
+      var c=Math.min(d,.1),ns=s+c*pc(s);
+      if(ns>=documentaryEnd){d-=(documentaryEnd-s)/pc(s);s=documentaryEnd;break;}
+      s=ns;d-=c;
+    }
+    if(d<=1e-9||s<documentaryEnd)return Math.min(end,s);
+    return timeLapse(s,d,end);
+  }
+  function timeLapse(seconds,delta,end){
     var next=seconds+delta;
     var remaining=end-documentaryEnd,display=90;
     if(next<=documentaryEnd||remaining<=display)return Math.min(end,next);
@@ -77,9 +117,11 @@
     return Math.min(end,documentaryEnd+t+acceleration*t*t);
   }
   var api={duration:300,marks:marks,
-    routeAt:routeAt,advancePlayback:advancePlayback,seekSeconds:seekSeconds,seekFraction:seekFraction,
+    routeAt:routeAt,advancePlayback:advancePlayback,pace:pace,battlePace:BATTLE_PACE,seekSeconds:seekSeconds,seekFraction:seekFraction,
     secondsAt:secondsAt,
     playbackAtBattleCue:playbackAtBattleCue,
+    // the attack: cues 0..420 span 11:00 to 11:06, so one cue is 6/7 of a sim second
+    battleSecondsPerCue:360/420,
     battleCueAtPlayback:function(seconds){return seconds>240?420+(seconds-240)*5.6:Math.max(0,Math.min(420,(routeAt(seconds)-.84)/.08*420));},
     ageSinceBattleCue:function(route,cue){return Math.max(0,secondsAt(route)-playbackAtBattleCue(cue));},
     missionSecondsAt:function(route){return (interpolate(route,1,2)-480)*60;},

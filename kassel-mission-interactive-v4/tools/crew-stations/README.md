@@ -1,5 +1,25 @@
 # B-24 crew-compartment models
 
+## Current: the approved crew-station sections (Nov 18 2026)
+
+The mission page now loads the six sections JP approved on the cockpit page
+(`b24-cockpit.html`) from `crew-sections/`. To drop in updated sections:
+
+```
+node tools/crew-stations/port-sections.mjs <sections dir with manifest.json> <b24-cockpit.html>
+node tools/cockpit-live/extract-gauges.mjs tools/crew-stations/flightdeck-plain.glb --labels <b24-cockpit.html> > cockpit-gauges.js
+rm tools/crew-stations/flightdeck-plain.glb
+```
+
+`port-sections.mjs` decodes Draco, bakes emissive strength, drops the cabin
+lamps, re-encodes opaque textures as JPEG, quantizes and meshopt-compresses
+the geometry (read in the page by `meshopt-decoder.js`, meshoptimizer 0.22,
+MIT), and copies the station eye points from the cockpit page into
+`crew-sections/manifest.json`. Only the flight instruments are redrawn live
+(`cockpit-live.js`); every other dial keeps the cockpit page's checked face.
+
+## Earlier compartments (no longer loaded)
+
 Source for the seven models the mission page loads for crew views
 (`crew-compartments.js`):
 
