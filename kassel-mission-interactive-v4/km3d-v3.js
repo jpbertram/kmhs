@@ -5365,8 +5365,10 @@ KM._buildFormation=function(){
   var plume=new Float32Array(2200);
   lossSmoke.geo.setAttribute('plume',new THREE.BufferAttribute(plume,2));
   KM._lossSmoke={geo:lossSmoke.geo,pos:lossSmoke.pos,plume:plume,count:1100,nextIdx:0};
-  var fire=pool(500,new THREE.PointsMaterial({map:soft,color:0xff7a33,size:5,
-    transparent:true,opacity:0.65,depthWrite:false,blending:THREE.AdditiveBlending}));
+  /* normal blending: additive orange puffs stacked along a burning ship
+     summed to a white blob against the bright sky */
+  var fire=pool(500,new THREE.PointsMaterial({map:soft,color:0xff5a14,size:5,
+    transparent:true,opacity:0.8,depthWrite:false,blending:THREE.NormalBlending}));
   KM._fire={geo:fire.geo,pos:fire.pos,count:500,nextIdx:0};
   var flakCount=120;
   var flakGeo=new THREE.BufferGeometry();KM._flakGeo=flakGeo;
@@ -5537,13 +5539,19 @@ V2.MODEL_URLS={
      inside GLTFLoader. Keep the documented procedural 109 silhouette
      instead; it is complete, correctly oriented, and has a live prop. */
   /* "P-51 Mustang" by an.s055163 — CC-BY-4.0 (named prop + gear nodes) */
-  p51:'https://cdn.prod.website-files.com/642b4bd98014250aa392775f/6a2b19eff3a4c9950f5299e3_km-p51-v2.glb',
+  /* "P-51 Mustang" by UlissesVinicios — CC-BY-4.0, bundled (aircraft/CREDITS.md).
+     Recoloured to the 361st FG yellow nose; codes painted out. */
+  p51:'aircraft/km-p51-361st.glb',
   /* "Fw190" by manilov.ap — CC-BY-4.0 (an original model at last) */
   fw190:'https://cdn.prod.website-files.com/642b4bd98014250aa392775f/6a2b19ef0caf522b3019d402_km-fw190.glb'
 };
 V2.MODEL_CFG={
+  /* No gear filter on the olive exterior: its rest pose already has the
+     gear retracted, and the "gear" nodes include the nose-gear doors and
+     the wing well fillers. Dropping them left open grids on top of both
+     wings beside the inboard nacelles and holes under the nose. */
   b24lo:{len:33,rotY:Math.PI/2,centerX:-2.7,centerY:0.3,
-    forceRotY:Math.PI/2,dropRe:/gear|wheel|tire/i},
+    forceRotY:Math.PI/2},
   /* the 109's canopy frame outscores its fin in the top-vertex test,
      putting the "fin" forward of center — flip it */
   /* the NEW fighters have named nodes: real props spin, real landing
@@ -5898,6 +5906,12 @@ PROC.fw190=KM._buildFw190;
 KM._buildFw190=function(){return V2.makeAircraft('fw190',PROC.fw190);};
 V2.procB24=PROC.b24;
 
+V2.modelCredit=function(){
+  var c=KM._cont;if(!c||c.querySelector('.km-model-credit'))return;
+  var el=document.createElement('div');el.className='km-model-credit';
+  el.textContent='3D models (CC BY 4.0): P-51 Mustang by UlissesVinicios · Fw 190 by manilov.ap, via Sketchfab';
+  c.appendChild(el);
+};
 V2.loadModels=function(){
   if(V2._modelsLoading)return;V2._modelsLoading=true;
   if(!THREE.GLTFLoader){console.warn('KM v2: GLTFLoader missing');return;}
@@ -5906,7 +5920,7 @@ V2.loadModels=function(){
     fetch(V2.MODEL_URLS[key]).then(function(r){return r.arrayBuffer();})
       .then(function(buf){
         loader.parse(buf,'',function(gltf){
-          try{V2.prepareTemplate(gltf,key);}
+          try{V2.prepareTemplate(gltf,key);V2.modelCredit();}
           catch(e){console.error('KM v2: template '+key,e);}
         },function(err){console.error('KM v2: parse '+key,err);});
       }).catch(function(e){console.warn('KM v2: model fetch failed '+key,e);});
@@ -6756,8 +6770,8 @@ function dmgShared(){
     daylight:new THREE.MeshBasicMaterial({color:0xfff4dc,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-4}),
     beam:new THREE.MeshBasicMaterial({color:0xfff0d0,transparent:true,opacity:.07,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide}),
     beamGeo:new THREE.CylinderGeometry(1,2.6,1,10,1,true).translate(0,.5,0).rotateX(Math.PI/2),
-    flame:function(){return new THREE.SpriteMaterial({map:soft,color:0xff7b22,transparent:true,opacity:.85,depthWrite:false,blending:THREE.AdditiveBlending});},
-    core:function(){return new THREE.SpriteMaterial({map:soft,color:0xffd27a,transparent:true,opacity:.8,depthWrite:false,blending:THREE.AdditiveBlending});},
+    flame:function(){return new THREE.SpriteMaterial({map:soft,color:0xff6a10,transparent:true,opacity:.9,depthWrite:false});},
+    core:function(){return new THREE.SpriteMaterial({map:soft,color:0xffc040,transparent:true,opacity:.95,depthWrite:false});},
     smoke:function(){return new THREE.SpriteMaterial({map:soft,color:0x55524c,transparent:true,opacity:.22,depthWrite:false});},
     crack:new THREE.MeshBasicMaterial({map:crackTex,transparent:true,depthWrite:false,side:THREE.DoubleSide}),
     radome:new THREE.MeshStandardMaterial({color:0x6f705f,roughness:.82,metalness:.08}),
@@ -6862,6 +6876,7 @@ function dmgSurface(){
   return V2._dmgSurf=out;
 }
 function dmgFlame(group,sh,pos,size,kind){
+  size*=1.7; /* readable at chase distance through the haze */
   /* a tongue of flame torn aft by the slipstream: a small hot root and a
      chain of cooler, redder lobes trailing back, not one glowing ball */
   var c=new THREE.Sprite(sh.core());c.position.copy(pos);c.scale.setScalar(size*.32);
@@ -7445,6 +7460,16 @@ function placePlane(p,battleT,elapsed,scene,dt,bombRelease,bombIndex){
    Each wave stays a coherent line abreast on the bomber box's altitude
    plane, makes ONE firing pass, then breaks ahead and disappears. */
 function waveTime(w,i){return w.t!=null?w.t:60+i*45;}
+/* Scene units per metre of pass geometry. The aircraft are now drawn at
+   true map scale (a B-24 is under a tenth of a unit), but the attack and
+   escort paths were written for the old oversized models, so the fighters
+   flew kilometres from the box and were sub-pixel. One path unit is now
+   about 26 m: a line-abreast company closes from ~1.8 km astern. */
+function passUnit(){
+  if(typeof GEO==='undefined'||!GEO.xToLon)return .30;
+  var mpu=111195*Math.cos(51.4*Math.PI/180)*(GEO.xToLon(1)-GEO.xToLon(0));
+  return mpu>0?26/mpu:.30;
+}
 // Monotone Hermite coordinate through the existing attack landmarks.
 // Shared derivatives make position AND velocity continuous at the breaks.
 // Scene-unit path reconstruction only: not a force-integrated manoeuvre.
@@ -7479,7 +7504,7 @@ function updateFighters(battleT,dt,elapsed,scene){
         111195*Math.cos(51.4*Math.PI/180)*(GEO.xToLon(1)-GEO.xToLon(0)));
       var u=f.userData;
       if(u.lat==null){
-        u.lat=(fi-(w.models.length-1)/2)*7.5;          /* coherent company front */
+        u.lat=(fi-(w.models.length-1)/2)*1.5;          /* line abreast, roughly 40 m apart */
         u.alt=((hash('y'+wi+fi)%5)-2)*0.25;            /* at most half a unit from the attack plane */
         u.stag=((hash('s'+wi+fi)%7)-3)*0.8;            /* slight real-world raggedness, never a separate phase */
       }
@@ -7492,7 +7517,7 @@ function updateFighters(battleT,dt,elapsed,scene){
       var alongPath=fighterPassCoordinate(ph,[-68,38,50,80]);
       var lateralPath=fighterPassCoordinate(ph,[0,0,12,22]);
       var verticalPath=fighterPassCoordinate(ph,[1.2,-.8,-4.8,-6.8]);
-      var passScale=.30; // Presentation scale for the compressed battle clock.
+      var passScale=passUnit(); // metres-true pass geometry
       var along=alongPath.value+u.stag;
       var lat=u.lat+side*lateralPath.value;
       var vert=verticalPath.value+u.alt;
@@ -7569,10 +7594,11 @@ function updateEscorts(battleT,missionT,dt,elapsed){
         var along=-82+iu*132+pair*3;
         var lateral=side*(16+pair*5)+Math.pow(Math.sin(bend*Math.PI),2)*side*5;
         var vertical=10-8*bend*bend*(3-2*bend)+(pair%2)*1.2;
+        var ek=passUnit();
         wanted=new THREE.Vector3(
-          a.pos.x+a.dir.x*along+across.x*lateral,
-          a.pos.y+vertical,
-          a.pos.z+a.dir.z*along+across.z*lateral);
+          a.pos.x+ek*(a.dir.x*along+across.x*lateral),
+          a.pos.y+ek*vertical,
+          a.pos.z+ek*(a.dir.z*along+across.z*lateral));
         desiredDir=a.dir.clone().multiplyScalar(132).addScaledVector(across,iu<1?Math.sin(2*bend*Math.PI)*Math.PI*side*5:0);
         desiredDir.y=iu<1?-48*bend*(1-bend):0;
       }
@@ -7892,7 +7918,7 @@ function kmCapPoints(m){
   m.onBeforeCompile=function(sh,r){
     if(prev)prev.call(this,sh,r);
     sh.vertexShader='varying float vKmFade;\n'+sh.vertexShader.replace('#include <fog_vertex>',
-      '#include <fog_vertex>\n float kmPs=gl_PointSize;gl_PointSize=min(kmPs,140.0);vKmFade=1.0-smoothstep(140.0,320.0,kmPs);');
+      '#include <fog_vertex>\n float kmPs=gl_PointSize;gl_PointSize=min(kmPs,90.0);vKmFade=1.0-smoothstep(90.0,200.0,kmPs);');
     sh.fragmentShader='varying float vKmFade;\n'+sh.fragmentShader.replace('#include <alphatest_fragment>',
       'diffuseColor.a*=vKmFade;\n#include <alphatest_fragment>');
   };
@@ -8043,7 +8069,14 @@ function updateHUD(phase,mT,battleT){
   var spdEl=document.getElementById('cp-spd');
   if(spdEl)spdEl.textContent=Math.round(shownSpd/5)*5;
   var clockEl=document.getElementById('cp-clock');
-  if(clockEl)clockEl.textContent=missionClock(mT);
+  /* a ship going down keeps its own battle clock (11:00 + cue) until it hits
+     the ground, instead of the formation's return-home clock */
+  var clockText=missionClock(mT);
+  if(lock&&lock.userData&&lock.userData.alive===false&&lock.userData.v2&&lock.userData.v2.beh==='fall'){
+    var lv=lock.userData.v2,cue=Math.min(KMMissionTimeline.battleCueAtPlayback(KM._playbackSeconds||0),(lv.ft||0)+(lv.dur||0));
+    var mins=660+cue*360/420/60;clockText=String(Math.floor(mins/60)).padStart(2,'0')+':'+String(Math.floor(mins%60)).padStart(2,'0');
+  }
+  if(clockEl)clockEl.textContent=clockText;
   var fill=document.getElementById('cp-tl-fill');
   var end=KM._playbackEndSeconds||300;
   var seconds=KM._playbackSeconds??KMMissionTimeline.secondsAt(mT);
@@ -8172,6 +8205,9 @@ KM._buildAnimation=function(){
       }
 
       if(V2._frame%30===1)V2.capPoints(scene);
+      /* thinner haze through the attack so damage and fires read */
+      if(scene.fog&&scene.fog.density!==undefined){if(V2._fogBase===undefined)V2._fogBase=scene.fog.density;
+        var inBattle=KM._missionT>.80&&KM._missionT<.96;scene.fog.density=V2._fogBase*(inBattle?.45:1);}
       /* about ten seconds in, start streaming the crew-station sections in the background */
       if(V2._frame===300&&window.KasselCrewCompartments&&window.KasselCrewCompartments.prefetch)window.KasselCrewCompartments.prefetch(THREE);
       /* fighters + escorts + tracers + chutes + flashes */
@@ -9245,8 +9281,8 @@ V2.postUpgrade=function(){
   if(KM._fire){
     var fr=findPoints(KM._fire.geo);
     if(fr){fr.material.dispose();fr.material=new THREE.PointsMaterial({
-      map:soft,color:0xff7a33,size:5,transparent:true,opacity:0.65,
-      depthWrite:false,blending:THREE.AdditiveBlending});}
+      map:soft,color:0xff5a14,size:5,transparent:true,opacity:0.8,
+      depthWrite:false,blending:THREE.NormalBlending});}
   }
   if(KM._flakGeo&&KM._flakMat){
     var fk=findPoints(KM._flakGeo);

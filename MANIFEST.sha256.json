@@ -36,8 +36,8 @@
     "sha256": "59bc0c1cde2445708a7b4cbb207c64d91abe3928848ea2e16da77d1ac93d7a64"
   },
   "build-simulator.cjs": {
-    "bytes": 2668,
-    "sha256": "36d90df74cbb454a777825b8d0a87f47952b24a634ca390443fbfe124910b72c"
+    "bytes": 2937,
+    "sha256": "69590dfd67cd9ff6689fb29b53173234934086b8d4cf121c791e776396b7ef0e"
   },
   "check-package.cjs": {
     "bytes": 1652,
@@ -150,6 +150,14 @@
   "kassel-mission-interactive-v4/aircraft-material-geometry.js": {
     "bytes": 2835,
     "sha256": "07563a8c2d9141f3f60ce89d59128c9bab1d97eb905606cbdfd5876f8ad6dd3c"
+  },
+  "kassel-mission-interactive-v4/aircraft/CREDITS.md": {
+    "bytes": 719,
+    "sha256": "386c8d0c6af2b196290568d4cf57dc258ac49f8668e18e409a85c836a1cbaad5"
+  },
+  "kassel-mission-interactive-v4/aircraft/km-p51-361st.glb": {
+    "bytes": 1619120,
+    "sha256": "e21fa972956516e2e01a1b66be5ca6658f1d708347b2ca963cfb35f7fe7258a6"
   },
   "kassel-mission-interactive-v4/airman-anatomy.js": {
     "bytes": 376079,
@@ -328,8 +336,8 @@
     "sha256": "ec4426568e2a8d75f9a602a8d2ed40f1e9d7c2e534847686cc8bd810ee296c22"
   },
   "kassel-mission-interactive-v4/km3d-v3.js": {
-    "bytes": 446452,
-    "sha256": "b0886a4603c3c174f659cde4b2e41f54531792a50512f11f4f199f0b3d679951"
+    "bytes": 448632,
+    "sha256": "cb27225d7f810d89a779d6c1dff3d39c763a5884d5d22936762b7dbdc0b37bf1"
   },
   "kassel-mission-interactive-v4/loss-smoke.js": {
     "bytes": 1710,
@@ -348,8 +356,8 @@
     "sha256": "2cc4d9d42473e2243c3d2cf9e6b66ec778fd1fa0fa60ed81b2c9f57434133802"
   },
   "kassel-mission-interactive-v4/mission-reconstruction.html": {
-    "bytes": 342035,
-    "sha256": "bba3d8b53e39cd1aeabeb29c6072288206d20d82503f253f6c60a13bbfd1a1be"
+    "bytes": 342218,
+    "sha256": "938bafb1daea42da161a13bb517d0932b4e53b631db6fb398d796835831d5a84"
   },
   "kassel-mission-interactive-v4/mission-timeline.js": {
     "bytes": 6525,

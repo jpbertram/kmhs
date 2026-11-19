@@ -30,6 +30,9 @@ fs.mkdirSync(path.join(output,'crew-sections'));
 fs.copyFileSync(path.join(project,'crew-sections','manifest.json'),path.join(output,'crew-sections','manifest.json'));
 for(const s of sections.sections){if(!/^[\w-]+\.glb$/.test(s.file))throw Error('Unrecognized crew section '+s.file);fs.copyFileSync(path.join(project,'crew-sections',s.file),path.join(output,'crew-sections',s.file));}
 fs.copyFileSync(path.join(project,'vendor','MESHOPTIMIZER-LICENSE.md'),path.join(output,'vendor','MESHOPTIMIZER-LICENSE.md'));
+// Bundled CC-BY aircraft model (credit shown in the sim and in aircraft/CREDITS.md).
+fs.mkdirSync(path.join(output,'aircraft'));
+for(const name of ['km-p51-361st.glb','CREDITS.md'])fs.copyFileSync(path.join(project,'aircraft',name),path.join(output,'aircraft',name));
 fs.mkdirSync(path.join(output,'textures'));
 for(const name of textures)fs.copyFileSync(path.join(project,'textures',name),path.join(output,'textures',name));
 const config={esriApiKey:process.env.KM_ESRI_BROWSER_KEY?.trim()||''};
