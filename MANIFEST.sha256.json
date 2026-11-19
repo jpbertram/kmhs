@@ -336,8 +336,8 @@
     "sha256": "ec4426568e2a8d75f9a602a8d2ed40f1e9d7c2e534847686cc8bd810ee296c22"
   },
   "kassel-mission-interactive-v4/km3d-v3.js": {
-    "bytes": 451152,
-    "sha256": "bf5bff13b2308deebec2ec315e1b571481d723fbc90a7ab0baab619faaad1b55"
+    "bytes": 451420,
+    "sha256": "ba29b39c903336b0467f094bc3e38cb583e0ef9d707ba8edc93757c88c976771"
   },
   "kassel-mission-interactive-v4/loss-smoke.js": {
     "bytes": 1710,
@@ -356,8 +356,8 @@
     "sha256": "2cc4d9d42473e2243c3d2cf9e6b66ec778fd1fa0fa60ed81b2c9f57434133802"
   },
   "kassel-mission-interactive-v4/mission-reconstruction.html": {
-    "bytes": 342215,
-    "sha256": "4b20e4f610653cc4638eaf63d0a51f3340f25bb203eb3a204ab9d8aabeee9406"
+    "bytes": 344395,
+    "sha256": "675deeeff53ce63f990b9158821cc87e343712c28236af0da72ae1a4bf9d04df"
   },
   "kassel-mission-interactive-v4/mission-timeline.js": {
     "bytes": 6834,

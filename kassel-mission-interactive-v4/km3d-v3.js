@@ -9905,6 +9905,10 @@ V2.fixTimeline=function(){
       /* approx label half-width as a % of the track */
       var halfPct=((it.t.length*7.0)/2)/cW*100;
       var leftEdge=it.f*100-halfPct;
+      /* phones: a label that would collide is hidden (its tick stays as a
+         marker); Battle and Return Home always show */
+      if(cW<620&&leftEdge<prevRightPct+1&&!/BATTLE|RETURN/.test(it.t)){m.style.visibility='hidden';return;}
+      m.style.visibility='';
       /* if this label would touch the previous one on the same row, drop it a row */
       if(leftEdge<prevRightPct+1){ row=(row+1)%2; } else { row=0; }
       prevRightPct=it.f*100+halfPct;
