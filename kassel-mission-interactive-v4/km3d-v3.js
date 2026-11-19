@@ -4350,7 +4350,7 @@ V2.cityDot=function(scene,x,y,z,col){
     map:V2.softTex(),color:col||0xffffff,transparent:true,
     opacity:0.3,depthWrite:false,blending:THREE.AdditiveBlending}));
   halo.position.set(x,y,z);halo.scale.set(9,9,1);scene.add(halo);
-  halo.userData.geoMarker=true;
+  halo.userData.geoMarker=true;halo.userData.kmHalo=true;(V2._halos=V2._halos||[]).push(halo);
 };
 
 V2.addGeoLabels=function(scene){
@@ -5368,7 +5368,7 @@ KM._buildFormation=function(){
   /* normal blending: additive orange puffs stacked along a burning ship
      summed to a white blob against the bright sky */
   var fire=pool(500,new THREE.PointsMaterial({map:soft,color:0xff5a14,size:5,
-    transparent:true,opacity:0.8,depthWrite:false,blending:THREE.NormalBlending}));
+    transparent:true,opacity:0.85,depthWrite:false,fog:false,blending:THREE.NormalBlending}));
   KM._fire={geo:fire.geo,pos:fire.pos,count:500,nextIdx:0};
   var flakCount=120;
   var flakGeo=new THREE.BufferGeometry();KM._flakGeo=flakGeo;
@@ -5402,6 +5402,9 @@ KM._buildFormation=function(){
         new THREE.MeshBasicMaterial({color:wp.c,transparent:true,opacity:0.18,side:THREE.DoubleSide}));
       ring.position.copy(wp.p);ring.position.y+=1;ring.rotation.x=-Math.PI/2;
       ring.userData={phase:Math.random()*Math.PI*2};scene.add(ring);
+      /* hidden from the chase and crew cameras: an 800 m red sphere at
+         altitude read as a pink blob in the sky */
+      (V2._halos=V2._halos||[]).push(ws,ring);
     });
   }
 
@@ -5467,7 +5470,7 @@ V2.addCrashSites=function(scene,subtle){
       transparent:true,opacity:subtle?0.22:0.4,depthWrite:false,
       blending:THREE.AdditiveBlending}));
     halo.position.set(xz[0],y+0.5,xz[1]);halo.scale.set(8,8,1);
-    group.add(halo);
+    group.add(halo);halo.userData.kmHalo=true;(V2._halos=V2._halos||[]).push(halo);
     /* label sprite (revealed in crash view / when the ship goes down) */
     var c=document.createElement('canvas');c.width=512;c.height=96;
     var g2=c.getContext('2d');
@@ -6770,8 +6773,8 @@ function dmgShared(){
     daylight:new THREE.MeshBasicMaterial({color:0xfff4dc,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-4}),
     beam:new THREE.MeshBasicMaterial({color:0xfff0d0,transparent:true,opacity:.07,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide}),
     beamGeo:new THREE.CylinderGeometry(1,2.6,1,10,1,true).translate(0,.5,0).rotateX(Math.PI/2),
-    flame:function(){return new THREE.SpriteMaterial({map:soft,color:0xff6a10,transparent:true,opacity:.9,depthWrite:false});},
-    core:function(){return new THREE.SpriteMaterial({map:soft,color:0xffc040,transparent:true,opacity:.95,depthWrite:false});},
+    flame:function(){return new THREE.SpriteMaterial({map:soft,color:0xff5a08,transparent:true,opacity:.95,depthWrite:false,fog:false});},
+    core:function(){return new THREE.SpriteMaterial({map:soft,color:0xffb020,transparent:true,opacity:1,depthWrite:false,fog:false});},
     smoke:function(){return new THREE.SpriteMaterial({map:soft,color:0x55524c,transparent:true,opacity:.22,depthWrite:false});},
     crack:new THREE.MeshBasicMaterial({map:crackTex,transparent:true,depthWrite:false,side:THREE.DoubleSide}),
     radome:new THREE.MeshStandardMaterial({color:0x6f705f,roughness:.82,metalness:.08}),
@@ -6883,7 +6886,7 @@ function dmgFlame(group,sh,pos,size,kind){
   c.userData.flame={base:size*.32,phase:Math.random()*6.28,kind:'core'};group.add(c);
   for(var k=0;k<8;k++){
     var f=new THREE.Sprite(sh.flame());var t=k/7,sz=size*(.36+.3*Math.sin(t*2.6))*(1-t*.3);
-    f.material.color.setRGB(1,.6-.34*t,.18-.14*t);f.material.opacity=.7-.45*t;
+    f.material.color.setRGB(1,.45-.3*t,.06);f.material.opacity=.92-.4*t;
     f.position.copy(pos).add(new THREE.Vector3(-size*.21*k,size*(.03*k+.05*Math.sin(k*2.1)),size*.05*Math.cos(k*1.7)));f.scale.setScalar(sz);
     f.userData.flame={base:sz,phase:Math.random()*6.28,kind:kind||'fire'};group.add(f);
   }
@@ -8205,6 +8208,11 @@ KM._buildAnimation=function(){
       }
 
       if(V2._frame%30===1)V2.capPoints(scene);
+      /* map-marker glows (city and crash-site halos) read as pink and white
+         circles hanging in the sky from the chase and crew cameras: show
+         them only in the map-style views */
+      if(V2._frame%15===1&&V2._halos){var csm=KM._camState&&KM._camState.mode,near=csm==='chase'||csm==='crew'||csm==='follow';
+        V2._halos.forEach(function(h){var m=h.material,u=h.userData;if(near&&u._kmHid===undefined){u._kmHid=m.opacity;m.opacity=0;}else if(!near&&u._kmHid!==undefined){m.opacity=u._kmHid;delete u._kmHid;}});}
       /* thinner haze through the attack so damage and fires read */
       if(scene.fog&&scene.fog.density!==undefined){if(V2._fogBase===undefined)V2._fogBase=scene.fog.density;
         var inBattle=KM._missionT>.80&&KM._missionT<.96;scene.fog.density=V2._fogBase*(inBattle?.45:1);}
@@ -9276,13 +9284,13 @@ V2.postUpgrade=function(){
     var sm=findPoints(KM._smoke.geo);
     if(sm){sm.material.dispose();sm.material=new THREE.PointsMaterial({
       map:soft,color:0x3a3b40,size:9,transparent:true,opacity:0.5,
-      depthWrite:false,blending:THREE.NormalBlending});}
+      depthWrite:false,fog:false,blending:THREE.NormalBlending});}
   }
   if(KM._fire){
     var fr=findPoints(KM._fire.geo);
     if(fr){fr.material.dispose();fr.material=new THREE.PointsMaterial({
       map:soft,color:0xff5a14,size:5,transparent:true,opacity:0.8,
-      depthWrite:false,blending:THREE.NormalBlending});}
+      depthWrite:false,fog:false,blending:THREE.NormalBlending});}
   }
   if(KM._flakGeo&&KM._flakMat){
     var fk=findPoints(KM._flakGeo);
