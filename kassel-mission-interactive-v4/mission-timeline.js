@@ -93,11 +93,13 @@
   function documentarySeconds(f){return secondsAtPresentation(f*shownEnd);}
   // Presentation time after the return blends from normal speed into
   // a 90-second time-lapse. Trajectory sampling still uses source seconds.
-  function advancePlayback(seconds,delta,end){
-    var s=seconds,d=delta;
+  // fullPace: the caller is following a ship that is going down, so the
+  // attack's quarter pace is skipped and playback runs at normal speed.
+  function advancePlayback(seconds,delta,end,fullPace){
+    var s=seconds,d=delta,pc=fullPace?function(){return 1;}:pace;
     while(d>1e-9&&s<documentaryEnd){
-      var c=Math.min(d,.1),ns=s+c*pace(s);
-      if(ns>=documentaryEnd){d-=(documentaryEnd-s)/pace(s);s=documentaryEnd;break;}
+      var c=Math.min(d,.1),ns=s+c*pc(s);
+      if(ns>=documentaryEnd){d-=(documentaryEnd-s)/pc(s);s=documentaryEnd;break;}
       s=ns;d-=c;
     }
     if(d<=1e-9||s<documentaryEnd)return Math.min(end,s);
@@ -118,6 +120,8 @@
     routeAt:routeAt,advancePlayback:advancePlayback,pace:pace,battlePace:BATTLE_PACE,seekSeconds:seekSeconds,seekFraction:seekFraction,
     secondsAt:secondsAt,
     playbackAtBattleCue:playbackAtBattleCue,
+    // the attack: cues 0..420 span 11:00 to 11:06, so one cue is 6/7 of a sim second
+    battleSecondsPerCue:360/420,
     battleCueAtPlayback:function(seconds){return seconds>240?420+(seconds-240)*5.6:Math.max(0,Math.min(420,(routeAt(seconds)-.84)/.08*420));},
     ageSinceBattleCue:function(route,cue){return Math.max(0,secondsAt(route)-playbackAtBattleCue(cue));},
     missionSecondsAt:function(route){return (interpolate(route,1,2)-480)*60;},

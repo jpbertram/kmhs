@@ -6040,6 +6040,18 @@ V2.EVENTS=[
 /* Documented aircraft-specific damage and loss motion. These replace
    the old hash-based random crashes. The short notes are intentionally
    concise descriptions from the mission record, not invented drama. */
+/* average ground speed of a falling, burning B-24 along its loss route,
+   m/s (~280 mph): inferred, see reference/LOSS-DESCENT-TIMING.md */
+V2.LOSS_DESCENT_MS=125;
+/* While the camera follows a ship that is going down, the attack's
+   quarter pace is dropped so the fall plays at normal speed. */
+V2.followingFall=function(){
+  var cs=KM._camState;if(!cs||(cs.mode!=='chase'&&cs.mode!=='crew'))return false;
+  var p=cs._followPlane||cs.selectedPlane,u=p&&p.userData,v=u&&u.v2;
+  if(!v||u.alive!==false||v.beh!=='fall'||!v.dur)return false;
+  var cue=KMMissionTimeline.battleCueAtPlayback(KM._playbackSeconds||0);
+  return cue>=v.ft&&cue<v.ft+v.dur;
+};
 V2.LOSS_PROFILES={
   Chilton:{motion:'breakup',event:0.46,note:'Lead ship exploded; the tail separated before impact.'},
   Bruce:{motion:'rammed',event:0.25,note:'Two engines afire; rammed by an Fw 190 and exploded.'},
@@ -7323,6 +7335,16 @@ function placePlane(p,battleT,elapsed,scene,dt,bombRelease,bombIndex){
           }
         }
         v.dur=v.forwardRoute.length/Math.max(.001,Math.hypot(entryVelocity.x*metricScale.x,entryVelocity.z*metricScale.z));
+        /* Formation cruise ground speed made a stricken ship take ten sim
+           minutes to cover a long route (Miner's is ~44 km). Ships that
+           were falling, burning or spinning come down along the same path
+           at a burning-descent ground speed instead (INFERRED, see
+           reference/LOSS-DESCENT-TIMING.md). Ships flown under control to a
+           bailout or belly landing keep cruise speed. */
+        var lossMotion=(v.profile&&v.profile.motion)||'burning_glide';
+        if(!/^(controlled_bailout|belly_landing)$/.test(lossMotion)&&v.pilot!=='Hautman'){
+          v.dur=Math.min(v.dur,v.forwardRoute.length/(((typeof V2!=='undefined'&&V2.LOSS_DESCENT_MS)||125)*(KMMissionTimeline.battleSecondsPerCue||360/420)));
+        }
         KM._playbackEndSeconds=Math.max(KM._playbackEndSeconds||300,KMMissionTimeline.playbackAtBattleCue(ft+v.dur)+2);
         v.routeClassification='ESTIMATED';
       }
@@ -8152,7 +8174,7 @@ KM._buildAnimation=function(){
       if(KM._playing){
         if((KM._playbackSeconds||0)<(KM._playbackEndSeconds||300)){
           if(KM._playbackSeconds===undefined)KM._playbackSeconds=KMMissionTimeline.secondsAt(KM._missionT);
-          KM._playbackSeconds=KMMissionTimeline.advancePlayback(KM._playbackSeconds,wallDelta*KM._speed,KM._playbackEndSeconds||300);
+          KM._playbackSeconds=KMMissionTimeline.advancePlayback(KM._playbackSeconds,wallDelta*KM._speed,KM._playbackEndSeconds||300,typeof V2!=="undefined"&&V2.followingFall&&V2.followingFall());
           KM._simSeconds=KM._playbackSeconds;
           KM._missionT=KMMissionTimeline.routeAt(KM._playbackSeconds);
           KM._battleT=KMMissionTimeline.battleAt(KM._missionT);
@@ -8163,7 +8185,7 @@ KM._buildAnimation=function(){
           (KM._missionT<RETURN_START&&KM._battleT>20&&KM._battleT<360)?Math.min(1.2,KM._battleT/120):0;
       }
       /* the attack plays at a quarter pace (mission-timeline.js); the anchor follows the same pace */
-      updateAnchor(KM._missionT,KM._battleT,dt*KM._speed*(KMMissionTimeline.pace?KMMissionTimeline.pace(KM._playbackSeconds||0):1));
+      updateAnchor(KM._missionT,KM._battleT,dt*KM._speed*(KMMissionTimeline.pace&&!(typeof V2!=="undefined"&&V2.followingFall&&V2.followingFall())?KMMissionTimeline.pace(KM._playbackSeconds||0):1));
       elapsed=KMMissionTimeline.secondsAt(KM._missionT);
       var mapView=KM._camState&&(KM._camState.mode==='topdown'&&KM._camState.tdH>=45||KM._camState.mode==='orbit'&&KM._camState.radius>=45);
       scene.children.forEach(function(o){if(o.userData.geoMarker)o.visible=!!mapView;});
