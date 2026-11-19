@@ -6051,10 +6051,29 @@ V2.EVENTS=[
 V2.LOSS_DESCENT_MS=125;
 /* While the camera follows a ship that is going down, the attack's
    quarter pace is dropped so the fall plays at normal speed. */
+/* The newest crewman out of a followed falling ship. At the compressed
+   battle clock a man is a kilometre behind his ship within a second, so
+   the chase camera cuts to him for JUMP_HOLD playback seconds (free fall,
+   canopy opening, first swing) at the attack's quarter pace, then
+   returns to the ship. Presentation only. */
+V2.JUMP_HOLD=1.6;
+V2.jumpFocus=function(p){
+  if(!p||!p.userData||p.userData.alive!==false)return null;
+  var now=KM._playbackSeconds||0,best=null,bestAge=1e9;
+  (V2._chutes||[]).forEach(function(ch){
+    if(ch.plane!==p.userData.planeData||ch.born===undefined)return;
+    var age=now-KMMissionTimeline.playbackAtBattleCue(ch.born);
+    if(age>=0&&age<bestAge){best=ch;bestAge=age;}
+  });
+  if(!best||bestAge>V2.JUMP_HOLD)return null;
+  var w=Math.max(0,Math.min(1,bestAge/.25,(V2.JUMP_HOLD-bestAge)/.3));
+  return {chute:best,age:bestAge,w:w*w*(3-2*w)};
+};
 V2.followingFall=function(){
   var cs=KM._camState;if(!cs||(cs.mode!=='chase'&&cs.mode!=='crew'))return false;
   var p=cs._followPlane||cs.selectedPlane,u=p&&p.userData,v=u&&u.v2;
   if(!v||u.alive!==false||v.beh!=='fall'||!v.dur)return false;
+  if(cs.mode==='chase'&&V2.jumpFocus(p))return false;
   var cue=KMMissionTimeline.battleCueAtPlayback(KM._playbackSeconds||0);
   return cue>=v.ft&&cue<v.ft+v.dur;
 };
@@ -6560,6 +6579,12 @@ V2.chuteTex=function(){
   return V2._chuteTex;
 };
 /* real 3D parachutes: silk hemisphere canopy, shroud lines, the man */
+/* Heights are drawn about six times taller than ground distances (a
+   unit is ~61 m up, ~376 m across), so a falling ship's path on screen is
+   far steeper than its real dive. Pointing the nose straight down that
+   path stood every loss on its nose. The nose follows a path flattened
+   by 2.5: a shallow burning glide reads as one, a real dive still dives. */
+V2.lossAttitude=function(v,u,t){return KasselLossTrajectory.attitudeTangent(v,u,t);};
 function chuteTemplate(){
   if(V2._chuteTpl)return V2._chuteTpl;
   V2._chuteTpl=KasselParachuteGeometry.build(THREE);
@@ -6580,7 +6605,7 @@ function bailoutExitPoint(p,v,bu,plan,member){
   if(!_exitDummy)_exitDummy=new THREE.Object3D();
   _exitDummy.position.set(pose.position.x,pose.position.y,pose.position.z);
   _exitDummy.scale.copy(p.scale);
-  KasselFlightAttitude.apply(THREE,_exitDummy,pose.tangent,pose.bank||0);
+  KasselFlightAttitude.apply(THREE,_exitDummy,KasselLossTrajectory.attitudeTangent(v,bu,pose.tangent),pose.bank||0);
   _exitDummy.updateMatrixWorld(true);
   var local=hit.p.clone().addScaledVector(hit.n,.35);
   return _exitDummy.localToWorld(local);
@@ -6615,6 +6640,16 @@ function articulateChute(ch,age,landedSeconds){
   ch.rig.scale.set(pose.rigScaleXZ,pose.rigScaleY,pose.rigScaleXZ);ch.rig.position.set(pose.rigOffsetX,pose.rigOffsetY,pose.rigOffsetZ);
   if(landedSeconds>0){ch.sp.rotation.x=0;ch.sp.rotation.z=0;}
 }
+/* A 24-ft canopy at true map scale is a few pixels from the usual
+   views, so a bailout went unnoticed. Below a minimum on-screen size the
+   whole rig is drawn larger (display only; the path is unchanged). */
+function chuteMinimumSize(ch){
+  var cam=KM._cam,ren=KM._ren;if(!cam||!ren)return;
+  if(!V2._chuteHeight){var box=new THREE.Box3().setFromObject(chuteTemplate());V2._chuteHeight=Math.max(1,box.max.y-box.min.y);}
+  var span=2*Math.tan(cam.fov*Math.PI/360)/Math.max(1,ren.domElement.clientHeight);
+  var want=30*span*cam.position.distanceTo(ch.sp.position)/V2._chuteHeight;
+  if(want>ch.rootScale)ch.sp.scale.setScalar(want);
+}
 function chuteTerrainHeight(x,z){
   var surface=V2.groundAt&&V2.groundAt(x,z);
   if(surface!==undefined)return surface;
@@ -6635,6 +6670,7 @@ function updateChutes(dt,elapsed){
       ch.sp.rotation.z=Math.cos(age*0.9+ch.sway)*0.08;
       var landed=Math.max(0,age-ch.contact.time);
       articulateChute(ch,age,landed);
+      chuteMinimumSize(ch);
       continue;
     }
     if(ch.sp.position.y>ch.ground){
@@ -7387,6 +7423,14 @@ function placePlane(p,battleT,elapsed,scene,dt,bombRelease,bombIndex){
         if(!/^(controlled_bailout|belly_landing)$/.test(lossMotion)&&v.pilot!=='Hautman'){
           v.dur=Math.min(v.dur,v.forwardRoute.length/(((typeof V2!=='undefined'&&V2.LOSS_DESCENT_MS)||125)*(KMMissionTimeline.battleSecondsPerCue||360/420)));
         }
+        /* A ship whose wreck lies close under the fight would otherwise
+           cover 23,000 ft in half a minute (Bonnie Vee: 33 s, over 200 m/s
+           straight down). Cap the average sink rate: about 75 m/s for a
+           spin, tumble or break-up, 40 m/s for a burning glide (ESTIMATED,
+           see reference/LOSS-DESCENT-TIMING.md). */
+        var sinkMs=/glide|wing_fire|controlled|landing/.test(lossMotion)?40:75;
+        var dropM=Math.max(0,(v.startPos.y-s0.y)*metricScale.y);
+        v.dur=Math.max(v.dur,dropM/(sinkMs*(KMMissionTimeline.battleSecondsPerCue||360/420)));
         KM._playbackEndSeconds=Math.max(KM._playbackEndSeconds||300,KMMissionTimeline.playbackAtBattleCue(ft+v.dur)+2);
         v.routeClassification='ESTIMATED';
       }
@@ -7412,7 +7456,7 @@ function placePlane(p,battleT,elapsed,scene,dt,bombRelease,bombIndex){
     var pd2=p.userData.planeData;
     var bailout=v.bailoutCrew||[];
     var nCh=bailout.length;
-    if(nCh>0&&v.chutesOut<nCh&&u>=0.08){
+    if(nCh>0&&v.chutesOut<nCh&&u>=0.04){
       if(!v.bailoutSchedule){
         /* who goes out which opening, and in what order: the AAF bail-out
            poster, overridden where a crew account names the exit
@@ -7422,8 +7466,17 @@ function placePlane(p,battleT,elapsed,scene,dt,bombRelease,bombIndex){
           var pl=plans&&plans[index],isPilot=/^(pilot|command pilot)$/i.test(member.r||'');
           return {index:index,pilot:isPilot,plan:pl,key:(isPilot?100:0)+(pl?pl.order:index)+index*.01};
         }).sort(function(a,b){return a.key-b.key;});
+        /* The bell rings as the ship falls out of the box; men go one at a
+           time over most of the fall, not in a burst at the start. A
+           documented explosion or break-up ends the window (survivors
+           there were thrown or got out before it). Spacing is ESTIMATED. */
+        var onset=KasselLossTrajectory.onsetOf(v),open0=Math.max(.05,onset*.55);
+        var close0=v.profile&&v.profile.event!=null?Math.max(open0+.02,v.profile.event-.012):
+          (v.profile&&v.profile.motion==='controlled_bailout'?.62:.72);
         v.bailoutSchedule=rankOf.map(function(e,k){
-          var phase=e.pilot&&v.pilot==='Miner'?v.profile.pilotExitPhase:0.08+0.34*k/Math.max(1,nCh-1);
+          var jitter=((hash((v.pilot||'')+k)%100)/100-.5)*.35/Math.max(1,nCh);
+          var phase=e.pilot&&v.pilot==='Miner'?v.profile.pilotExitPhase:
+            open0+(close0-open0)*Math.max(0,Math.min(1,(k+.5+jitter)/Math.max(1,nCh)));
           return {index:e.index,phase:phase,pilot:e.pilot&&v.pilot==='Miner',plan:e.plan};
         }).sort(function(a,b){return a.phase-b.phase;});
         pd2.bailoutPlans=plans;
@@ -7441,7 +7494,7 @@ function placePlane(p,battleT,elapsed,scene,dt,bombRelease,bombIndex){
         var momentum=tb>ta?{x:(pb.x-pa.x)/(tb-ta),z:(pb.z-pa.z)/(tb-ta)}:null;
         /* His account establishes delayed deployment, not a measured
            duration. 0.65 playback seconds is presentation-only. */
-        var openingDelay=event.pilot?.65:0;
+        var openingDelay=event.pilot?.65:.35;
         spawnChute(scene,launch,bailout[ci],pd2,ci,ft+bu*v.dur,momentum,openingDelay,mapMetres);
         v.chutesOut++;
       }
@@ -7459,7 +7512,7 @@ function placePlane(p,battleT,elapsed,scene,dt,bombRelease,bombIndex){
     p.position.set(x,y,z);
     /* Include the lateral escape and authored spiral in the tangent;
        the old heading differentiated only the underlying Bezier. */
-    KasselFlightAttitude.apply(THREE,p,lossPose.tangent,lossPose.bank);
+    KasselFlightAttitude.apply(THREE,p,KasselLossTrajectory.attitudeTangent(v,u,lossPose.tangent),lossPose.bank); /* see V2.lossAttitude */
     KasselAircraftMapScale.clearTerrain(THREE,p,V2.groundAt);
     /* burning trail */
     if(KM._playing&&(V2._frame&1)===0){
@@ -7838,6 +7891,21 @@ function crewHandoffLens(elapsed,startFov){
       if(pl){
         var lossFocus=KasselCrewLossFocus.select(pl,c,V2.CREW_LISTS||{},V2._chutes||[],window.KMCrewStations&&KMCrewStations.resolve);
         var focus=lossFocus.position,focusRadius=lossFocus.radius;
+        /* While a falling ship's crew are getting out, cut to each man as
+           he leaves (V2.jumpFocus) and come back to the ship after his
+           canopy has opened. */
+        if(lossFocus.kind==='aircraft'){
+          var jump=V2.jumpFocus(pl);
+          if(jump){
+            if(!V2._chuteHeight){var cbox=new THREE.Box3().setFromObject(chuteTemplate());V2._chuteHeight=Math.max(1,cbox.max.y-cbox.min.y);}
+            var baseR=c.cR||115*(pl.userData.mapGeometryScale||pl.scale.x||.0025);
+            var manR=jump.chute.rootScale*V2._chuteHeight*2.4;
+            var canopyCentre=jump.chute.sp.position.clone();canopyCentre.y+=jump.chute.rootScale*(jump.chute.feetY||-5.5)*.5; /* between canopy and boots */
+            focus=pl.position.clone().lerp(canopyCentre,jump.w);
+            focusRadius=baseR+(manR-baseR)*jump.w;
+            lossFocus.kind=jump.w>.5?'airman':'aircraft';
+          }
+        }
         var chaseNear=lossFocus.kind==='airman'&&focusRadius?Math.min(wantNear,focusRadius*.12):wantNear;
         if(camera.near!==chaseNear||camera.fov!==wantFov){
           camera.near=chaseNear;camera.fov=wantFov;camera.updateProjectionMatrix();

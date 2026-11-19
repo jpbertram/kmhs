@@ -316,16 +316,16 @@
     "sha256": "86dae712c1195e9a8e5be8aecfe87ef1f72ac2497393cb5681d10ecce3d01ad7"
   },
   "kassel-mission-interactive-v4/forward-endpoint-route.js": {
-    "bytes": 3612,
-    "sha256": "491afca52f489768e674fd85c1d6e9610006413d05c1501acf8fdd43ee7659d6"
+    "bytes": 3836,
+    "sha256": "0d6359cafcb06d27d479b46c017da00c10957088a8e0f83fdfd4726b4068be76"
   },
   "kassel-mission-interactive-v4/geometry-review.html": {
     "bytes": 3520,
     "sha256": "59788c5ae9126272d653ac422514e8ac7171a396022e577fae058f19774407c6"
   },
   "kassel-mission-interactive-v4/historical-geometry.js": {
-    "bytes": 12547,
-    "sha256": "50916808a0ca1486775c158c8820f5796ff3ea0fa470b1db8c26b6c474a2a9e5"
+    "bytes": 13354,
+    "sha256": "711e45599226da392a5e53a3169ae63bbf2644f96d839d823e41bacc698a88bc"
   },
   "kassel-mission-interactive-v4/index.html": {
     "bytes": 448,
@@ -336,16 +336,16 @@
     "sha256": "ec4426568e2a8d75f9a602a8d2ed40f1e9d7c2e534847686cc8bd810ee296c22"
   },
   "kassel-mission-interactive-v4/km3d-v3.js": {
-    "bytes": 453955,
-    "sha256": "bf3413abb680ed31ee2f18e8d77009ac0632a7838e8e6fe39bf3a4cd05b33def"
+    "bytes": 458318,
+    "sha256": "38dee187bf77b119a732f02abb893b5bf0e117532cda9014d067fb347629b5ed"
   },
   "kassel-mission-interactive-v4/loss-smoke.js": {
     "bytes": 1710,
     "sha256": "a61c3ee091eecf6b5df7b5b207ff9aad7151e587033dab57ea0dfc1eb629b4b6"
   },
   "kassel-mission-interactive-v4/loss-trajectory.js": {
-    "bytes": 3485,
-    "sha256": "f54ae4b4eefad6e18a8ba492a1eb9178fba8ac312c131631db3a97e83ec68a15"
+    "bytes": 7565,
+    "sha256": "af79ef41dfad20feeb11a218cba34920d09aaccf55447c0e879e39ad9f3e3a77"
   },
   "kassel-mission-interactive-v4/m1-runtime-fixture.js": {
     "bytes": 4380,
@@ -356,8 +356,8 @@
     "sha256": "2cc4d9d42473e2243c3d2cf9e6b66ec778fd1fa0fa60ed81b2c9f57434133802"
   },
   "kassel-mission-interactive-v4/mission-reconstruction.html": {
-    "bytes": 344395,
-    "sha256": "e16bb6a7134d09d4f3f35174933553883827873c8819a8c8fdab16d8443d979e"
+    "bytes": 344397,
+    "sha256": "95320445f888300d31cbfb7063d1d1e7b1f4adf96c000aad6127efeb43402f0d"
   },
   "kassel-mission-interactive-v4/mission-timeline.js": {
     "bytes": 7303,
@@ -368,8 +368,8 @@
     "sha256": "9af1cc97b9ffa7388334abf0d1eccdb0d0d0cb39fc9e572d3a196e6dd52a94fa"
   },
   "kassel-mission-interactive-v4/parachute-geometry.js": {
-    "bytes": 1834,
-    "sha256": "f62d5efb99bf15a369e6f535d30fc2d226c50aa49e05ac07a385f972c6b20544"
+    "bytes": 5205,
+    "sha256": "932355e805556d47835fa8c414ceda747c39fd56fbf5b048974d2c6e1881f371"
   },
   "kassel-mission-interactive-v4/parachute-pose.js": {
     "bytes": 1458,
@@ -432,8 +432,8 @@
     "sha256": "4275afcccfe09da438719ae531c619729d961a96451f3cdfe2c28333eb0bdc52"
   },
   "kassel-mission-interactive-v4/reference/LOSS-DESCENT-TIMING.md": {
-    "bytes": 1426,
-    "sha256": "62ad8b3875de414dc30fa4e2ff145e75c7aaf67e1b34d01bfedb07abe910d912"
+    "bytes": 2414,
+    "sha256": "183291be849137411985a4b75cdd93205ae3b87472d347eeb19972f3f0fa09b1"
   },
   "kassel-mission-interactive-v4/reference/LOSS-PATH-RECONSTRUCTION.md": {
     "bytes": 1706,

@@ -50,11 +50,18 @@
   airman:function(T){
    var g=new T.Group();g.name='clothed-airman-in-parachute-harness';
    var cloth=new T.MeshStandardMaterial({color:0x554a35,roughness:1}),leather=new T.MeshStandardMaterial({color:0x32271d,roughness:.88}),webbing=new T.MeshStandardMaterial({color:0x9e9270,roughness:1}),skin=new T.MeshStandardMaterial({color:0x92755b,roughness:1}),steel=new T.MeshStandardMaterial({color:0x62675f,roughness:.5,metalness:.55});
+   // Typical 8th AF heavy-bomber crew dress: brown sheepskin or leather
+   // jacket with a light fleece collar, olive trousers and the yellow B-3/B-4
+   // "Mae West" life preserver over the chest. Generic issue, not a portrait.
+   var jacket=new T.MeshStandardMaterial({color:0x7a5233,roughness:.95}),fleece=new T.MeshStandardMaterial({color:0xd8c7a0,roughness:1}),trousers=new T.MeshStandardMaterial({color:0x6b6747,roughness:1}),maeWest=new T.MeshStandardMaterial({color:0xe3be3a,roughness:.8});
    function add(geo,mat,pos,scale){var m=new T.Mesh(geo,mat);if(pos)m.position.set.apply(m.position,pos);if(scale)m.scale.set.apply(m.scale,scale);g.add(m);return m;}
-   var torso=loft(T,[[-.35,.16,.11],[-.23,.16,.115],[0,.19,.135],[.22,.215,.135],[.32,.235,.12],[.38,.15,.095],[.40,.08,.07]],'y',cloth,32);g.add(torso);
+   var torso=loft(T,[[-.35,.16,.11],[-.23,.16,.115],[0,.19,.135],[.22,.215,.135],[.32,.235,.12],[.38,.15,.095],[.40,.08,.07]],'y',jacket,32);g.add(torso);
+   // Mae West: two inflated lobes over the chest, collar band behind the neck
+   g.add(loft(T,[[.02,.15,.05,.10],[.12,.2,.075,.11],[.25,.215,.08,.105],[.34,.17,.06,.085]],'y',maeWest,32));
+   g.add(loft(T,[[.33,.17,.12,.0],[.37,.16,.115,.0],[.40,.12,.1,-.01]],'y',maeWest,32));
    // A shaped standing collar gives the garment a neckline rather than
    // leaving a bare cylinder projecting from an unbroken torso tube.
-   g.add(loft(T,[[.335,.135,.092],[.39,.102,.079],[.435,.079,.068]],'y',cloth,32));
+   g.add(loft(T,[[.335,.135,.092],[.39,.102,.079],[.435,.079,.068]],'y',fleece,32));
    // Shaped head, neck and leather flying helmet; no giant spherical head.
    add(new T.CylinderGeometry(.055,.062,.12,20),skin,[0,.44,0]);
    if(global.KasselHumanHead){var h=global.KasselHumanHead,hg=new T.BufferGeometry();hg.setAttribute('position',new T.Float32BufferAttribute(h.positions,3));hg.setIndex(h.indices);hg.computeVertexNormals();add(hg,skin,[0,.572,.010],[.21,.29,.205]);}
@@ -62,10 +69,10 @@
    add(new T.SphereGeometry(1,24,16,0,Math.PI*2,0,Math.PI*.49),leather,[0,.60,0],[.110,.122,.103]);
    if(!global.KasselHumanHead)add(new T.SphereGeometry(1,12,8),skin,[0,.55,.101],[.025,.038,.037]);
    [-1,1].forEach(function(s){add(new T.SphereGeometry(1,16,10),leather,[s*.108,.565,0],[.019,.043,.038]);});
-   function limb(points,radii){var curve=new T.CatmullRomCurve3(points.map(function(p){return new T.Vector3().fromArray(p);})),p=[],ix=[],rings=28,sides=20;
+   function limb(points,radii,mat){var curve=new T.CatmullRomCurve3(points.map(function(p){return new T.Vector3().fromArray(p);})),p=[],ix=[],rings=28,sides=20;
     for(var i=0;i<=rings;i++){var u=i/rings,c=curve.getPoint(u),t=curve.getTangent(u).normalize(),ref=Math.abs(t.z)<.9?new T.Vector3(0,0,1):new T.Vector3(1,0,0),n=new T.Vector3().crossVectors(t,ref).normalize(),b=new T.Vector3().crossVectors(t,n),ru=u*2,j=Math.min(1,Math.floor(ru)),f=ru-j,r=radii[j]*(1-f)+radii[j+1]*f;
      for(var k=0;k<sides;k++){var ang=k/sides*Math.PI*2,v=c.clone().addScaledVector(n,Math.cos(ang)*r).addScaledVector(b,Math.sin(ang)*r*.88);p.push(v.x,v.y,v.z);if(i){var a=(i-1)*sides+k,d=(i-1)*sides+(k+1)%sides,e=i*sides+k,h=i*sides+(k+1)%sides;ix.push(a,e,d,d,e,h);}}}
-    var geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(p,3));geo.setIndex(ix);geo.computeVertexNormals();return add(geo,cloth);
+    var geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(p,3));geo.setIndex(ix);geo.computeVertexNormals();return add(geo,mat||cloth);
    }
    function strap(a,b,width){var av=new T.Vector3().fromArray(a),bv=new T.Vector3().fromArray(b),d=bv.clone().sub(av);var m=add(new T.BoxGeometry(width,d.length(),.012),webbing,av.clone().add(bv).multiplyScalar(.5).toArray());m.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),d.normalize());}
    // Generic leather glove gripping a riser. Distinct palm, four curled
@@ -83,9 +90,9 @@
     var cuff=add(new T.CylinderGeometry(.031,.026,.025,24),leather,[x,y-.046,z]);cuff.rotation.z=side*.35;
    }
    [-1,1].forEach(function(s){
-    limb([[s*.12,-.27,0],[s*.18,-.66,.09],[s*.14,-1.04,.01]],[.095,.067,.049]);
+    limb([[s*.12,-.27,0],[s*.17,-.64,.11],[s*.13,-1.03,.03]],[.095,.067,.049],trousers);
     var boot=loft(T,[[-1.152,.051,.090,.04],[-1.139,.058,.113,.058],[-1.102,.060,.112,.053],[-1.080,.055,.080,.024],[-1.000,.056,.062,.005],[-.945,.055,.059,.005]],'y',leather,32);boot.position.x=s*.14;g.add(boot);
-    limb([[s*.20,.27,0],[s*.31,.47,.025],[s*.18,.735,.018]],[.082,.048,.035]);
+    limb([[s*.20,.27,0],[s*.31,.47,.025],[s*.18,.735,.018]],[.082,.048,.035],jacket);
     glove(s);
     strap([s*.12,.37,.13],[s*.09,-.29,.12],.042);strap([s*.12,.37,-.13],[s*.09,-.28,-.12],.042);
     strap([s*.09,-.28,.12],[s*.18,-.44,.08],.043);strap([s*.18,-.44,.08],[s*.09,-.30,-.12],.043);

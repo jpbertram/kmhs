@@ -23,15 +23,18 @@
    initialAltitudeDerivative:velocity.y/Math.max(1e-9,Math.hypot(velocity.x*scale.x,velocity.z*scale.z)),initialBank:0,
    classification:'ESTIMATED',reason:'Bounded-curvature forward geometric approach; endpoint preserved, path not documentary evidence'};
  }
- function samplePosition(route,u){
-  u=Math.max(0,Math.min(1,u));const s=u*route.length,arc=s<route.arc;
+ // uy: optional separate progress for altitude, so a stricken ship can
+ // hold height while it falls out of the box before the dive.
+ function samplePosition(route,u,uy){
+  u=Math.max(0,Math.min(1,u));uy=uy===undefined?u:Math.max(0,Math.min(1,uy));
+  const s=u*route.length,arc=s<route.arc;
   const eta=route.eta0+route.sign*Math.min(s,route.arc)/route.radiusM;
   const x=arc?route.cx+route.radiusM*Math.cos(eta):route.px+route.fx*(s-route.arc);
   const z=arc?route.cz+route.radiusM*Math.sin(eta):route.pz+route.fz*(s-route.arc);
   const fx=arc?-route.sign*Math.sin(eta):route.fx,fz=arc?route.sign*Math.cos(eta):route.fz;
-  const e=u*u*(3-2*u),dy=route.target.y-route.start.y;
+  const e=uy*uy*(3-2*uy),dy=route.target.y-route.start.y;
   const dy0=route.initialAltitudeDerivative*route.length;
-  let y=route.start.y+dy*e+dy0*(u*u*u-2*u*u+u);
+  let y=route.start.y+dy*e+dy0*(uy*uy*uy-2*uy*uy+uy);
   if(route.terrainHeight){
    const ground=route.terrainHeight(x/route.scale.x,z/route.scale.z);
    if(ground!==undefined){
@@ -47,12 +50,12 @@
   // remains tangent-continuous. Roll timing is estimated, not validated.
   const ramp=Math.min(1,s/200,Math.max(0,(route.arc-s)/200));
   return {position:{x:x/route.scale.x,y,z:z/route.scale.z},
-   tangent:{x:fx/route.scale.x,y:(6*u*(1-u)*dy+dy0*(3*u*u-4*u+1))/route.length,z:fz/route.scale.z},
+   tangent:{x:fx/route.scale.x,y:(6*uy*(1-uy)*dy+dy0*(3*uy*uy-4*uy+1))/route.length,z:fz/route.scale.z},
    bank:(arc?route.sign*Math.atan(105**2/(9.80665*route.radiusM))*ramp:0)+route.initialBank*Math.max(0,1-s/200)};
  }
- function sample(route,u){
-  const result=samplePosition(route,u);
-  if(route.terrainHeight){
+ function sample(route,u,uy){
+  const result=samplePosition(route,u,uy);
+  if(route.terrainHeight&&uy===undefined){
    const left=Math.max(0,u-.00001),right=Math.min(1,u+.00001);
    if(right>left){
     const rise=samplePosition(route,right).position.y-samplePosition(route,left).position.y;
