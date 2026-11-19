@@ -1,0 +1,140 @@
+{
+ "origin": "shared: pilot station at 0,0,0; +z aft; metres",
+ "source": "b24-cockpit.html crew sections (approved by JP 2026-11-18), converted by tools/crew-stations/port-sections.mjs",
+ "sections": [
+  {
+   "key": "flightdeck",
+   "file": "b24-flightdeck.glb",
+   "contents": "Cockpit, flight deck, radio and top turret, with pilot and co-pilot eye cameras",
+   "bytes": 5997352
+  },
+  {
+   "key": "nose",
+   "file": "b24-nose.glb",
+   "contents": "Nose: navigator, bombardier, Norden, nose turret",
+   "bytes": 4124220
+  },
+  {
+   "key": "bombbay",
+   "file": "b24-bombbay.glb",
+   "contents": "Bomb bay with catwalk and bombs",
+   "bytes": 992300
+  },
+  {
+   "key": "waist",
+   "file": "b24-waist.glb",
+   "contents": "Waist guns and waist section",
+   "bytes": 2875144
+  },
+  {
+   "key": "tail",
+   "file": "b24-tail.glb",
+   "contents": "Aft fuselage and tail turret",
+   "bytes": 3827836
+  },
+  {
+   "key": "exterior",
+   "file": "b24-exterior.glb",
+   "contents": "Wings, nacelles, tailplane and outer skin",
+   "bytes": 413340
+  }
+ ],
+ "stations": {
+  "nav": {
+   "eye": [
+    0.14,
+    0.42,
+    -1.86
+   ],
+   "look": [
+    0.4963,
+    -0.4467,
+    -0.7444
+   ]
+  },
+  "bomb": {
+   "eye": [
+    0,
+    0.1,
+    -2.8
+   ],
+   "look": [
+    0,
+    -0.7413,
+    -0.6712
+   ]
+  },
+  "nose": {
+   "eye": [
+    0,
+    0.74,
+    -4.2
+   ],
+   "look": [
+    0,
+    -0.0599,
+    -0.9982
+   ]
+  },
+  "radio": {
+   "eye": [
+    0.42,
+    1.2,
+    1.42
+   ],
+   "look": [
+    0.921,
+    -0.3868,
+    -0.0461
+   ]
+  },
+  "ttop": {
+   "eye": [
+    0,
+    2.045,
+    1.5
+   ],
+   "look": [
+    0,
+    0,
+    -1
+   ]
+  },
+  "waistL": {
+   "eye": [
+    -0.1,
+    1.031,
+    8.95
+   ],
+   "look": [
+    -0.9929,
+    -0.1191,
+    0
+   ]
+  },
+  "waistR": {
+   "eye": [
+    0.1,
+    1.031,
+    8.95
+   ],
+   "look": [
+    0.9929,
+    -0.1191,
+    0
+   ]
+  },
+  "tail": {
+   "eye": [
+    0,
+    0.86,
+    14.64
+   ],
+   "look": [
+    0,
+    -0.02,
+    0.9998
+   ]
+  }
+ }
+}

@@ -24,8 +24,12 @@ const textures=[
   'cabin-cloth-tone.jpg','cabin-cloth-roughness.jpg','cabin-cloth-normal.jpg'
 ];
 // Crew-compartment models loaded by crew-compartments.js from the page's folder.
-const compartments=['b24-flight-deck.glb','b24-aft-deck.glb','b24-top-turret.glb','b24-nose-compartment.glb','b24-waist.glb','b24-ball-turret.glb','b24-tail-turret.glb'];
-for(const name of compartments)fs.copyFileSync(path.join(project,name),path.join(output,name));
+// The six approved crew-station sections, listed in their own manifest.
+const sections=JSON.parse(fs.readFileSync(path.join(project,'crew-sections','manifest.json'),'utf8'));
+fs.mkdirSync(path.join(output,'crew-sections'));
+fs.copyFileSync(path.join(project,'crew-sections','manifest.json'),path.join(output,'crew-sections','manifest.json'));
+for(const s of sections.sections){if(!/^[\w-]+\.glb$/.test(s.file))throw Error('Unrecognized crew section '+s.file);fs.copyFileSync(path.join(project,'crew-sections',s.file),path.join(output,'crew-sections',s.file));}
+fs.copyFileSync(path.join(project,'vendor','MESHOPTIMIZER-LICENSE.md'),path.join(output,'vendor','MESHOPTIMIZER-LICENSE.md'));
 fs.mkdirSync(path.join(output,'textures'));
 for(const name of textures)fs.copyFileSync(path.join(project,'textures',name),path.join(output,'textures',name));
 const config={esriApiKey:process.env.KM_ESRI_BROWSER_KEY?.trim()||''};

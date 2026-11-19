@@ -36,8 +36,8 @@
     "sha256": "59bc0c1cde2445708a7b4cbb207c64d91abe3928848ea2e16da77d1ac93d7a64"
   },
   "build-simulator.cjs": {
-    "bytes": 2246,
-    "sha256": "cd0b4d5674acb1d4e3647c4c95a544814dd8c05f4d84468f4a7cf4567984d94f"
+    "bytes": 2668,
+    "sha256": "36d90df74cbb454a777825b8d0a87f47952b24a634ca390443fbfe124910b72c"
   },
   "check-package.cjs": {
     "bytes": 1652,
@@ -224,12 +224,12 @@
     "sha256": "1d662a35626b7e9430e9d6e0c2ecc56b758ed4f8c68a4cf90b7395c57ef07d3a"
   },
   "kassel-mission-interactive-v4/cockpit-gauges.js": {
-    "bytes": 6088,
-    "sha256": "d4386b081f34de75c9f96bbdab749361e7217673e6c9c2d3abb69de77e209e4e"
+    "bytes": 8150,
+    "sha256": "2faba84a2e0814d0b8eeb61aa4652c94a4e27c50beea0dbeff2c894b6db925bf"
   },
   "kassel-mission-interactive-v4/cockpit-live.js": {
-    "bytes": 16710,
-    "sha256": "775493529e80323b66f0e2c7d76f1bf4b43954ab6a3953c5b7507d59eedeb137"
+    "bytes": 16973,
+    "sha256": "6a2c982f2307ad6cfd2fb97fdc77d562345bd7aa89f8575d44049d829f7c49a3"
   },
   "kassel-mission-interactive-v4/coordinated-turn.html": {
     "bytes": 2212,
@@ -240,8 +240,8 @@
     "sha256": "3fa916c9b9ab8330fa0634b393c9c3f02da1e11be8ce021a2d8cc21c0f05f6db"
   },
   "kassel-mission-interactive-v4/crew-compartments.js": {
-    "bytes": 5956,
-    "sha256": "046af0cb17f13404a161e7665bbc5ccd76f2c8dd65c25d2224f2d46326479401"
+    "bytes": 9260,
+    "sha256": "30c2e70ad42ced7e4b302b006e7258d69e7d6e562855f1273d4a8bdc2dcb4fb9"
   },
   "kassel-mission-interactive-v4/crew-exterior.js": {
     "bytes": 1376,
@@ -254,6 +254,34 @@
   "kassel-mission-interactive-v4/crew-navigation.js": {
     "bytes": 3450,
     "sha256": "c4ea08f98f3bc52284e7dcc193ac89723afc35a56c63f9b2c364af0a4f5d54a5"
+  },
+  "kassel-mission-interactive-v4/crew-sections/b24-bombbay.glb": {
+    "bytes": 992300,
+    "sha256": "973a33955ba991a6c62c20595bab50e3f21e1e1e3e32c68df9494a828352ae3b"
+  },
+  "kassel-mission-interactive-v4/crew-sections/b24-exterior.glb": {
+    "bytes": 413340,
+    "sha256": "aa2e0d8f49b1c79709794cb860a0fa078b5f43b6e2e0c25a1c9faa30b60a25f8"
+  },
+  "kassel-mission-interactive-v4/crew-sections/b24-flightdeck.glb": {
+    "bytes": 5997352,
+    "sha256": "f9c53336552d3764d5c976086bf4b12766fae3e5bc533c91452385e91f94eaa9"
+  },
+  "kassel-mission-interactive-v4/crew-sections/b24-nose.glb": {
+    "bytes": 4124220,
+    "sha256": "c60b7958ef1849e319ea561f31dacd147b45e693b4c9012f651fcf4abd66d56c"
+  },
+  "kassel-mission-interactive-v4/crew-sections/b24-tail.glb": {
+    "bytes": 3827836,
+    "sha256": "920c679b800b5b79ad621d1be21dff7eeae3e6303f7aeabdae03249b8d813dad"
+  },
+  "kassel-mission-interactive-v4/crew-sections/b24-waist.glb": {
+    "bytes": 2875144,
+    "sha256": "ba99f9bb75cd169f532900673bca38634729e0df6b5de7bb5168703a292c5f17"
+  },
+  "kassel-mission-interactive-v4/crew-sections/manifest.json": {
+    "bytes": 1963,
+    "sha256": "a04c3797f08c23b6d6ebaaa43e4683e02e60a1323cca33509cad7420a178b132"
   },
   "kassel-mission-interactive-v4/crew-stations.js": {
     "bytes": 1444,
@@ -300,8 +328,8 @@
     "sha256": "ec4426568e2a8d75f9a602a8d2ed40f1e9d7c2e534847686cc8bd810ee296c22"
   },
   "kassel-mission-interactive-v4/km3d-v3.js": {
-    "bytes": 446215,
-    "sha256": "fdfc423651154527c4148e8cd53de84755f30c46cf0a0aa94395b3c1184bad54"
+    "bytes": 446452,
+    "sha256": "b0886a4603c3c174f659cde4b2e41f54531792a50512f11f4f199f0b3d679951"
   },
   "kassel-mission-interactive-v4/loss-smoke.js": {
     "bytes": 1710,
@@ -315,9 +343,13 @@
     "bytes": 4380,
     "sha256": "32d41a0fff23d5b9af34bcb7624ba3f376bf4484c836a0d18fd7d9a566d91a8c"
   },
+  "kassel-mission-interactive-v4/meshopt-decoder.js": {
+    "bytes": 25234,
+    "sha256": "2cc4d9d42473e2243c3d2cf9e6b66ec778fd1fa0fa60ed81b2c9f57434133802"
+  },
   "kassel-mission-interactive-v4/mission-reconstruction.html": {
-    "bytes": 341975,
-    "sha256": "358abc85c4c67bf84c7b98d7b84e0a5942b16d4f385563854e6931c7ab0955f1"
+    "bytes": 342035,
+    "sha256": "bba3d8b53e39cd1aeabeb29c6072288206d20d82503f253f6c60a13bbfd1a1be"
   },
   "kassel-mission-interactive-v4/mission-timeline.js": {
     "bytes": 6525,
@@ -512,8 +544,8 @@
     "sha256": "75f0a1729b64849cd70647ed065f501b90eafb1522125d849689a8d370f7960b"
   },
   "kassel-mission-interactive-v4/test-cockpit-live.js": {
-    "bytes": 3351,
-    "sha256": "550dc5dbb16d8865a927e663f0220f89e6e630cf3293ac2db6a1ccc3a81b5277"
+    "bytes": 3830,
+    "sha256": "42f9b27a56672b58f870bf304d84e57c9b32c704f3a39101084c1f03a223c986"
   },
   "kassel-mission-interactive-v4/test-coordinated-turn.js": {
     "bytes": 5198,
@@ -608,16 +640,16 @@
     "sha256": "da15a4498b26016ad11b3ead637e830fc5d4cdccbf5c9ec147f3db3ac9af3412"
   },
   "kassel-mission-interactive-v4/tools/cockpit-live/extract-gauges.mjs": {
-    "bytes": 4086,
-    "sha256": "92da130563b3bc44c2a9bcc722d51ad65dad705ed478139f8e9620410970a659"
+    "bytes": 4584,
+    "sha256": "33cfc3f61a1fda91ed6715563d88823d19bdff38e3614e733772412640fae929"
   },
   "kassel-mission-interactive-v4/tools/cockpit-live/probe-controls.mjs": {
     "bytes": 1171,
     "sha256": "8004c45fd46cd683043e369125339dc085f2847b2e4a91c6e982007e4ceb5f2d"
   },
   "kassel-mission-interactive-v4/tools/crew-stations/README.md": {
-    "bytes": 3536,
-    "sha256": "e44342db6829e9327b2a101c77abcf99f441e2e97aa01a8f58399823ff4ed0d6"
+    "bytes": 4522,
+    "sha256": "d2add8910b2b8acb46c5ccf23070d3b06d27cfb20464fc672654b92f24a82f96"
   },
   "kassel-mission-interactive-v4/tools/crew-stations/__pycache__/b24lib.cpython-311.pyc": {
     "bytes": 41092,
@@ -639,9 +671,17 @@
     "bytes": 13244,
     "sha256": "75e2155d84764a32a2292c94f6af64e4b9bee35b4bc9ebf3556696c752d8b667"
   },
+  "kassel-mission-interactive-v4/tools/crew-stations/package-lock.json": {
+    "bytes": 6150,
+    "sha256": "703b47647014f0c492021f40beb364e72d84c4794145f800fd01d00b450ceb9e"
+  },
   "kassel-mission-interactive-v4/tools/crew-stations/package.json": {
-    "bytes": 329,
-    "sha256": "04edb754a8747d8264d0652e9906957a6d3903ec74aaec10957eef103e5c2a2e"
+    "bytes": 388,
+    "sha256": "902e5b65f86c10f0fa621333f0df955182ef96e3f799dd4b1cbda6ab92314f21"
+  },
+  "kassel-mission-interactive-v4/tools/crew-stations/port-sections.mjs": {
+    "bytes": 4791,
+    "sha256": "804f4774c5ed91469e9b55cbe0e5a498e8a55944d4ae40e4c63aba2585a80d84"
   },
   "kassel-mission-interactive-v4/tools/crew-stations/prep.mjs": {
     "bytes": 1330,
@@ -694,6 +734,10 @@
   "kassel-mission-interactive-v4/vendor/GLTFLoader-r128.js": {
     "bytes": 96550,
     "sha256": "5c15967ba830918a9caea6338712c994c354bccd4edc4569bde411c3ec06a3e6"
+  },
+  "kassel-mission-interactive-v4/vendor/MESHOPTIMIZER-LICENSE.md": {
+    "bytes": 1079,
+    "sha256": "d1bc307ff896c7fc65e3ff4823cc478194f7a5bc6436f99534ebede4d9e2017a"
   },
   "kassel-mission-interactive-v4/vendor/THREE-LICENSE.txt": {
     "bytes": 1081,

@@ -8172,6 +8172,8 @@ KM._buildAnimation=function(){
       }
 
       if(V2._frame%30===1)V2.capPoints(scene);
+      /* about ten seconds in, start streaming the crew-station sections in the background */
+      if(V2._frame===300&&window.KasselCrewCompartments&&window.KasselCrewCompartments.prefetch)window.KasselCrewCompartments.prefetch(THREE);
       /* fighters + escorts + tracers + chutes + flashes */
       var fighterClock=KMMissionTimeline.battleCueAtPlayback(KM._playbackSeconds||0);
       updateFighters(fighterClock,sdt,elapsed,scene);
