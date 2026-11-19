@@ -667,14 +667,6 @@
     "bytes": 41092,
     "sha256": "63d6e8ce32e3fddfacca48cd9e162b18d5e1e91d0d2d24d3289f608d3e479fa3"
   },
-  "kassel-mission-interactive-v4/tools/crew-stations/_i2.mjs": {
-    "bytes": 1420,
-    "sha256": "6edd6069dd1478f359973c823f7142b3a3b4a396860a5a4bc2b47ea35c8dacbc"
-  },
-  "kassel-mission-interactive-v4/tools/crew-stations/_i3.mjs": {
-    "bytes": 1066,
-    "sha256": "a388a36d13718024aa11e5667e13131f76cd19337db529a80f2ba5737f2f4aff"
-  },
   "kassel-mission-interactive-v4/tools/crew-stations/aftdeck.py": {
     "bytes": 8063,
     "sha256": "48f2a32536351d121cc98033af6f4bc206ed13b2cd7ff7f7102d65e02fc0d417"
