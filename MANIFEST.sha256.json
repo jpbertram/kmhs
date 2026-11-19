@@ -336,8 +336,8 @@
     "sha256": "ec4426568e2a8d75f9a602a8d2ed40f1e9d7c2e534847686cc8bd810ee296c22"
   },
   "kassel-mission-interactive-v4/km3d-v3.js": {
-    "bytes": 450205,
-    "sha256": "8e4f412b4fa5ee4ca35eda823246cb6b9cb8ccad6b68ba49ff34e1d3d98815b4"
+    "bytes": 451152,
+    "sha256": "bf5bff13b2308deebec2ec315e1b571481d723fbc90a7ab0baab619faaad1b55"
   },
   "kassel-mission-interactive-v4/loss-smoke.js": {
     "bytes": 1710,
@@ -430,6 +430,10 @@
   "kassel-mission-interactive-v4/reference/Kassel Mission Build Spec.html": {
     "bytes": 27166,
     "sha256": "4275afcccfe09da438719ae531c619729d961a96451f3cdfe2c28333eb0bdc52"
+  },
+  "kassel-mission-interactive-v4/reference/LOSS-DESCENT-TIMING.md": {
+    "bytes": 1426,
+    "sha256": "62ad8b3875de414dc30fa4e2ff145e75c7aaf67e1b34d01bfedb07abe910d912"
   },
   "kassel-mission-interactive-v4/reference/LOSS-PATH-RECONSTRUCTION.md": {
     "bytes": 1706,
@@ -662,6 +666,14 @@
   "kassel-mission-interactive-v4/tools/crew-stations/__pycache__/b24lib.cpython-311.pyc": {
     "bytes": 41092,
     "sha256": "63d6e8ce32e3fddfacca48cd9e162b18d5e1e91d0d2d24d3289f608d3e479fa3"
+  },
+  "kassel-mission-interactive-v4/tools/crew-stations/_i2.mjs": {
+    "bytes": 1420,
+    "sha256": "6edd6069dd1478f359973c823f7142b3a3b4a396860a5a4bc2b47ea35c8dacbc"
+  },
+  "kassel-mission-interactive-v4/tools/crew-stations/_i3.mjs": {
+    "bytes": 1066,
+    "sha256": "a388a36d13718024aa11e5667e13131f76cd19337db529a80f2ba5737f2f4aff"
   },
   "kassel-mission-interactive-v4/tools/crew-stations/aftdeck.py": {
     "bytes": 8063,

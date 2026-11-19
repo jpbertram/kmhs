@@ -5551,7 +5551,12 @@ V2.MODEL_CFG={
      the wing well fillers. Dropping them left open grids on top of both
      wings beside the inboard nacelles and holes under the nose. */
   b24lo:{len:33,rotY:Math.PI/2,centerX:-2.7,centerY:0.3,
-    forceRotY:Math.PI/2},
+    forceRotY:Math.PI/2,
+    /* Object_1681 is the airframe's internal rib and spar structure (one
+       9,600-vertex mesh spanning both wings). Its ribs poke through the
+       wing skin between the nacelles as a black grid; the formation
+       exterior doesn't need it. */
+    dropMeshRe:/^Object_1681$/},
   /* the 109's canopy frame outscores its fin in the top-vertex test,
      putting the "fin" forward of center — flip it */
   /* the NEW fighters have named nodes: real props spin, real landing
@@ -5653,6 +5658,7 @@ V2.prepareTemplate=function(gltf,key){
     }
     if(!shown)return;
     if(drop)return; /* landing gear etc — gone for flight */
+    if(cfg.dropMeshRe&&cfg.dropMeshRe.test(o.name||''))return;
     var g=o.geometry.clone();
     g.applyMatrix4(o.matrixWorld);
     if(!g.attributes.normal)g.computeVertexNormals();
@@ -7515,6 +7521,10 @@ function updateFighters(battleT,dt,elapsed,scene){
   var a=KM._anchor;
   var across=new THREE.Vector3(-a.dir.z,0,a.dir.x);
   var bombers=(KM._fp||[]).concat(KM._b24?[KM._b24]:[]).filter(function(b){return b.visible&&b.userData.alive;});
+  /* run in at the middle of the box's height, not the lead ship's */
+  /* fixed once from the intact box, so losses never make the run-in height jump */
+  if(KM._boxDY===undefined&&bombers.length>=20){var ys=bombers.map(function(b){return b.position.y-a.pos.y;}).sort(function(x,y){return x-y;});KM._boxDY=ys[ys.length>>1];}
+  var boxY=a.pos.y+(KM._boxDY||0);
   (KM._fighterWaves||[]).forEach(function(w,wi){
     var t0=waveTime(w,wi);
     var waveDur=w.duration||90;
@@ -7538,7 +7548,10 @@ function updateFighters(battleT,dt,elapsed,scene){
       var side=(u.lat>=0?1:-1);
       var alongPath=fighterPassCoordinate(ph,[-68,38,50,80]);
       var lateralPath=fighterPassCoordinate(ph,[0,0,12,22]);
-      var verticalPath=fighterPassCoordinate(ph,[1.2,-.8,-4.8,-6.8]);
+      /* Sturmgruppe Fw 190s (IV./JG 3, II./JG 4) closed from dead astern in
+         line abreast at the box's own height, fired, then broke down and
+         under. The JG 300 Bf 109s stayed above as top cover. */
+      var verticalPath=fighterPassCoordinate(ph,w.type==='bf109'?[7,6.5,6.2,6]:[.2,0,-4.8,-8]);
       var passScale=passUnit(); // metres-true pass geometry
       var along=alongPath.value+u.stag;
       var lat=u.lat+side*lateralPath.value;
@@ -7552,7 +7565,7 @@ function updateFighters(battleT,dt,elapsed,scene){
       lat+=Math.sin(lateralPhase)*0.28*envelope;
       var px=a.pos.x+passScale*(a.dir.x*along+across.x*lat);
       var pz=a.pos.z+passScale*(a.dir.z*along+across.z*lat);
-      var py=a.pos.y+passScale*(vert+Math.sin(verticalPhase)*0.18*envelope);
+      var py=boxY+passScale*(vert+Math.sin(verticalPhase)*0.18*envelope);
       var want=new THREE.Vector3(px,py,pz);
       f.position.copy(want);
       /* Analytic pass tangent: seeking and pausing never uses the
