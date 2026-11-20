@@ -316,16 +316,16 @@
     "sha256": "86dae712c1195e9a8e5be8aecfe87ef1f72ac2497393cb5681d10ecce3d01ad7"
   },
   "kassel-mission-interactive-v4/forward-endpoint-route.js": {
-    "bytes": 3612,
-    "sha256": "491afca52f489768e674fd85c1d6e9610006413d05c1501acf8fdd43ee7659d6"
+    "bytes": 3836,
+    "sha256": "0d6359cafcb06d27d479b46c017da00c10957088a8e0f83fdfd4726b4068be76"
   },
   "kassel-mission-interactive-v4/geometry-review.html": {
     "bytes": 3520,
     "sha256": "59788c5ae9126272d653ac422514e8ac7171a396022e577fae058f19774407c6"
   },
   "kassel-mission-interactive-v4/historical-geometry.js": {
-    "bytes": 12547,
-    "sha256": "50916808a0ca1486775c158c8820f5796ff3ea0fa470b1db8c26b6c474a2a9e5"
+    "bytes": 15038,
+    "sha256": "9eb31d3511ec9cb5cc4664ec4c8726e093a4b3adcd2da1704b727aa3a58cfe38"
   },
   "kassel-mission-interactive-v4/index.html": {
     "bytes": 448,
@@ -336,16 +336,16 @@
     "sha256": "ec4426568e2a8d75f9a602a8d2ed40f1e9d7c2e534847686cc8bd810ee296c22"
   },
   "kassel-mission-interactive-v4/km3d-v3.js": {
-    "bytes": 451420,
-    "sha256": "ba29b39c903336b0467f094bc3e38cb583e0ef9d707ba8edc93757c88c976771"
+    "bytes": 458659,
+    "sha256": "992feae7965e35226f0283e1fe85a66af33483c4da8a9e08ebd05c08821ce01e"
   },
   "kassel-mission-interactive-v4/loss-smoke.js": {
     "bytes": 1710,
     "sha256": "a61c3ee091eecf6b5df7b5b207ff9aad7151e587033dab57ea0dfc1eb629b4b6"
   },
   "kassel-mission-interactive-v4/loss-trajectory.js": {
-    "bytes": 3485,
-    "sha256": "f54ae4b4eefad6e18a8ba492a1eb9178fba8ac312c131631db3a97e83ec68a15"
+    "bytes": 7565,
+    "sha256": "af79ef41dfad20feeb11a218cba34920d09aaccf55447c0e879e39ad9f3e3a77"
   },
   "kassel-mission-interactive-v4/m1-runtime-fixture.js": {
     "bytes": 4380,
@@ -356,24 +356,24 @@
     "sha256": "2cc4d9d42473e2243c3d2cf9e6b66ec778fd1fa0fa60ed81b2c9f57434133802"
   },
   "kassel-mission-interactive-v4/mission-reconstruction.html": {
-    "bytes": 344395,
-    "sha256": "675deeeff53ce63f990b9158821cc87e343712c28236af0da72ae1a4bf9d04df"
+    "bytes": 344578,
+    "sha256": "e7d036d15cd4fa7e31f709b43a9a2aeac93f466159527eb97de69b9a7f4f6a30"
   },
   "kassel-mission-interactive-v4/mission-timeline.js": {
-    "bytes": 6834,
-    "sha256": "2f418c4ee4a3e5c9470ec73086fba7d249c70b39c8acb6c15b80595b3916ffc4"
+    "bytes": 7303,
+    "sha256": "9d30b8ae511d5d4998940147c76114049a8be8c3e5c529bc8eefda4e15e195d4"
   },
   "kassel-mission-interactive-v4/parachute-contact.js": {
     "bytes": 2133,
     "sha256": "9af1cc97b9ffa7388334abf0d1eccdb0d0d0cb39fc9e572d3a196e6dd52a94fa"
   },
   "kassel-mission-interactive-v4/parachute-geometry.js": {
-    "bytes": 1834,
-    "sha256": "f62d5efb99bf15a369e6f535d30fc2d226c50aa49e05ac07a385f972c6b20544"
+    "bytes": 6679,
+    "sha256": "9a7be91371b0d2a6dcd9cd4ce4d6cef8f0822435ce0eb4816223f3843e878608"
   },
   "kassel-mission-interactive-v4/parachute-pose.js": {
-    "bytes": 1458,
-    "sha256": "0d7970db848e61b5822e2bd21953f0485a890ffe3dcbc8194059c44f0239a8b0"
+    "bytes": 2273,
+    "sha256": "fd7c389e02c903fc88ee25661ccb406b14a04a752189e24935a3983fe1fb7673"
   },
   "kassel-mission-interactive-v4/parachute-review.html": {
     "bytes": 4867,
@@ -432,8 +432,8 @@
     "sha256": "4275afcccfe09da438719ae531c619729d961a96451f3cdfe2c28333eb0bdc52"
   },
   "kassel-mission-interactive-v4/reference/LOSS-DESCENT-TIMING.md": {
-    "bytes": 1426,
-    "sha256": "62ad8b3875de414dc30fa4e2ff145e75c7aaf67e1b34d01bfedb07abe910d912"
+    "bytes": 2414,
+    "sha256": "183291be849137411985a4b75cdd93205ae3b87472d347eeb19972f3f0fa09b1"
   },
   "kassel-mission-interactive-v4/reference/LOSS-PATH-RECONSTRUCTION.md": {
     "bytes": 1706,
@@ -584,8 +584,8 @@
     "sha256": "4f2fad2f5be81f0fe00dc2b330ed376c070545ff5df2dcaa9e3545a381d8c5aa"
   },
   "kassel-mission-interactive-v4/test-m1-clock.js": {
-    "bytes": 2987,
-    "sha256": "5748ad49825802027ca409cdaeeeca078fa1f7dfc00ccc9a66d8a17975dd4af3"
+    "bytes": 3011,
+    "sha256": "1d4156c72a52d72e12dc9528149bd2ae9c6de448e111de64ce93cf8aab5e3712"
   },
   "kassel-mission-interactive-v4/test-m1-crew-exterior.js": {
     "bytes": 1049,

@@ -6051,10 +6051,33 @@ V2.EVENTS=[
 V2.LOSS_DESCENT_MS=125;
 /* While the camera follows a ship that is going down, the attack's
    quarter pace is dropped so the fall plays at normal speed. */
+/* Optional, off by default ("Follow Jumpers" button): in the chase view,
+   cut to each man as he leaves the followed falling ship, slow to the
+   attack's quarter pace while his canopy streams out and opens, then go
+   back to the ship. Never on unless the viewer asks for it. */
+V2.followJumpers=false;
+V2.JUMP_HOLD=1.6;
+KM.toggleJumpFollow=function(btn){
+  V2.followJumpers=!V2.followJumpers;
+  if(btn)btn.classList.toggle('active',V2.followJumpers);
+};
+V2.jumpFocus=function(p){
+  if(!V2.followJumpers||!p||!p.userData||p.userData.alive!==false)return null;
+  var now=KM._playbackSeconds||0,best=null,bestAge=1e9;
+  (V2._chutes||[]).forEach(function(ch){
+    if(ch.plane!==p.userData.planeData||ch.born===undefined)return;
+    var age=now-KMMissionTimeline.playbackAtBattleCue(ch.born);
+    if(age>=0&&age<bestAge){best=ch;bestAge=age;}
+  });
+  if(!best||bestAge>V2.JUMP_HOLD)return null;
+  var w=Math.max(0,Math.min(1,bestAge/.25,(V2.JUMP_HOLD-bestAge)/.3));
+  return {chute:best,age:bestAge,w:w*w*(3-2*w)};
+};
 V2.followingFall=function(){
   var cs=KM._camState;if(!cs||(cs.mode!=='chase'&&cs.mode!=='crew'))return false;
   var p=cs._followPlane||cs.selectedPlane,u=p&&p.userData,v=u&&u.v2;
   if(!v||u.alive!==false||v.beh!=='fall'||!v.dur)return false;
+  if(cs.mode==='chase'&&V2.jumpFocus(p))return false;
   var cue=KMMissionTimeline.battleCueAtPlayback(KM._playbackSeconds||0);
   return cue>=v.ft&&cue<v.ft+v.dur;
 };
@@ -6451,34 +6474,64 @@ function prepareBombVisual(){
     };
   }
 }
+/* A 500-lb AN-M64 is about 1.5 m long. Released at about 105 m/s from
+   23,000 ft it leaves the bay level, weathervanes nose-down as it picks
+   up speed, nears a terminal speed of roughly 280 m/s and takes about
+   45 s to reach the ground, trailing a little behind the ship that
+   dropped it. The fall runs on the same compressed clock as the
+   formation, so the bombs stay under the ships instead of streaking
+   off; the drop itself plays slowly (mission-timeline.js). Terminal
+   speed, the horizontal drag constant and the release nose-up are
+   ESTIMATES for a representative fall, not a ballistics table. */
+var BOMB={lengthM:1.52,tasMps:105,g:9.81,vtMps:280,dragK:1e-4,minPx:13};
+function bombMetres(){
+  var mx=111195*Math.cos(51.4*Math.PI/180)*(GEO.xToLon(1)-GEO.xToLon(0));
+  var mz=111195*(GEO.zToLat(0)-GEO.zToLat(1));
+  return {x:mx,z:mz,y:7010/115};
+}
 function queueBombs(scene,plane,index,release,samplePosition){
   prepareBombVisual();
-  var scale=plane.userData.mapGeometryScale||plane.scale.x;
+  var scale=plane.userData.mapGeometryScale||plane.scale.x,m=bombMetres();
   for(var i=0;i<4;i++){
-    var born=release+index*.12+i*.28;
-    var route=KMMissionTimeline.routeAt(born);
-    var launch=new THREE.Vector3();
-    samplePosition(launch,route);
+    /* the box salvos on its leaders: a short ripple, not a long trickle */
+    var born=release+index*.03+i*.12;
+    var launch=new THREE.Vector3(),ahead=new THREE.Vector3();
+    samplePosition(launch,KMMissionTimeline.routeAt(born));
+    samplePosition(ahead,KMMissionTimeline.routeAt(born+.25));
     launch.y-=2.5*scale;
-    var track=KM._full;
-    var direction=track?track.getTangentAt(Math.min(1,fullArc(route)/(track.__len||track.getLength()))):KM._anchor.dir;
+    var dx=(ahead.x-launch.x)/.25,dz=(ahead.z-launch.z)/.25;
+    var speedM=Math.hypot(dx*m.x,dz*m.z)||1;
     var mesh=new THREE.Mesh(bombVisual.geometry,bombVisual.material);
     mesh.name='mission-bomb';
     mesh.add(new THREE.Mesh(bombVisual.tail,bombVisual.material));
     mesh.visible=false;
     scene.add(mesh);
-    bombs.push({mesh:mesh,scene:scene,born:born,launch:launch,scale:scale,vx:direction.x*7,vz:direction.z*7});
+    bombs.push({mesh:mesh,scene:scene,born:born,launch:launch,
+      /* unit heading in metres, and real seconds per playback second */
+      hx:dx*m.x/speedM,hz:dz*m.z/speedM,realPerPlayback:speedM/BOMB.tasMps,
+      wobble:hash('bomb'+index+'-'+i)%628/100});
   }
 }
+V2.bombFallAt=function(t){
+  var v0=BOMB.tasMps,k=BOMB.dragK,vt=BOMB.vtMps,g=BOMB.g;
+  return {
+    alongM:Math.log(1+k*v0*t)/k,
+    dropM:vt*vt/g*Math.log(Math.cosh(g*t/vt)),
+    vAlong:v0/(1+k*v0*t),
+    vDown:vt*Math.tanh(g*t/vt)
+  };
+};
 function updateBombs(seconds,camera,showImpacts){
-  var canvas=KM._ren.domElement;
+  var canvas=KM._ren.domElement,m=bombMetres();
   var pixelSpan=2*Math.tan(camera.fov*Math.PI/360)/Math.max(1,canvas.clientHeight);
+  var trueScale=BOMB.lengthM/2.34/m.x;
+  var axis=new THREE.Vector3(),tip=new THREE.Quaternion();
   for(var i=bombs.length-1;i>=0;i--){
     var b=bombs[i],age=seconds-b.born;
-    if(age<0)continue;
-    var pos=b.mesh.position;
+    if(age<0){b.mesh.visible=false;continue;}
     // Use the playback clock so the same drop is visible after a seek.
-    pos.set(b.launch.x+b.vx*age,b.launch.y-10*age-15*age*age,b.launch.z+b.vz*age);
+    var t=age*b.realPerPlayback,f=V2.bombFallAt(t),pos=b.mesh.position;
+    pos.set(b.launch.x+b.hx*f.alongM/m.x,b.launch.y-f.dropM/m.y,b.launch.z+b.hz*f.alongM/m.z);
     var gy=(V2.groundAt&&V2.groundAt(pos.x,pos.z))??2;
     if(pos.y<=gy){
       if(showImpacts){
@@ -6490,10 +6543,16 @@ function updateBombs(seconds,camera,showImpacts){
       continue;
     }
     b.mesh.visible=true;
-    // A minimum screen size keeps a distant payload legible. It affects
-    // the display mesh only, never the sampled release or impact position.
-    b.mesh.scale.setScalar(Math.max(b.scale,pixelSpan*camera.position.distanceTo(pos)*2));
-    b.mesh.quaternion.setFromUnitVectors(bombVisual.nose,bombVisual.velocity.set(b.vx,-10-30*age,b.vz).normalize());
+    // True size up close; a minimum screen length keeps a distant bomb
+    // reading as a bomb rather than a speck. Display only.
+    b.mesh.scale.setScalar(Math.max(trueScale,BOMB.minPx*pixelSpan*camera.position.distanceTo(pos)/2.34));
+    // Nose follows the velocity on screen, after a short nose-up release
+    // and a damped fin wobble while the bomb picks up speed.
+    var vel=bombVisual.velocity.set(b.hx*f.vAlong/m.x,-f.vDown/m.y,b.hz*f.vAlong/m.z).normalize();
+    b.mesh.quaternion.setFromUnitVectors(bombVisual.nose,vel);
+    var settle=Math.exp(-t/7),pitch=settle*(.22*Math.exp(-t/2.5)+.09*Math.sin(1.6*t+b.wobble));
+    axis.set(-b.hz,0,b.hx).normalize();
+    b.mesh.quaternion.premultiply(tip.setFromAxisAngle(axis,pitch));
   }
 }
 function clearBombs(){
@@ -6524,6 +6583,12 @@ V2.chuteTex=function(){
   return V2._chuteTex;
 };
 /* real 3D parachutes: silk hemisphere canopy, shroud lines, the man */
+/* Heights are drawn about six times taller than ground distances (a
+   unit is ~61 m up, ~376 m across), so a falling ship's path on screen is
+   far steeper than its real dive. Pointing the nose straight down that
+   path stood every loss on its nose. The nose follows a path flattened
+   by 2.5: a shallow burning glide reads as one, a real dive still dives. */
+V2.lossAttitude=function(v,u,t){return KasselLossTrajectory.attitudeTangent(v,u,t);};
 function chuteTemplate(){
   if(V2._chuteTpl)return V2._chuteTpl;
   V2._chuteTpl=KasselParachuteGeometry.build(THREE);
@@ -6544,7 +6609,7 @@ function bailoutExitPoint(p,v,bu,plan,member){
   if(!_exitDummy)_exitDummy=new THREE.Object3D();
   _exitDummy.position.set(pose.position.x,pose.position.y,pose.position.z);
   _exitDummy.scale.copy(p.scale);
-  KasselFlightAttitude.apply(THREE,_exitDummy,pose.tangent,pose.bank||0);
+  KasselFlightAttitude.apply(THREE,_exitDummy,KasselLossTrajectory.attitudeTangent(v,bu,pose.tangent),pose.bank||0);
   _exitDummy.updateMatrixWorld(true);
   var local=hit.p.clone().addScaledVector(hit.n,.35);
   return _exitDummy.localToWorld(local);
@@ -6558,6 +6623,8 @@ function spawnChute(scene,pos,member,planeData,index,born,momentum,openingDelay,
   /* clone the canopy material so each chute can fade independently */
   g.traverse(function(o){if(o.material)o.material=o.material.clone();});
   g.position.copy(pos);
+  /* the man, not the canopy origin above him, leaves at the exit */
+  g.position.y-=KasselParachuteGeometry.anchor*rootScale;
   /* Preserve the supplied launch position. Random radial placement
      previously teleported crew away from the aircraft at birth. Named
      hashing may vary sway, never invent a bailout doorway. */
@@ -6578,6 +6645,22 @@ function articulateChute(ch,age,landedSeconds){
   ch.rig.visible=pose.rigVisible;
   ch.rig.scale.set(pose.rigScaleXZ,pose.rigScaleY,pose.rigScaleXZ);ch.rig.position.set(pose.rigOffsetX,pose.rigOffsetY,pose.rigOffsetZ);
   if(landedSeconds>0){ch.sp.rotation.x=0;ch.sp.rotation.z=0;}
+  if(ch.manPivot===undefined)ch.manPivot=ch.sp.getObjectByName('parachuting-airman-pivot')||null;
+  if(ch.manPivot)ch.manPivot.rotation.x=pose.bodyPitch||0;
+}
+/* A 24-ft canopy at true map scale is a few pixels from the usual
+   views, so a bailout went unnoticed. Below a minimum on-screen size the
+   whole rig is drawn larger (display only; the path is unchanged). */
+function chuteMinimumSize(ch){
+  var cam=KM._cam,ren=KM._ren;if(!cam||!ren)return;
+  if(!V2._chuteHeight){var box=new THREE.Box3().setFromObject(chuteTemplate());V2._chuteHeight=Math.max(1,box.max.y-box.min.y);}
+  var span=2*Math.tan(cam.fov*Math.PI/360)/Math.max(1,ren.domElement.clientHeight);
+  var want=30*span*cam.position.distanceTo(ch.sp.position)/V2._chuteHeight;
+  if(want>ch.rootScale){
+    ch.sp.scale.setScalar(want);
+    /* grow about the harness, so the man stays on his own path */
+    ch.sp.position.y+=KasselParachuteGeometry.anchor*(ch.rootScale-want);
+  }
 }
 function chuteTerrainHeight(x,z){
   var surface=V2.groundAt&&V2.groundAt(x,z);
@@ -6599,6 +6682,7 @@ function updateChutes(dt,elapsed){
       ch.sp.rotation.z=Math.cos(age*0.9+ch.sway)*0.08;
       var landed=Math.max(0,age-ch.contact.time);
       articulateChute(ch,age,landed);
+      if(!landed)chuteMinimumSize(ch);
       continue;
     }
     if(ch.sp.position.y>ch.ground){
@@ -7351,6 +7435,14 @@ function placePlane(p,battleT,elapsed,scene,dt,bombRelease,bombIndex){
         if(!/^(controlled_bailout|belly_landing)$/.test(lossMotion)&&v.pilot!=='Hautman'){
           v.dur=Math.min(v.dur,v.forwardRoute.length/(((typeof V2!=='undefined'&&V2.LOSS_DESCENT_MS)||125)*(KMMissionTimeline.battleSecondsPerCue||360/420)));
         }
+        /* A ship whose wreck lies close under the fight would otherwise
+           cover 23,000 ft in half a minute (Bonnie Vee: 33 s, over 200 m/s
+           straight down). Cap the average sink rate: about 75 m/s for a
+           spin, tumble or break-up, 40 m/s for a burning glide (ESTIMATED,
+           see reference/LOSS-DESCENT-TIMING.md). */
+        var sinkMs=/glide|wing_fire|controlled|landing/.test(lossMotion)?40:75;
+        var dropM=Math.max(0,(v.startPos.y-s0.y)*metricScale.y);
+        v.dur=Math.max(v.dur,dropM/(sinkMs*(KMMissionTimeline.battleSecondsPerCue||360/420)));
         KM._playbackEndSeconds=Math.max(KM._playbackEndSeconds||300,KMMissionTimeline.playbackAtBattleCue(ft+v.dur)+2);
         v.routeClassification='ESTIMATED';
       }
@@ -7376,7 +7468,7 @@ function placePlane(p,battleT,elapsed,scene,dt,bombRelease,bombIndex){
     var pd2=p.userData.planeData;
     var bailout=v.bailoutCrew||[];
     var nCh=bailout.length;
-    if(nCh>0&&v.chutesOut<nCh&&u>=0.08){
+    if(nCh>0&&v.chutesOut<nCh&&u>=0.04){
       if(!v.bailoutSchedule){
         /* who goes out which opening, and in what order: the AAF bail-out
            poster, overridden where a crew account names the exit
@@ -7386,8 +7478,17 @@ function placePlane(p,battleT,elapsed,scene,dt,bombRelease,bombIndex){
           var pl=plans&&plans[index],isPilot=/^(pilot|command pilot)$/i.test(member.r||'');
           return {index:index,pilot:isPilot,plan:pl,key:(isPilot?100:0)+(pl?pl.order:index)+index*.01};
         }).sort(function(a,b){return a.key-b.key;});
+        /* The bell rings as the ship falls out of the box; men go one at a
+           time over most of the fall, not in a burst at the start. A
+           documented explosion or break-up ends the window (survivors
+           there were thrown or got out before it). Spacing is ESTIMATED. */
+        var onset=KasselLossTrajectory.onsetOf(v),open0=Math.max(.05,onset*.55);
+        var close0=v.profile&&v.profile.event!=null?Math.max(open0+.02,v.profile.event-.012):
+          (v.profile&&v.profile.motion==='controlled_bailout'?.62:.72);
         v.bailoutSchedule=rankOf.map(function(e,k){
-          var phase=e.pilot&&v.pilot==='Miner'?v.profile.pilotExitPhase:0.08+0.34*k/Math.max(1,nCh-1);
+          var jitter=((hash((v.pilot||'')+k)%100)/100-.5)*.35/Math.max(1,nCh);
+          var phase=e.pilot&&v.pilot==='Miner'?v.profile.pilotExitPhase:
+            open0+(close0-open0)*Math.max(0,Math.min(1,(k+.5+jitter)/Math.max(1,nCh)));
           return {index:e.index,phase:phase,pilot:e.pilot&&v.pilot==='Miner',plan:e.plan};
         }).sort(function(a,b){return a.phase-b.phase;});
         pd2.bailoutPlans=plans;
@@ -7405,7 +7506,7 @@ function placePlane(p,battleT,elapsed,scene,dt,bombRelease,bombIndex){
         var momentum=tb>ta?{x:(pb.x-pa.x)/(tb-ta),z:(pb.z-pa.z)/(tb-ta)}:null;
         /* His account establishes delayed deployment, not a measured
            duration. 0.65 playback seconds is presentation-only. */
-        var openingDelay=event.pilot?.65:0;
+        var openingDelay=event.pilot?.65:.35;
         spawnChute(scene,launch,bailout[ci],pd2,ci,ft+bu*v.dur,momentum,openingDelay,mapMetres);
         v.chutesOut++;
       }
@@ -7423,7 +7524,7 @@ function placePlane(p,battleT,elapsed,scene,dt,bombRelease,bombIndex){
     p.position.set(x,y,z);
     /* Include the lateral escape and authored spiral in the tangent;
        the old heading differentiated only the underlying Bezier. */
-    KasselFlightAttitude.apply(THREE,p,lossPose.tangent,lossPose.bank);
+    KasselFlightAttitude.apply(THREE,p,KasselLossTrajectory.attitudeTangent(v,u,lossPose.tangent),lossPose.bank); /* see V2.lossAttitude */
     KasselAircraftMapScale.clearTerrain(THREE,p,V2.groundAt);
     /* burning trail */
     if(KM._playing&&(V2._frame&1)===0){
@@ -7802,6 +7903,18 @@ function crewHandoffLens(elapsed,startFov){
       if(pl){
         var lossFocus=KasselCrewLossFocus.select(pl,c,V2.CREW_LISTS||{},V2._chutes||[],window.KMCrewStations&&KMCrewStations.resolve);
         var focus=lossFocus.position,focusRadius=lossFocus.radius;
+        if(lossFocus.kind==='aircraft'){
+          var jump=V2.jumpFocus(pl);
+          if(jump){
+            if(!V2._chuteHeight){var cbox=new THREE.Box3().setFromObject(chuteTemplate());V2._chuteHeight=Math.max(1,cbox.max.y-cbox.min.y);}
+            var baseR=c.cR||115*(pl.userData.mapGeometryScale||pl.scale.x||.0025);
+            var rs=jump.chute.sp.scale.x,manR=rs*V2._chuteHeight*2.2;
+            var harness=jump.chute.sp.position.clone();harness.y+=rs*KasselParachuteGeometry.anchor*.4;
+            focus=pl.position.clone().lerp(harness,jump.w);
+            focusRadius=baseR+(manR-baseR)*jump.w;
+            lossFocus.kind=jump.w>.5?'airman':'aircraft';
+          }
+        }
         var chaseNear=lossFocus.kind==='airman'&&focusRadius?Math.min(wantNear,focusRadius*.12):wantNear;
         if(camera.near!==chaseNear||camera.fov!==wantFov){
           camera.near=chaseNear;camera.fov=wantFov;camera.updateProjectionMatrix();
@@ -8163,19 +8276,32 @@ KM._buildAnimation=function(){
   all.forEach(function(p){initPlaneBattle(p,scene);});
   V2._frame=0;
   var elapsed=0,lastTime=performance.now(),holdT=0;
-  var frameInterval=1000/30,nextRender=lastTime+frameInterval;
+  /* About 30 frames a second, locked to the display's refresh. Drawing
+     every Nth refresh (N = 2 at 60 Hz, 4 at 120 Hz) shows each frame for
+     the same time and advances the clock by the same step. A deadline
+     read off performance.now() drifted against the refresh, so some
+     frames stayed up for one refresh and others for three: the ground
+     stalled, then lurched, and the formation looked as if it slid back
+     and jumped forward. */
+  var frameInterval=1000/30,refresh=1000/60,lastTick=null,tick=0;
   document.addEventListener('visibilitychange',function(){
-    lastTime=performance.now();nextRender=lastTime+frameInterval;
+    lastTime=null;lastTick=null;
   });
 
-  function animate(){
+  function animate(ts){
     requestAnimationFrame(animate);
-    var now=performance.now();
-    // Keep a stable deadline. Resetting it to each delivered frame
-    // can skip an extra refresh and alternate between uneven intervals.
-    if(document.hidden||now+1<nextRender)return;
-    nextRender+=frameInterval*Math.max(1,Math.floor((now-nextRender)/frameInterval)+1);
-    var wallDelta=(now-lastTime)/1000;
+    if(document.hidden)return;
+    var now=typeof ts==='number'?ts:performance.now();
+    if(lastTick!==null){
+      var gap=now-lastTick;
+      /* learn the refresh period from ordinary gaps, not dropped frames */
+      if(gap>2&&gap<refresh*1.5)refresh+=(gap-refresh)*.1;
+    }
+    lastTick=now;
+    var stride=Math.max(1,Math.round(frameInterval/refresh));
+    if((++tick)%stride)return;
+    if(lastTime===null)lastTime=now-stride*refresh;
+    var wallDelta=Math.max(0,(now-lastTime)/1000);
     lastTime=now;
     var dt=Math.min(wallDelta,0.05);
     /* sim clock: choreography freezes dead when paused — the camera

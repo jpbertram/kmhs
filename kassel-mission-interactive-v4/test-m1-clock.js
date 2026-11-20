@@ -1,7 +1,7 @@
 'use strict';
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 const src=fs.readFileSync(__dirname+'/km3d-v3.js','utf8');
-const start=src.indexOf('      if(KM._playing){',src.indexOf('var now=performance.now();'));
+const start=src.indexOf('      if(KM._playing){',src.indexOf("var now=typeof ts==='number'"));
 const end=src.indexOf('      updateAnchor(',start),code=src.slice(start,end);
 assert(start>0&&end>start,'Actual animation scheduler block required');
 const ctx={KM:{_playing:true,_playbackSeconds:299.99,_playbackEndSeconds:350,_missionT:.99999,_speed:1},dt:.05,wallDelta:.05,RETURN_START:.92,KMMissionTimeline:require('./mission-timeline')};vm.createContext(ctx);
@@ -36,6 +36,6 @@ for(const hz of [10,30,60]){
 }
 {let p=0,w=0;while(p<300){p=timeline.advancePlayback(p,1/30,endSeconds);w+=1/30;}
  const attack=timeline.seekFraction(240,300)-timeline.seekFraction(210,300);
- assert(w>390&&w<405,'documentary with the quarter-pace attack takes about 398 s, took '+w.toFixed(1));
+ assert(w>410&&w<425,'documentary with the quarter-pace attack and slowed bombs-away takes about 417 s, took '+w.toFixed(1));
  assert(attack>.28,'the attack is a wide stretch of the bar');}
 console.log('PASS remaining paths: continuous 90-second presentation at 10, 30 and 60 Hz; attack at quarter pace');

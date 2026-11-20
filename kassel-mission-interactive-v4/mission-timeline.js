@@ -69,12 +69,21 @@
   // unchanged; only how fast playback advances, and how wide the attack is
   // on the bar, change.
   var BATTLE_FROM=210,BATTLE_TO=240,BATTLE_PACE=.25,RAMP=4;
+  // Bombs away (route .65, playback 145 s) slows the same way so the
+  // salvo can be watched leaving the bays and falling: about 0.9 s of
+  // release ripple plus a 1.3 s fall on the formation's compressed clock
+  // (a real fall of about 45 s), shown at a seventh of normal pace.
+  var BOMBS_FROM=144.7,BOMBS_TO=147.4,BOMBS_PACE=.15,BOMBS_RAMP=1.2;
   function smooth(u){u=Math.max(0,Math.min(1,u));return u*u*(3-2*u);}
+  function windowPace(s,from,to,slow,ramp){
+    if(s<=from-ramp||s>=to+ramp)return 1;
+    if(s<from)return 1+(slow-1)*smooth((s-(from-ramp))/ramp);
+    if(s<=to)return slow;
+    return slow+(1-slow)*smooth((s-to)/ramp);
+  }
   function pace(s){
-    if(s<=BATTLE_FROM-RAMP||s>=BATTLE_TO+RAMP)return 1;
-    if(s<BATTLE_FROM)return 1+(BATTLE_PACE-1)*smooth((s-(BATTLE_FROM-RAMP))/RAMP);
-    if(s<=BATTLE_TO)return BATTLE_PACE;
-    return BATTLE_PACE+(1-BATTLE_PACE)*smooth((s-BATTLE_TO)/RAMP);
+    return Math.min(windowPace(s,BATTLE_FROM,BATTLE_TO,BATTLE_PACE,RAMP),
+      windowPace(s,BOMBS_FROM,BOMBS_TO,BOMBS_PACE,BOMBS_RAMP));
   }
   // presentation seconds: wall seconds at 1x to reach playback second s
   var STEP=.05,shown=[0];
