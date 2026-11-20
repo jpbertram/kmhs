@@ -324,8 +324,8 @@
     "sha256": "59788c5ae9126272d653ac422514e8ac7171a396022e577fae058f19774407c6"
   },
   "kassel-mission-interactive-v4/historical-geometry.js": {
-    "bytes": 13354,
-    "sha256": "711e45599226da392a5e53a3169ae63bbf2644f96d839d823e41bacc698a88bc"
+    "bytes": 15038,
+    "sha256": "9eb31d3511ec9cb5cc4664ec4c8726e093a4b3adcd2da1704b727aa3a58cfe38"
   },
   "kassel-mission-interactive-v4/index.html": {
     "bytes": 448,
@@ -336,8 +336,8 @@
     "sha256": "ec4426568e2a8d75f9a602a8d2ed40f1e9d7c2e534847686cc8bd810ee296c22"
   },
   "kassel-mission-interactive-v4/km3d-v3.js": {
-    "bytes": 458318,
-    "sha256": "38dee187bf77b119a732f02abb893b5bf0e117532cda9014d067fb347629b5ed"
+    "bytes": 458659,
+    "sha256": "992feae7965e35226f0283e1fe85a66af33483c4da8a9e08ebd05c08821ce01e"
   },
   "kassel-mission-interactive-v4/loss-smoke.js": {
     "bytes": 1710,
@@ -356,8 +356,8 @@
     "sha256": "2cc4d9d42473e2243c3d2cf9e6b66ec778fd1fa0fa60ed81b2c9f57434133802"
   },
   "kassel-mission-interactive-v4/mission-reconstruction.html": {
-    "bytes": 344397,
-    "sha256": "95320445f888300d31cbfb7063d1d1e7b1f4adf96c000aad6127efeb43402f0d"
+    "bytes": 344578,
+    "sha256": "e7d036d15cd4fa7e31f709b43a9a2aeac93f466159527eb97de69b9a7f4f6a30"
   },
   "kassel-mission-interactive-v4/mission-timeline.js": {
     "bytes": 7303,
@@ -368,12 +368,12 @@
     "sha256": "9af1cc97b9ffa7388334abf0d1eccdb0d0d0cb39fc9e572d3a196e6dd52a94fa"
   },
   "kassel-mission-interactive-v4/parachute-geometry.js": {
-    "bytes": 5205,
-    "sha256": "932355e805556d47835fa8c414ceda747c39fd56fbf5b048974d2c6e1881f371"
+    "bytes": 6679,
+    "sha256": "9a7be91371b0d2a6dcd9cd4ce4d6cef8f0822435ce0eb4816223f3843e878608"
   },
   "kassel-mission-interactive-v4/parachute-pose.js": {
-    "bytes": 1458,
-    "sha256": "0d7970db848e61b5822e2bd21953f0485a890ffe3dcbc8194059c44f0239a8b0"
+    "bytes": 2273,
+    "sha256": "fd7c389e02c903fc88ee25661ccb406b14a04a752189e24935a3983fe1fb7673"
   },
   "kassel-mission-interactive-v4/parachute-review.html": {
     "bytes": 4867,

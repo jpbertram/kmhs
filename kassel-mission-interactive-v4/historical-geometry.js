@@ -13,6 +13,23 @@
    var merged=new T.BufferGeometry();merged.setAttribute('position',new T.Float32BufferAttribute(positions,3));merged.setAttribute('normal',new T.Float32BufferAttribute(normals,3));var mesh=new T.Mesh(merged,material);mesh.name='airman-material-batch';root.add(mesh);
   });return root;
  }
+ // One draw call for every cloth, leather and skin part (colours carried
+ // per vertex), one for the metal fittings: a sky full of parachutes is
+ // otherwise hundreds of draw calls.
+ function batchByColour(T,root){
+  root.updateMatrixWorld(true);var cloth={p:[],n:[],c:[],rough:0,count:0},metal=new Map();
+  root.children.slice().forEach(function(o){if(!o.isMesh||Array.isArray(o.material))return;var m=o.material;
+   if(m.metalness>.3){var l=metal.get(m)||[];l.push(o);metal.set(m,l);return;}
+   var geo=o.geometry.index?o.geometry.toNonIndexed():o.geometry.clone();geo.applyMatrix4(o.matrix);var p=geo.attributes.position,n=geo.attributes.normal;
+   for(var i=0;i<p.count;i++){cloth.p.push(p.getX(i),p.getY(i),p.getZ(i));cloth.n.push(n.getX(i),n.getY(i),n.getZ(i));cloth.c.push(m.color.r,m.color.g,m.color.b);}
+   cloth.rough+=m.roughness;cloth.count++;geo.dispose();o.geometry.dispose();root.remove(o);});
+  if(cloth.count){var g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(cloth.p,3));g.setAttribute('normal',new T.Float32BufferAttribute(cloth.n,3));g.setAttribute('color',new T.Float32BufferAttribute(cloth.c,3));
+   var mesh=new T.Mesh(g,new T.MeshStandardMaterial({vertexColors:true,roughness:cloth.rough/cloth.count}));mesh.name='airman-material-batch';root.add(mesh);}
+  metal.forEach(function(list,m){var holder=new T.Group();list.forEach(function(o){root.remove(o);holder.add(o);});holder.updateMatrixWorld(true);
+   holder.children.forEach(function(o){o.updateMatrix();});root.add(holder);batchStatic(T,holder);
+   holder.children.slice().forEach(function(o){holder.remove(o);root.add(o);});root.remove(holder);});
+  return root;
+ }
  function loft(T,rings,axis,material,segments){
   var p=[],ix=[],n=segments||32;
   rings.forEach(function(r,ri){for(var j=0;j<n;j++){var a=j/n*Math.PI*2,one=Math.cos(a)*r[1],two=Math.sin(a)*r[2];if(axis==='x')p.push(r[0],two+(r[3]||0),one);else p.push(one,r[0],two+(r[3]||0));
@@ -120,7 +137,7 @@
    });
    add(new T.BoxGeometry(.028,.43,.012),leather,[0,.14,.139]); // jacket closure
    g.userData.anatomyStatus='Generic anatomical head and posed clothed body; not a portrait or verified equipment issue';
-   return batchStatic(T,linearize(g));
+   return batchByColour(T,linearize(g));
   }
  };
 })(window);

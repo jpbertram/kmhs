@@ -266,6 +266,7 @@ html,body{margin:0;min-height:100%;background:#080a0e;color:#e8e5dc;font-family:
               <button class="cp-toggle active" onclick="KM.toggleLayer('intended',this)">Correct Route</button>
               <button class="cp-toggle active" onclick="KM.toggleLayer('wrongTurn',this)">Wrong Turn</button>
               <button class="cp-toggle active" onclick="KM.toggleLayer('flak',this)">Flak</button>
+              <button class="cp-toggle" title="Chase view: watch each man leave a falling ship and his parachute open" onclick="KM.toggleJumpFollow(this)">Follow Jumpers</button>
             </div>
           </div>
         </div>
@@ -2039,11 +2040,11 @@ console.log('KM: animation + init loaded');
 <script src="meshopt-decoder.js?v=0.22.0"></script>
 <script src="crew-compartments.js?v=20261118-sections"></script>
 <script src="interior-rebuild.js?v=20261118-r8"></script>
-<script src="historical-geometry.js?v=20261119-maewest"></script>
+<script src="historical-geometry.js?v=20261120-batch"></script>
 <script src="airman-anatomy.js"></script>
 <script src="flight-attitude.js?v=20261001-r2"></script>
-<script src="parachute-pose.js?v=20261001-r4"></script>
-<script src="parachute-geometry.js?v=20261119-gores"></script>
+<script src="parachute-pose.js?v=20261120-deploy"></script>
+<script src="parachute-geometry.js?v=20261120-deploy"></script>
 <script src="parachute-contact.js?v=20261001-r3"></script>
 <script src="formation-kinematics.js?v=20261001-m1d"></script>
 <script src="aircraft-map-scale.js?v=20261117-footprint"></script>
@@ -2060,6 +2061,6 @@ console.log('KM: animation + init loaded');
 <script src="fighter-targeting.js?v=20261001-r1"></script>
 <script src="crew-exterior.js"></script>
 <script src="simulator-config.js"></script>
-<script src="km3d-v3.js?v=20261119-losses"></script>
+<script src="km3d-v3.js?v=20261120-chase"></script>
 <script src="crew-navigation.js"></script>
 </body></html>

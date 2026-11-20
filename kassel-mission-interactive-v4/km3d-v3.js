@@ -6051,14 +6051,18 @@ V2.EVENTS=[
 V2.LOSS_DESCENT_MS=125;
 /* While the camera follows a ship that is going down, the attack's
    quarter pace is dropped so the fall plays at normal speed. */
-/* The newest crewman out of a followed falling ship. At the compressed
-   battle clock a man is a kilometre behind his ship within a second, so
-   the chase camera cuts to him for JUMP_HOLD playback seconds (free fall,
-   canopy opening, first swing) at the attack's quarter pace, then
-   returns to the ship. Presentation only. */
+/* Optional, off by default ("Follow Jumpers" button): in the chase view,
+   cut to each man as he leaves the followed falling ship, slow to the
+   attack's quarter pace while his canopy streams out and opens, then go
+   back to the ship. Never on unless the viewer asks for it. */
+V2.followJumpers=false;
 V2.JUMP_HOLD=1.6;
+KM.toggleJumpFollow=function(btn){
+  V2.followJumpers=!V2.followJumpers;
+  if(btn)btn.classList.toggle('active',V2.followJumpers);
+};
 V2.jumpFocus=function(p){
-  if(!p||!p.userData||p.userData.alive!==false)return null;
+  if(!V2.followJumpers||!p||!p.userData||p.userData.alive!==false)return null;
   var now=KM._playbackSeconds||0,best=null,bestAge=1e9;
   (V2._chutes||[]).forEach(function(ch){
     if(ch.plane!==p.userData.planeData||ch.born===undefined)return;
@@ -6619,6 +6623,8 @@ function spawnChute(scene,pos,member,planeData,index,born,momentum,openingDelay,
   /* clone the canopy material so each chute can fade independently */
   g.traverse(function(o){if(o.material)o.material=o.material.clone();});
   g.position.copy(pos);
+  /* the man, not the canopy origin above him, leaves at the exit */
+  g.position.y-=KasselParachuteGeometry.anchor*rootScale;
   /* Preserve the supplied launch position. Random radial placement
      previously teleported crew away from the aircraft at birth. Named
      hashing may vary sway, never invent a bailout doorway. */
@@ -6639,6 +6645,8 @@ function articulateChute(ch,age,landedSeconds){
   ch.rig.visible=pose.rigVisible;
   ch.rig.scale.set(pose.rigScaleXZ,pose.rigScaleY,pose.rigScaleXZ);ch.rig.position.set(pose.rigOffsetX,pose.rigOffsetY,pose.rigOffsetZ);
   if(landedSeconds>0){ch.sp.rotation.x=0;ch.sp.rotation.z=0;}
+  if(ch.manPivot===undefined)ch.manPivot=ch.sp.getObjectByName('parachuting-airman-pivot')||null;
+  if(ch.manPivot)ch.manPivot.rotation.x=pose.bodyPitch||0;
 }
 /* A 24-ft canopy at true map scale is a few pixels from the usual
    views, so a bailout went unnoticed. Below a minimum on-screen size the
@@ -6648,7 +6656,11 @@ function chuteMinimumSize(ch){
   if(!V2._chuteHeight){var box=new THREE.Box3().setFromObject(chuteTemplate());V2._chuteHeight=Math.max(1,box.max.y-box.min.y);}
   var span=2*Math.tan(cam.fov*Math.PI/360)/Math.max(1,ren.domElement.clientHeight);
   var want=30*span*cam.position.distanceTo(ch.sp.position)/V2._chuteHeight;
-  if(want>ch.rootScale)ch.sp.scale.setScalar(want);
+  if(want>ch.rootScale){
+    ch.sp.scale.setScalar(want);
+    /* grow about the harness, so the man stays on his own path */
+    ch.sp.position.y+=KasselParachuteGeometry.anchor*(ch.rootScale-want);
+  }
 }
 function chuteTerrainHeight(x,z){
   var surface=V2.groundAt&&V2.groundAt(x,z);
@@ -6670,7 +6682,7 @@ function updateChutes(dt,elapsed){
       ch.sp.rotation.z=Math.cos(age*0.9+ch.sway)*0.08;
       var landed=Math.max(0,age-ch.contact.time);
       articulateChute(ch,age,landed);
-      chuteMinimumSize(ch);
+      if(!landed)chuteMinimumSize(ch);
       continue;
     }
     if(ch.sp.position.y>ch.ground){
@@ -7891,17 +7903,14 @@ function crewHandoffLens(elapsed,startFov){
       if(pl){
         var lossFocus=KasselCrewLossFocus.select(pl,c,V2.CREW_LISTS||{},V2._chutes||[],window.KMCrewStations&&KMCrewStations.resolve);
         var focus=lossFocus.position,focusRadius=lossFocus.radius;
-        /* While a falling ship's crew are getting out, cut to each man as
-           he leaves (V2.jumpFocus) and come back to the ship after his
-           canopy has opened. */
         if(lossFocus.kind==='aircraft'){
           var jump=V2.jumpFocus(pl);
           if(jump){
             if(!V2._chuteHeight){var cbox=new THREE.Box3().setFromObject(chuteTemplate());V2._chuteHeight=Math.max(1,cbox.max.y-cbox.min.y);}
             var baseR=c.cR||115*(pl.userData.mapGeometryScale||pl.scale.x||.0025);
-            var manR=jump.chute.rootScale*V2._chuteHeight*2.4;
-            var canopyCentre=jump.chute.sp.position.clone();canopyCentre.y+=jump.chute.rootScale*(jump.chute.feetY||-5.5)*.5; /* between canopy and boots */
-            focus=pl.position.clone().lerp(canopyCentre,jump.w);
+            var rs=jump.chute.sp.scale.x,manR=rs*V2._chuteHeight*2.2;
+            var harness=jump.chute.sp.position.clone();harness.y+=rs*KasselParachuteGeometry.anchor*.4;
+            focus=pl.position.clone().lerp(harness,jump.w);
             focusRadius=baseR+(manR-baseR)*jump.w;
             lossFocus.kind=jump.w>.5?'airman':'aircraft';
           }
